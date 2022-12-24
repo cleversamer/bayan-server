@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "bayan-platform",
+  "private_key_id": "b5a7805bac724f5621a7567b0564129f9cc8a61d",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC625bLvQI9+Bn7\nXdFgpI3G0nIl4P39GMTdOdxF8icx/YR4KgEhY4OQNqXR0JdZEfE2hGyoyU5bP+l6\nizVUizfPTeQWun1kuJAFhNmJ6yZ0bYi1/j4ttDhIub4gmrG9AxDq+0UXrKgfqQCA\nkMGkXu64HwZ+PAxDizpq333FP5aqpLat4DXm8M4i+tMH23XDOg5SlwtvNDz1y2rf\nWnEnCJgNjxfRYiDDJ/KyGoSR2Lr1TgUsD+359KC4aqQoZvqIoVUKWF21/a+37CEe\naykqQIlR9kCWdUgl8XuXA5FZpq0FVLmAIF5NWPYjXIXP9CgBp8xb2LFUyHrOIEFT\neJqzxKjRAgMBAAECggEADNMZbG5SgxJOJjRwNGPW3zh+YR8qD37ttAlOlvZhvkqa\nFu07GqGL3BAEHXxlhtV2arl4A7WdTSH70k9Pn7fWYsIDz5OJG6qXJ+nQTGj5QLBr\n26HRfq2J12P4KqCzZjeZp6cLPO66s0GUKT7GK5Pgan6moW9ZoCEkJ0WjijAtFRUO\n9m7NVsXgdQwGFGtT6WLg9VW1jBRSdl/EUnvl7R5G2p2/0/ovsk/pRl3XM7ppcWYK\nsNidFxJsljCjqZEPq3DDAlxO0gOjfwRrC+TJt4kuTpDt8NhdroNOLvCiIclbwjoA\nFXsfqcM+pUCTvPVnSFKisYo0zk/B+lupUrtv/QKPiQKBgQDdP+msXQuUJgJ0Dj+T\nDUmp3bLz4NoXMdrahx6qxPW7gIIrxfcjQcB4hnyFNcZOBSNQSv61TmZoyZCNtTTe\nJioBw+6zOL2eg6syXQFE37comAhcLS7aMelIGcacBzc9AorcDen9f6zZz9tFGIZk\nt68Uf/T9ClYUkgXBhvei2ty0HwKBgQDYNNWnYsh4xNNQCc5oE7BJlLmVdld/pnHy\nc0/mMntbiFljsZtFpPDkPhuTIifCNNWr8zSgKHPxjVhU7hbV5XVAM6uBYP6kzVuQ\nmgnXwGlmqOYCXGUiF/IULCVVtfNG1CHzVKmB4IQiN4wfu5NP/xPAYta1SSmlhEqN\njLdzcH6FDwKBgAN+fec99O/bBdDlZLWi0RYArVHSrD8Ph4BJ//78a1ERv3yHfNau\ntCZzIUZNShtzU1JyTMF6Qn3HKSRDx1j2y1UJzhxAeiYluC9sbpey3MakWAV0pTfG\n8AM2fP970bCB+MVu5tIdERLDiJf3wi+XAwnU136jiiZ7A+JBimmlATVLAoGAR9h2\nzyLCX294kPZRQsCYKjtj2Ej1FpQm9VxgRqyr1WTf34Mbh+8hpZcF7sTA1YZdIsC0\n0ivfK3u+yKo9qGKRrf39lga3V+ht7wVhE/L6k4S4ujwd11CBvzZUScEm0HiZt5SA\np4oGHqC6zai1cTXgSGQP2TowvrHRXGxQYeoWAP0CgYEAkYgw9YW5v3obFXBifNNR\ncHBm22kPVQ5FQ2q78w437cgZKtKOGJggcSJfd8XcpMd4Ynbh8tV3ED0qW+ma9ubO\nMYjer6IjDevryMMXOG03fEOc7gUOzW72v+KL164nT1nCuuvXepu3S2KPMklWC+Ju\nQgSgZzdq+HN//ytG+bifTIM=\n-----END PRIVATE KEY-----\n",
+  "client_email": "bayan-service@bayan-platform.iam.gserviceaccount.com",
+  "client_id": "105741592198891506098",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/bayan-service%40bayan-platform.iam.gserviceaccount.com"
+}
