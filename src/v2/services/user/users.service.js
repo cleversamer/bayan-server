@@ -1,30 +1,106 @@
 const { User } = require("../../models/user/user.model");
-const jwt = require("jsonwebtoken");
 const httpStatus = require("http-status");
 const emailService = require("./email.service");
 const localStorage = require("../storage/localStorage.service");
 const cloudStorage = require("../storage/cloudStorage.service");
 const { ApiError } = require("../../middleware/apiError");
 const errors = require("../../config/errors");
-const _ = require("lodash");
 const bcrypt = require("bcrypt");
 
-module.exports.findUserByEmailOrPhone = async (
-  emailOrPhone,
-  role = "",
-  withError = false
-) => {
+module.exports.resendEmailOrPhoneVerificationCode = async (key, user, lang) => {
   try {
-    const user = await User.findOne({
-      $or: [{ email: { $eq: emailOrPhone } }, { phone: { $eq: emailOrPhone } }],
-    });
+    // Ensure that key is correct
+    key = key.toLowerCase();
+    if (!["email", "phone"].includes(key)) {
+      key = "email";
+    }
 
-    const notFound = !user || (user && role && user.role !== role);
-    if (withError && notFound) {
-      const statusCode = httpStatus.NOT_FOUND;
-      const message = errors.user.notFound;
+    // Check if user's email or phone is verified
+    const isVerified =
+      key === "email" ? user.isEmailVerified() : user.isPhoneVerified();
+    if (isVerified) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.user[`${key}AlreadyVerified`];
       throw new ApiError(statusCode, message);
     }
+
+    // Update user's email or phone verification code
+    // Send code in a message to user's email or phone
+    // Save user
+    user.updateCode(key);
+    await user.save();
+
+    // Sending email or phone verification code to user's email or phone
+    if (key === "email")
+      await emailService.registerEmail(lang, user.email, user);
+
+    // TODO: send phone verification code to user's phone
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.verifyEmailOrPhone = async (key, user, code) => {
+  try {
+    // Ensure that key is correct
+    key = key.toLowerCase();
+    if (!["email", "phone"].includes(key)) {
+      key = "email";
+    }
+
+    // Check if user's email or phone is verified
+    const isVerified =
+      key === "email" ? user.isEmailVerified() : user.isPhoneVerified();
+    if (isVerified) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.user[`${key}AlreadyVerified`];
+      throw new ApiError(statusCode, message);
+    }
+
+    // Check if code is correct
+    const isCorrectCode = user.isMatchingCode(key, code);
+    if (!isCorrectCode) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.auth.incorrectCode;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Check if code is expired
+    const isValidCode = user.isValidCode(key);
+    if (!isValidCode) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.auth.expiredCode;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Verify user's email or phone
+    if (key === "email") {
+      user.verifyEmail();
+    } else {
+      user.verifyPhone();
+    }
+
+    return await user.save();
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.sendForgotPasswordCode = async (email) => {
+  try {
+    // Check if user exists
+    const user = await this.findUserByEmailOrPhone(email);
+    if (!user) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.auth.emailNotUsed;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Update user's password reset code
+    user.updateCode("password");
+
+    // Save the user to the DB
+    await user.save();
 
     return user;
   } catch (err) {
@@ -32,17 +108,57 @@ module.exports.findUserByEmailOrPhone = async (
   }
 };
 
-module.exports.findUserById = async (userId) => {
+module.exports.handleForgotPassword = async (
+  emailOrPhone,
+  code,
+  newPassword
+) => {
   try {
-    return await User.findById(userId);
+    // Check if user exists
+    const user = await this.findUserByEmailOrPhone(emailOrPhone);
+    if (!user) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.auth.emailOrPhoneNotUsed;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Check if code is correct
+    const isCorrectCode = user.isMatchingCode("password", code);
+    if (!isCorrectCode) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.auth.incorrectCode;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Check if code is expired
+    const isValidCode = user.isValidCode("password");
+    if (!isValidCode) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.auth.expiredCode;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Update password
+    await user.updatePassword(newPassword);
+
+    // Save the user to the DB
+    await user.save();
+
+    return user;
   } catch (err) {
     throw err;
   }
 };
 
-module.exports.validateToken = (token) => {
+module.exports.resetPassword = async (user, newPassword) => {
   try {
-    return jwt.verify(token, process.env["JWT_PRIVATE_KEY"]);
+    // Update user's password
+    await user.updatePassword(newPassword);
+
+    // Save the user to the DB
+    await user.save();
+
+    return user;
   } catch (err) {
     throw err;
   }
@@ -109,40 +225,6 @@ module.exports.updateProfile = async (
   }
 };
 
-///////////////////////////// ADMIN /////////////////////////////
-module.exports.changeUserRole = async (userId, role) => {
-  try {
-    const user = await this.findUserById(userId);
-    if (!user) {
-      const statusCode = httpStatus.NOT_FOUND;
-      const message = errors.user.notFound;
-      throw new ApiError(statusCode, message);
-    }
-
-    user.role = role;
-    return await user.save();
-  } catch (err) {
-    throw err;
-  }
-};
-
-module.exports.validateUser = async (userId) => {
-  try {
-    const user = await this.findUserById(userId);
-    if (!user) {
-      const statusCode = httpStatus.NOT_FOUND;
-      const message = errors.user.notFound;
-      throw new ApiError(statusCode, message);
-    }
-
-    user.verified.email = true;
-    user.verified.phone = true;
-    return await user.save();
-  } catch (err) {
-    throw err;
-  }
-};
-
 module.exports.updateUserProfile = async (
   userId,
   name,
@@ -199,6 +281,86 @@ module.exports.updateUserProfile = async (
       user.verified.email = false;
       user = await user.save();
     }
+
+    return user;
+  } catch (err) {
+    throw err;
+  }
+};
+
+///////////////////////////// ADMIN /////////////////////////////
+module.exports.changeUserRole = async (userId, role) => {
+  try {
+    // Check if user exists
+    const user = await this.findUserById(userId);
+    if (!user) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.user.notFound;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Update user's role
+    user.updateRole(role);
+
+    // Save the user to the DB
+    await user.save();
+
+    return user;
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.findUserByEmailOrPhone = async (
+  emailOrPhone,
+  role = "",
+  withError = false
+) => {
+  try {
+    // Find a user with the specified email or phone
+    const user = await User.findOne({
+      $or: [{ email: { $eq: emailOrPhone } }, { phone: { $eq: emailOrPhone } }],
+    });
+
+    // Check if user exists or exist with another role
+    const notFound = !user || (user && role && user.role !== role);
+    if (withError && notFound) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.user.notFound;
+      throw new ApiError(statusCode, message);
+    }
+
+    return user;
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.verifyUser = async (userId) => {
+  try {
+    // Check if user exists
+    const user = await this.findUserById(userId);
+    if (!user) {
+      const statusCode = httpStatus.NOT_FOUND;
+      const message = errors.user.notFound;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Check if user is already verified
+    if (user.isEmailVerified() && user.isPhoneVerified()) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.user.alreadyVerified;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Verify user's email
+    user.verifyEmail();
+
+    // Verify user's password
+    user.verifyPassword();
+
+    // Save the user to the DB
+    await user.save();
 
     return user;
   } catch (err) {

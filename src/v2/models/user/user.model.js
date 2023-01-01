@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const { server } = require("../../config/system");
 
 const clientSchema = [
   "_id",
@@ -18,6 +19,21 @@ const clientSchema = [
 const SUPPORTED_ROLES = ["student", "teacher", "admin"];
 
 const AUTH_TYPES = ["email", "google"];
+
+const verification = {
+  email: {
+    expiryInMins: 10,
+    codeLength: validation.verificationCode.exactLength,
+  },
+  phone: {
+    expiryInMins: 10,
+    codeLength: validation.verificationCode.exactLength,
+  },
+  password: {
+    expiryInMins: 10,
+    codeLength: validation.verificationCode.exactLength,
+  },
+};
 
 const userSchema = new mongoose.Schema(
   {
@@ -112,44 +128,124 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-userSchema.pre("save", function (next) {
-  const code = Math.floor(1000 + Math.random() * 9000);
-  const expiresAt = new Date() + 10 * 60 * 1000;
-  this.emailVerificationCode = { code, expiresAt };
+userSchema.methods.genAuthToken = function () {
+  try {
+    const body = {
+      sub: this._id.toHexString(),
+      email: this.email,
+      phone: this.phone.full,
+      password: this.password + server.PASSWORD_SALT,
+    };
 
-  next();
-});
-
-userSchema.methods.updateEmailVerificationCode = function () {
-  const code = Math.floor(1000 + Math.random() * 9000);
-  const expiresAt = new Date() + 10 * 60 * 1000;
-  this.emailVerificationCode = { code, expiresAt };
+    return jwt.sign(body, process.env["JWT_PRIVATE_KEY"]);
+  } catch (err) {
+    // TODO: write the error to the database
+    return "auth-token-error";
+  }
 };
 
-userSchema.methods.generatePasswordResetCode = function () {
-  const code = Math.floor(1000 + Math.random() * 9000);
-  const expiresAt = new Date() + 10 * 60 * 1000;
-  this.resetPasswordCode = { code, expiresAt };
+userSchema.methods.updateLastLogin = function () {
+  this.lastLogin = new Date();
+};
+
+userSchema.methods.genCode = function (length = 4) {
+  try {
+    const possibleNums = Math.pow(10, length - 1);
+    return Math.floor(possibleNums + Math.random() * 9 * possibleNums);
+  } catch (err) {
+    // TODO: write the error to the database
+  }
+};
+
+userSchema.methods.updateCode = function (key) {
+  try {
+    const { codeLength, expiryInMins } = verification[key];
+
+    // Generate code
+    const code = this.genCode(codeLength);
+
+    // Generate expiry date
+    const mins = expiryInMins * 60 * 1000;
+    const expiryDate = new Date() + mins;
+
+    // Update email verification code
+    this.verification[key] = { code, expiryDate };
+  } catch (err) {
+    // TODO: write the error to the database
+  }
+};
+
+userSchema.methods.isMatchingCode = function (key, code) {
+  try {
+    return this.verification[key].code == code;
+  } catch (err) {
+    // TODO: write the error to the database
+    return false;
+  }
+};
+
+userSchema.methods.isValidCode = function (key) {
+  try {
+    const { expiryDate } = this.verification[key];
+    const { expiryInMins } = verification[key];
+
+    // Measure the difference between now and code's expiry date
+    const diff = new Date() - new Date(expiryDate);
+
+    // Calculate expiry mins in milliseconds
+    const time = expiryInMins * 60 * 1000;
+
+    // Return true if milliseconds are greater than the difference
+    // Otherwise, return false...
+    return diff <= time;
+  } catch (err) {
+    // TODO: write the error to the database
+    return false;
+  }
+};
+
+userSchema.methods.isEmailVerified = function () {
+  return this.verified.email;
 };
 
 userSchema.methods.verifyEmail = function () {
   this.verified.email = true;
 };
 
-userSchema.methods.genAuthToken = function () {
-  const body = { sub: this._id.toHexString(), email: this.email };
-  const token = jwt.sign(body, process.env["JWT_PRIVATE_KEY"], {});
+userSchema.methods.isPhoneVerified = function () {
+  return this.verified.phone;
+};
 
-  return token;
+userSchema.methods.verifyPhone = function () {
+  this.verified.phone = true;
 };
 
 userSchema.methods.comparePassword = async function (candidate) {
-  return await bcrypt.compare(candidate, this.password);
+  try {
+    return await bcrypt.compare(candidate, this.password);
+  } catch (err) {
+    // TODO: write the error to the database
+    return false;
+  }
 };
 
-// Create an index on the `role` field to enhance
-// get user by role query
-userSchema.index({ role: 1 });
+userSchema.methods.updatePassword = async function (newPassword) {
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashed = await bcrypt.hash(newPassword, salt);
+    this.password = hashed;
+  } catch (err) {
+    // TODO: write the error to the database
+  }
+};
+
+userSchema.methods.updateRole = function (newRole) {
+  try {
+    this.role = newRole;
+  } catch (err) {
+    // TODO: write the error to the database
+  }
+};
 
 const User = mongoose.model("User", userSchema);
 

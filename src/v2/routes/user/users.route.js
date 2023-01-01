@@ -4,48 +4,70 @@ const { usersController } = require("../../controllers");
 const auth = require("../../middleware/auth");
 const { authValidator, userValidator } = require("../../middleware/validation");
 
+//////////////////// User: Authentication ////////////////////
 router.get("/isauth", auth("readOwn", "user", true), usersController.isAuth);
 
+//////////////////// User: Verification ////////////////////
 router
-  .route("/verify")
+  .route("/verify/email")
   .get(
+    authValidator.resendCodeValidator,
     auth("readOwn", "emailVerificationCode", true),
-    usersController.resendEmailVerificationCode
+    usersController.resendEmailOrPhoneVerificationCode("email")
   )
   .post(
+    authValidator.codeValidator,
     auth("updateOwn", "emailVerificationCode", true),
-    usersController.verifyUserEmail
+    usersController.verifyEmailOrPhone("email")
   );
 
 router
-  .route("/forgot-password")
-  .get(authValidator.emailValidator, usersController.sendForgotPasswordCode)
+  .route("/verify/phone")
+  .get(
+    authValidator.resendCodeValidator,
+    auth("readOwn", "phoneVerificationCode", true),
+    usersController.resendEmailOrPhoneVerificationCode("phone")
+  )
+  .post(
+    authValidator.codeValidator,
+    auth("updateOwn", "phoneVerificationCode", true),
+    usersController.verifyEmailOrPhone("phone")
+  );
+
+//////////////////// User: Password ////////////////////
+router
+  .route("/password/forgot")
+  .get(
+    authValidator.getForgotPasswordCode,
+    usersController.sendForgotPasswordCode
+  )
   .post(
     authValidator.forgotPasswordValidator,
     usersController.handleForgotPassword
   );
 
-router.post(
-  "/reset-password",
+router.patch(
+  "/password/change",
   authValidator.resetPasswordValidator,
   auth("updateOwn", "password"),
-  usersController.resetPassword
+  usersController.changePassword
 );
 
+//////////////////// User: Profile ////////////////////
 router.patch(
-  "/update",
+  "/profile/update",
   userValidator.validateUpdateProfile,
   auth("updateOwn", "user"),
   usersController.updateProfile
 );
 
-router
-  .route("/subscriptions")
-  .post(
-    userValidator.validateSubscripeToPackage,
-    auth("createOwn", "subscription"),
-    usersController.subscribeToPackage
-  );
+//////////////////// User: Subscription ////////////////////
+router.post(
+  "/subscribe",
+  userValidator.validateSubscripeToPackage,
+  auth("createOwn", "subscription"),
+  usersController.subscribeToPackage
+);
 
 router.get(
   "/admin/:id/subscriptions",
@@ -53,34 +75,37 @@ router.get(
   usersController.getUserSubscriptions
 );
 
+//////////////////// Admin: Profile ////////////////////
 router.patch(
-  "/admin/update-profile",
+  "/admin/profile/update",
   userValidator.validateUpdateUserProfile,
   auth("updateAny", "user"),
   usersController.updateUserProfile
 );
 
-router.patch(
-  "/admin/change-user-role",
-  userValidator.validateUpdateUserRole,
-  auth("updateAny", "user"),
-  usersController.changeUserRole
-);
-
-router.patch(
-  "/admin/validate-user",
-  userValidator.validateValidateUser,
-  auth("updateAny", "user"),
-  usersController.validateUser
-);
-
 router.get(
-  "/:role/:id",
+  "/admin/profile/find",
   userValidator.validateFindUserByEmailOrPhone,
   auth("readAny", "user"),
   usersController.findUserByEmailOrPhone
 );
 
+router.patch(
+  "/admin/profile/update-role",
+  userValidator.validateUpdateUserRole,
+  auth("updateAny", "user"),
+  usersController.changeUserRole
+);
+
+//////////////////// Admin: Verification ////////////////////
+router.patch(
+  "/admin/profile/verify",
+  userValidator.validateVerifyUser,
+  auth("updateAny", "user"),
+  usersController.verifyUser
+);
+
+//////////////////// Admin: Excel ////////////////////
 router.get(
   "/admin/users/export",
   auth("readAny", "user"),

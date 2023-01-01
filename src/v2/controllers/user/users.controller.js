@@ -13,104 +13,59 @@ const { ApiError } = require("../../middleware/apiError");
 const errors = require("../../config/errors");
 const success = require("../../config/success");
 const _ = require("lodash");
-const bcrypt = require("bcrypt");
 
 module.exports.isAuth = async (req, res, next) => {
   try {
     const user = req.user;
 
-    user.lastLogin = new Date();
+    // Update user's last login date
+    user.updateLastLogin();
+
+    // Save the user to the DB
     await user.save();
 
+    // Create the response object
     const response = _.pick(user, userSchema);
 
+    // Send response back to the client
     res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
   }
 };
 
-module.exports.verifyUserEmail = async (req, res, next) => {
+module.exports.resendEmailOrPhoneVerificationCode =
+  (key) => async (req, res, next) => {
+    try {
+      const user = req.user;
+      const { lang } = req.query;
+
+      // Send user's email/phone verification code
+      await usersService.resendEmailOrPhoneVerificationCode(key, user, lang);
+
+      // Create the response object
+      const response = {
+        ok: true,
+        message: success.auth[`${key}VerificationCodeSent`],
+      };
+
+      // Send response back to the client
+      res.status(httpStatus.OK).json(response);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+module.exports.verifyEmailOrPhone = (key) => async (req, res, next) => {
   try {
+    const user = req.user;
     const { code } = req.body;
-    const user = req.user;
 
-    if (user.verified.email) {
-      const statusCode = httpStatus.BAD_REQUEST;
-      const message = errors.user.alreadyVerified;
-      throw new ApiError(statusCode, message);
-    }
+    // Verify user's email/phone
+    const verifiedUser = await usersService.verifyEmailOrPhone(key, user, code);
 
-    if ((!code && code != 0) || code.toString().length !== 4) {
-      const statusCode = httpStatus.BAD_REQUEST;
-      const message = errors.auth.invalidCode;
-      throw new ApiError(statusCode, message);
-    }
-
-    if (user.emailVerificationCode.code == code) {
-      const diff = new Date() - new Date(user.emailVerificationCode.expiresAt);
-      const condition = diff < 10 * 60 * 1000;
-      if (!condition) {
-        const statusCode = httpStatus.BAD_REQUEST;
-        const message = errors.auth.expiredCode;
-        throw new ApiError(statusCode, message);
-      }
-
-      user.verifyEmail();
-      const verifiedUser = await user.save();
-
-      const response = _.pick(verifiedUser, userSchema);
-
-      return res.status(httpStatus.OK).json(response);
-    }
-
-    const statusCode = httpStatus.BAD_REQUEST;
-    const message = errors.auth.incorrectCode;
-    throw new ApiError(statusCode, message);
-  } catch (err) {
-    next(err);
-  }
-};
-
-module.exports.resendEmailVerificationCode = async (req, res, next) => {
-  try {
-    const user = req.user;
-
-    if (user.verified.email) {
-      const statusCode = httpStatus.BAD_REQUEST;
-      const message = errors.user.alreadyVerified;
-      throw new ApiError(statusCode, message);
-    }
-
-    user.updateEmailVerificationCode();
-    await user.save();
-
-    await emailService.registerEmail(user.email, user);
-
-    const response = {
-      ok: true,
-      message: success.auth.emailVerificationCodeSent,
-    };
-
-    res.status(httpStatus.OK).json(response);
-  } catch (err) {
-    next(err);
-  }
-};
-
-module.exports.resetPassword = async (req, res, next) => {
-  try {
-    const { newPassword } = req.body;
-    const user = req.user;
-
-    const salt = await bcrypt.genSalt(10);
-    const hashed = await bcrypt.hash(newPassword, salt);
-    user.password = hashed;
-    await user.save();
-
-    const response = _.pick(user, userSchema);
-
-    res.status(httpStatus.CREATED).json(response);
+    // Send response back to the client
+    res.status(httpStatus.OK).json(_.pick(verifiedUser, CLIENT_SCHEMA));
   } catch (err) {
     next(err);
   }
@@ -118,24 +73,29 @@ module.exports.resetPassword = async (req, res, next) => {
 
 module.exports.sendForgotPasswordCode = async (req, res, next) => {
   try {
-    const { email } = req.query;
-    const user = await usersService.findUserByEmailOrPhone(email);
-    if (!user) {
-      const statusCode = httpStatus.NOT_FOUND;
-      const message = errors.auth.emailNotUsed;
-      throw new ApiError(statusCode, message);
+    const { email, sendTo } = req.query;
+
+    // Send forgot password email to the user
+    await usersService.sendForgotPasswordCode(email);
+
+    if (sendTo === "email") {
+      // Send email to the user
+      await emailService.forgotPasswordEmail(email, updatedUser);
+    } else {
+      // TODO:
+      // Send SMS message to the user
     }
 
-    user.generatePasswordResetCode();
-    const updatedUser = await user.save();
-
-    await emailService.forgotPasswordEmail(email, updatedUser);
-
+    // Create the response object
     const response = {
       ok: true,
-      message: success.auth.passwordResetCodeSent,
+      message:
+        sendTo === "email"
+          ? success.auth.passwordResetCodeSentToEmail
+          : success.auth.passwordResetCodeSentToPhone,
     };
 
+    // Send response back to the client
     res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
@@ -144,46 +104,41 @@ module.exports.sendForgotPasswordCode = async (req, res, next) => {
 
 module.exports.handleForgotPassword = async (req, res, next) => {
   try {
-    const { email, code, newPassword } = req.body;
+    const { emailOrPhone, code, newPassword } = req.body;
 
-    const user = await usersService.findUserByEmailOrPhone(email);
-    if (!user) {
-      const statusCode = httpStatus.NOT_FOUND;
-      const message = errors.auth.emailNotUsed;
-      throw new ApiError(statusCode, message);
-    }
+    // Reset user's password
+    const updatedUser = await usersService.handleForgotPassword(
+      emailOrPhone,
+      code,
+      newPassword
+    );
 
-    if ((!code && code != 0) || code.toString().length !== 4) {
-      const statusCode = httpStatus.BAD_REQUEST;
-      const message = errors.auth.invalidCode;
-      throw new ApiError(statusCode, message);
-    }
+    // Create the response object
+    const response = {
+      user: _.pick(updatedUser, userSchema),
+      token: updatedUser.genAuthToken(),
+    };
 
-    if (user.resetPasswordCode.code == code) {
-      const diff = new Date() - new Date(user.resetPasswordCode.expiresAt);
-      const condition = diff < 10 * 60 * 1000;
-      if (!condition) {
-        const statusCode = httpStatus.BAD_REQUEST;
-        const message = errors.auth.expiredCode;
-        throw new ApiError(statusCode, message);
-      }
+    // Send response back to the client
+    res.status(httpStatus.OK).json(response);
+  } catch (err) {
+    next(err);
+  }
+};
 
-      const salt = await bcrypt.genSalt(10);
-      const hashed = await bcrypt.hash(newPassword, salt);
-      user.password = hashed;
-      await user.save();
+module.exports.changePassword = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const { newPassword } = req.body;
 
-      const response = {
-        user: _.pick(user, userSchema),
-        token: user.genAuthToken(),
-      };
+    // Reset user's password
+    const updatedUser = await usersService.resetPassword(user, newPassword);
 
-      return res.status(httpStatus.OK).json(response);
-    }
+    // Create the response object
+    const response = _.pick(updatedUser, userSchema);
 
-    const statusCode = httpStatus.BAD_REQUEST;
-    const message = errors.auth.incorrectCode;
-    throw new ApiError(statusCode, message);
+    // Send response back to the client
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }
@@ -195,6 +150,7 @@ module.exports.updateProfile = async (req, res, next) => {
     const { name, phone, email, password } = req.body;
     const avatar = req?.files?.avatar || null;
 
+    // Update user's profile
     const newUser = await usersService.updateProfile(
       user,
       name,
@@ -204,11 +160,13 @@ module.exports.updateProfile = async (req, res, next) => {
       password
     );
 
+    // Create the response object
     const response = {
       user: _.pick(newUser, userSchema),
       token: newUser.genAuthToken(),
     };
 
+    // Send response back to the client
     res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     if (err.code === errors.codes.duplicateIndexKey) {
@@ -226,6 +184,7 @@ module.exports.subscribeToPackage = async (req, res, next) => {
     const user = req.user;
     const { packageId, subjects, paymentInfo } = req.body;
 
+    // Subscribe the user to the package
     const newUser = await subscriptionsService.subscribeToPackage(
       user,
       packageId,
@@ -233,8 +192,10 @@ module.exports.subscribeToPackage = async (req, res, next) => {
       paymentInfo
     );
 
+    // Create the response object
     const response = _.pick(newUser, userSchema);
 
+    // Send response back to the client
     res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
@@ -246,17 +207,20 @@ module.exports.getUserSubscriptions = async (req, res, next) => {
   try {
     const { id: userId } = req.params;
 
+    // Find user's subscriptions
     const subscriptions = await subscriptionsService.getUserSubscriptions(
       userId,
       true
     );
 
+    // Create the response object
     const response = {
       subscriptions: subscriptions.map((subscription) =>
         _.pick(subscription, subscriptionSchema)
       ),
     };
 
+    // Send response back to the client
     res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
@@ -268,6 +232,7 @@ module.exports.updateUserProfile = async (req, res, next) => {
     const { userId, name, phone, email, password } = req.body;
     const avatar = req?.files?.avatar || null;
 
+    // Update user's profile
     const updatedUser = await usersService.updateUserProfile(
       userId,
       name,
@@ -277,8 +242,10 @@ module.exports.updateUserProfile = async (req, res, next) => {
       password
     );
 
+    // Create the response object
     const response = _.pick(updatedUser, userSchema);
 
+    // Send response back to the client
     res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     if (err.code === errors.codes.duplicateIndexKey) {
@@ -291,28 +258,18 @@ module.exports.updateUserProfile = async (req, res, next) => {
   }
 };
 
-module.exports.validateUser = async (req, res, next) => {
-  try {
-    const { userId } = req.body;
-
-    const updatedUser = await usersService.validateUser(userId);
-
-    const response = _.pick(updatedUser, userSchema);
-
-    res.status(httpStatus.CREATED).json(response);
-  } catch (err) {
-    next(err);
-  }
-};
-
+///////////////////////////// ADMIN /////////////////////////////
 module.exports.changeUserRole = async (req, res, next) => {
   try {
     const { userId, role } = req.body;
 
+    // Change user's role
     const updatedUser = await usersService.changeUserRole(userId, role);
 
+    // Create the response object
     const response = _.pick(updatedUser, userSchema);
 
+    // Send response back to the client
     res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
@@ -326,15 +283,35 @@ module.exports.findUserByEmailOrPhone = async (req, res, next) => {
     // GET requests does not accept body data.
     const { emailOrPhone, role } = req.body;
 
+    // Find user with the specified email or phone
     const user = await usersService.findUserByEmailOrPhone(
       emailOrPhone,
       role,
       true
     );
 
+    // Create the response object
     const response = _.pick(user, userSchema);
 
+    // Send response back to the client
     res.status(httpStatus.OK).json(response);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.verifyUser = async (req, res, next) => {
+  try {
+    const { userId } = req.body;
+
+    // Verify user's email and phone
+    const updatedUser = await usersService.verifyUser(userId);
+
+    // Create the response object
+    const response = _.pick(updatedUser, userSchema);
+
+    // Send response back to the client
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }
@@ -344,13 +321,16 @@ module.exports.exportUsersToExcel = async (req, res, next) => {
   try {
     const users = await usersService.getAllUsers();
 
+    // Get the path to the excel file
     const filePath = await excelService.exportUsersToExcelFile(users);
 
+    // Create the response object
     const response = {
       fileType: "file/xlsx",
       path: filePath,
     };
 
+    // Send response back to the client
     res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
