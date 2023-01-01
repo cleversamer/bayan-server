@@ -4,6 +4,7 @@ const {
   emailService,
   usersService,
   subscriptionsService,
+  excelService,
 } = require("../../services");
 const { ApiError } = require("../../middleware/apiError");
 const errors = require("../../config/errors");
@@ -303,6 +304,23 @@ module.exports.findUserByEmailOrPhone = async (req, res, next) => {
     );
 
     res.status(httpStatus.OK).json(_.pick(user, clientSchema));
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.exportUsersToExcel = async (req, res, next) => {
+  try {
+    const users = await usersService.getAllUsers();
+
+    const filePath = await excelService.exportUsersToExcelFile(users);
+
+    const response = {
+      fileType: "file/xlsx",
+      path: filePath,
+    };
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }

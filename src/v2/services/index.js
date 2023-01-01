@@ -3,6 +3,7 @@ module.exports.usersService = require("./user/users.service");
 module.exports.emailService = require("./user/email.service");
 module.exports.googleService = require("./user/google.service");
 module.exports.subscriptionsService = require("./user/subscriptions.service");
+module.exports.excelService = require("./user/excel.service");
 
 module.exports.levelsService = require("./tutorial/levels.service");
 module.exports.gradesService = require("./tutorial/grades.service");

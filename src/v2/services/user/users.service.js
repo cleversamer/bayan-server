@@ -205,3 +205,11 @@ module.exports.updateUserProfile = async (
     throw err;
   }
 };
+
+module.exports.getAllUsers = async () => {
+  try {
+    return await User.find({});
+  } catch (err) {
+    throw err;
+  }
+};

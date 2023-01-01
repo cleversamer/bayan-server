@@ -81,4 +81,10 @@ router.get(
   usersController.findUserByEmailOrPhone
 );
 
+router.get(
+  "/admin/users/export",
+  auth("readAny", "user"),
+  usersController.exportUsersToExcel
+);
+
 module.exports = router;
