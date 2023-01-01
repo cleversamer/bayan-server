@@ -1,5 +1,8 @@
 const httpStatus = require("http-status");
-const { clientSchema } = require("../../models/user/user.model");
+const { clientSchema: userSchema } = require("../../models/user/user.model");
+const {
+  clientSchema: subscriptionSchema,
+} = require("../../models/user/subscription.model");
 const {
   emailService,
   usersService,
@@ -19,7 +22,9 @@ module.exports.isAuth = async (req, res, next) => {
     user.lastLogin = new Date();
     await user.save();
 
-    res.status(httpStatus.OK).json(_.pick(req.user, clientSchema));
+    const response = _.pick(user, userSchema);
+
+    res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
   }
@@ -54,7 +59,9 @@ module.exports.verifyUserEmail = async (req, res, next) => {
       user.verifyEmail();
       const verifiedUser = await user.save();
 
-      return res.status(httpStatus.OK).json(_.pick(verifiedUser, clientSchema));
+      const response = _.pick(verifiedUser, userSchema);
+
+      return res.status(httpStatus.OK).json(response);
     }
 
     const statusCode = httpStatus.BAD_REQUEST;
@@ -80,9 +87,12 @@ module.exports.resendEmailVerificationCode = async (req, res, next) => {
 
     await emailService.registerEmail(user.email, user);
 
-    res
-      .status(httpStatus.OK)
-      .json({ ok: true, message: success.auth.emailVerificationCodeSent });
+    const response = {
+      ok: true,
+      message: success.auth.emailVerificationCodeSent,
+    };
+
+    res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
   }
@@ -98,7 +108,9 @@ module.exports.resetPassword = async (req, res, next) => {
     user.password = hashed;
     await user.save();
 
-    res.status(httpStatus.CREATED).json(_.pick(user, clientSchema));
+    const response = _.pick(user, userSchema);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }
@@ -119,9 +131,12 @@ module.exports.sendForgotPasswordCode = async (req, res, next) => {
 
     await emailService.forgotPasswordEmail(email, updatedUser);
 
-    res
-      .status(httpStatus.OK)
-      .json({ ok: true, message: success.auth.passwordResetCodeSent });
+    const response = {
+      ok: true,
+      message: success.auth.passwordResetCodeSent,
+    };
+
+    res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
   }
@@ -158,12 +173,12 @@ module.exports.handleForgotPassword = async (req, res, next) => {
       user.password = hashed;
       await user.save();
 
-      const body = {
-        user: _.pick(user, clientSchema),
+      const response = {
+        user: _.pick(user, userSchema),
         token: user.genAuthToken(),
       };
 
-      return res.status(httpStatus.OK).json(body);
+      return res.status(httpStatus.OK).json(response);
     }
 
     const statusCode = httpStatus.BAD_REQUEST;
@@ -189,12 +204,12 @@ module.exports.updateProfile = async (req, res, next) => {
       password
     );
 
-    const body = {
-      user: _.pick(newUser, clientSchema),
+    const response = {
+      user: _.pick(newUser, userSchema),
       token: newUser.genAuthToken(),
     };
 
-    res.status(httpStatus.CREATED).json(body);
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     if (err.code === errors.codes.duplicateIndexKey) {
       const statusCode = httpStatus.BAD_REQUEST;
@@ -218,7 +233,9 @@ module.exports.subscribeToPackage = async (req, res, next) => {
       paymentInfo
     );
 
-    res.status(httpStatus.CREATED).json(_.pick(newUser, clientSchema));
+    const response = _.pick(newUser, userSchema);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }
@@ -234,7 +251,13 @@ module.exports.getUserSubscriptions = async (req, res, next) => {
       true
     );
 
-    res.status(httpStatus.OK).json(subscriptions);
+    const response = {
+      subscriptions: subscriptions.map((subscription) =>
+        _.pick(subscription, subscriptionSchema)
+      ),
+    };
+
+    res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
   }
@@ -254,7 +277,9 @@ module.exports.updateUserProfile = async (req, res, next) => {
       password
     );
 
-    res.status(httpStatus.CREATED).json(_.pick(updatedUser, clientSchema));
+    const response = _.pick(updatedUser, userSchema);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     if (err.code === errors.codes.duplicateIndexKey) {
       const statusCode = httpStatus.BAD_REQUEST;
@@ -272,7 +297,9 @@ module.exports.validateUser = async (req, res, next) => {
 
     const updatedUser = await usersService.validateUser(userId);
 
-    res.status(httpStatus.CREATED).json(_.pick(updatedUser, clientSchema));
+    const response = _.pick(updatedUser, userSchema);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }
@@ -284,7 +311,9 @@ module.exports.changeUserRole = async (req, res, next) => {
 
     const updatedUser = await usersService.changeUserRole(userId, role);
 
-    res.status(httpStatus.CREATED).json(_.pick(updatedUser, clientSchema));
+    const response = _.pick(updatedUser, userSchema);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }
@@ -303,7 +332,9 @@ module.exports.findUserByEmailOrPhone = async (req, res, next) => {
       true
     );
 
-    res.status(httpStatus.OK).json(_.pick(user, clientSchema));
+    const response = _.pick(user, userSchema);
+
+    res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
   }

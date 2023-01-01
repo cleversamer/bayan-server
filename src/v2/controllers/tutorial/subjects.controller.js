@@ -19,7 +19,9 @@ module.exports.createSubject = async (req, res, next) => {
       photo
     );
 
-    res.status(httpStatus.CREATED).json(_.pick(subject, clientSchema));
+    const response = _.pick(subject, clientSchema);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }
@@ -29,10 +31,13 @@ module.exports.getSeasonSubjects = async (req, res, next) => {
   try {
     const { seasonId } = req.query;
 
-    let subjects = await subjectsService.getSeasonSubjects(seasonId);
-    subjects = subjects.map((subject) => _.pick(subject, clientSchema));
+    const subjects = await subjectsService.getSeasonSubjects(seasonId);
 
-    res.status(httpStatus.OK).json(subjects);
+    const response = {
+      subjects: subjects.map((subject) => _.pick(subject, clientSchema)),
+    };
+
+    res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
   }
@@ -41,8 +46,12 @@ module.exports.getSeasonSubjects = async (req, res, next) => {
 module.exports.toggleIsSubjectFree = async (req, res, next) => {
   try {
     const { subjectId } = req.body;
+
     const subject = await subjectsService.toggleIsSubjectFree(subjectId);
-    res.status(httpStatus.CREATED).json(subject);
+
+    const response = _.pick(subject, clientSchema);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }

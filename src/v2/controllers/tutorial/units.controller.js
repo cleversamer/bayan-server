@@ -1,4 +1,18 @@
-const { clientSchema } = require("../../models/tutorial/unit.model");
+const {
+  clientSchema: unitSchema,
+} = require("../../models/tutorial/unit.model");
+const {
+  clientSchema: lessonSchema,
+} = require("../../models/tutorial/lesson.model");
+const {
+  CLIENT_SCHEMA: documentSchema,
+} = require("../../models/tutorial/lesson-content/document.model");
+const {
+  CLIENT_SCHEMA: videoSchema,
+} = require("../../models/tutorial/lesson-content/video.model");
+const {
+  CLIENT_SCHEMA: quizSchema,
+} = require("../../models/tutorial/lesson-content/quiz.model");
 const { unitsService } = require("../../services");
 const httpStatus = require("http-status");
 const _ = require("lodash");
@@ -9,7 +23,10 @@ module.exports.createUnit = async (req, res, next) => {
     const { subjectId, title } = req.body;
 
     const unit = await unitsService.createUnit(user, subjectId, title);
-    res.status(httpStatus.CREATED).json(_.pick(unit, clientSchema));
+
+    const response = _.pick(unit, unitSchema);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }
@@ -22,7 +39,9 @@ module.exports.getSubjectUnits = async (req, res, next) => {
     // Returns an object with the units and subeject video url
     const subject = await unitsService.getSubjectUnits(subjectId);
 
-    res.status(httpStatus.OK).json(subject);
+    const response = _.pick(subject, unitSchema);
+
+    res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
   }
@@ -36,7 +55,7 @@ module.exports.addContent = async (req, res, next) => {
 
     const sharedBody = { author: user._id, unitId, type, title };
     const documentBody = { ...sharedBody, text: documentText };
-    const quizBody = sharedBody;
+    const quizBody = { ...sharedBody };
     const videoBody = {
       ...sharedBody,
       url: videoUrl,
@@ -52,7 +71,14 @@ module.exports.addContent = async (req, res, next) => {
 
     const content = await unitsService.addContent(unitId, contentBody);
 
-    res.status(httpStatus.CREATED).json(content);
+    const response =
+      type === "document"
+        ? _.pick(content, documentSchema)
+        : type === "quiz"
+        ? _.pick(content, quizSchema)
+        : _.pick(content, videoSchema);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }
@@ -61,8 +87,14 @@ module.exports.addContent = async (req, res, next) => {
 module.exports.getUnitLessons = async (req, res, next) => {
   try {
     const { unitId } = req.query;
+
     const lessons = await unitsService.getUnitLessons(unitId);
-    res.status(httpStatus.OK).json(lessons);
+
+    const response = {
+      lessons: lessons.map((lesson) => _.pick(lesson, lessonSchema)),
+    };
+
+    res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
   }

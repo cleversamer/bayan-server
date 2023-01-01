@@ -16,7 +16,9 @@ module.exports.createSubscription = async (req, res, next) => {
       subjects
     );
 
-    res.status(httpStatus.CREATED).json(subscription);
+    const response = _.pick(subscription, clientSchema);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }
@@ -36,7 +38,13 @@ module.exports.getUserSubscriptions = async (req, res, next) => {
       throw new ApiError(statusCode, message);
     }
 
-    res.status(httpStatus.OK).json(subscriptions);
+    const response = {
+      subscriptions: subscriptions.map((subscription) =>
+        _.pick(subscription, clientSchema)
+      ),
+    };
+
+    res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
   }
@@ -50,7 +58,9 @@ module.exports.toggleSubscriptionActive = async (req, res, next) => {
       subscriptionId
     );
 
-    res.status(httpStatus.CREATED).json(_.pick(subscription, clientSchema));
+    const response = _.pick(subscription, clientSchema);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }
@@ -65,7 +75,9 @@ module.exports.toggleSubjectActive = async (req, res, next) => {
       subjectId
     );
 
-    res.status(httpStatus.CREATED).json(_.pick(subscription, clientSchema));
+    const response = _.pick(subscription, clientSchema);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }
@@ -80,7 +92,9 @@ module.exports.addSubjectToSubscription = async (req, res, next) => {
       subjectId
     );
 
-    res.status(httpStatus.CREATED).json(_.pick(subscription, clientSchema));
+    const response = _.pick(subscription, clientSchema);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }
@@ -95,7 +109,9 @@ module.exports.deleteSubscribedSubject = async (req, res, next) => {
       subjectId
     );
 
-    res.status(httpStatus.CREATED).json(_.pick(subscription, clientSchema));
+    const response = _.pick(subscription, clientSchema);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }

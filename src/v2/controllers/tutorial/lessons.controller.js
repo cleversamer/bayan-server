@@ -1,4 +1,21 @@
-const { clientSchema } = require("../../models/tutorial/lesson.model");
+const {
+  clientSchema: lessonSchema,
+} = require("../../models/tutorial/lesson.model");
+const {
+  clientSchema: subscriptionSchema,
+} = require("../../models/user/subscription.model");
+const {
+  CLIENT_SCHEMA: documentSchema,
+} = require("../../models/tutorial/lesson-content/document.model");
+const {
+  CLIENT_SCHEMA: videoSchema,
+} = require("../../models/tutorial/lesson-content/video.model");
+const {
+  CLIENT_SCHEMA: quizSchema,
+} = require("../../models/tutorial/lesson-content/quiz.model");
+const {
+  CLIENT_SCHEMA: questionSchema,
+} = require("../../models/tutorial/lesson-content/question.model");
 const { lessonsService } = require("../../services");
 const httpStatus = require("http-status");
 const _ = require("lodash");
@@ -10,7 +27,9 @@ module.exports.getLessonById = async (req, res, next) => {
 
     const lesson = await lessonsService.getLessonById(user, lessonId, true);
 
-    res.status(httpStatus.OK).json(lesson);
+    const response = _.pick(lesson, lessonSchema);
+
+    res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
   }
@@ -22,7 +41,10 @@ module.exports.createLesson = async (req, res, next) => {
     const { unitId, title } = req.body;
 
     const lesson = await lessonsService.createLesson(user, unitId, title);
-    res.status(httpStatus.CREATED).json(_.pick(lesson, clientSchema));
+
+    const response = _.pick(lesson, lessonSchema);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }
@@ -34,7 +56,11 @@ module.exports.getUnitLessons = async (req, res, next) => {
 
     let units = await lessonsService.getUnitLessons(unitId);
 
-    res.status(httpStatus.OK).json(units);
+    const response = {
+      units: units.map((unit) => _.pick(unit, lessonSchema)),
+    };
+
+    res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
   }
@@ -53,7 +79,9 @@ module.exports.addDocumnet = async (req, res, next) => {
       file
     );
 
-    res.status(httpStatus.CREATED).json(document);
+    const response = _.pick(document, documentSchema);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }
@@ -75,7 +103,9 @@ module.exports.addVideo = async (req, res, next) => {
       description
     );
 
-    res.status(httpStatus.CREATED).json(_video);
+    const response = _.pick(_video, videoSchema);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }
@@ -88,7 +118,9 @@ module.exports.addQuiz = async (req, res, next) => {
 
     const quiz = await lessonsService.addQuiz(user, lessonId, title);
 
-    res.status(httpStatus.CREATED).json(quiz);
+    const response = _.pick(quiz, quizSchema);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }
@@ -109,7 +141,9 @@ module.exports.addQuestionToQuiz = async (req, res, next) => {
       photo
     );
 
-    res.status(httpStatus.CREATED).json(question);
+    const response = _.pick(question, questionSchema);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }
@@ -122,7 +156,9 @@ module.exports.submitQuiz = async (req, res, next) => {
 
     const submission = await lessonsService.submitQuiz(user, quizId, answers);
 
-    res.status(httpStatus.CREATED).json(submission);
+    const response = _.pick(submission, subscriptionSchema);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }
@@ -131,8 +167,12 @@ module.exports.submitQuiz = async (req, res, next) => {
 module.exports.getDocumnent = async (req, res, next) => {
   try {
     const { id: documentId } = req.params;
-    const quiz = await lessonsService.getDocument(documentId);
-    res.status(httpStatus.OK).json(quiz);
+
+    const document = await lessonsService.getDocument(documentId);
+
+    const response = _.pick(document, documentSchema);
+
+    res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
   }
@@ -141,8 +181,12 @@ module.exports.getDocumnent = async (req, res, next) => {
 module.exports.getVideo = async (req, res, next) => {
   try {
     const { id: videoId } = req.params;
-    const quiz = await lessonsService.getVideo(videoId);
-    res.status(httpStatus.OK).json(quiz);
+
+    const video = await lessonsService.getVideo(videoId);
+
+    const response = _.pick(video, videoSchema);
+
+    res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
   }
@@ -151,8 +195,12 @@ module.exports.getVideo = async (req, res, next) => {
 module.exports.getQuiz = async (req, res, next) => {
   try {
     const { id: quizId } = req.params;
+
     const quiz = await lessonsService.getQuiz(quizId);
-    res.status(httpStatus.OK).json(quiz);
+
+    const response = _.pick(quiz, quizSchema);
+
+    res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
   }

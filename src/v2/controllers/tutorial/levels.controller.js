@@ -1,3 +1,4 @@
+const { CLIENT_SCHEMA } = require("../../models/tutorial/level.model");
 const { levelsService } = require("../../services");
 const { ApiError } = require("../../middleware/apiError");
 const httpStatus = require("http-status");
@@ -7,7 +8,12 @@ const _ = require("lodash");
 module.exports.getAllLevels = async (req, res, next) => {
   try {
     const levels = await levelsService.getAllLevels();
-    res.status(httpStatus.OK).json(levels);
+
+    const response = {
+      levels: levels.map((level) => _.pick(level, CLIENT_SCHEMA)),
+    };
+
+    res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
   }
@@ -21,7 +27,9 @@ module.exports.createLevel = async (req, res, next) => {
 
     const level = await levelsService.createLevel(user, title, photo);
 
-    res.status(httpStatus.CREATED).json(level);
+    const response = _.pick(level, CLIENT_SCHEMA);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     if (err.code === errors.codes.duplicateIndexKey) {
       const statusCode = httpStatus.BAD_REQUEST;
@@ -36,7 +44,12 @@ module.exports.createLevel = async (req, res, next) => {
 module.exports.getAllSupportedLevels = (req, res, next) => {
   try {
     const supportedLevels = levelsService.getAllSupportedLevels();
-    res.status(httpStatus.OK).json(supportedLevels);
+
+    const response = {
+      supportedLevels,
+    };
+
+    res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
   }

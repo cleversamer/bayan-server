@@ -16,7 +16,9 @@ module.exports.createSeason = async (req, res, next) => {
       photo
     );
 
-    res.status(httpStatus.CREATED).json(_.pick(season, clientSchema));
+    const response = _.pick(season, clientSchema);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }
@@ -26,10 +28,13 @@ module.exports.getGradeSeasons = async (req, res, next) => {
   try {
     const { gradeId } = req.query;
 
-    let seasons = await seasonsService.getGradeSeasons(gradeId);
-    seasons = seasons.map((season) => _.pick(season, clientSchema));
+    const seasons = await seasonsService.getGradeSeasons(gradeId);
 
-    res.status(httpStatus.OK).json(seasons);
+    const response = {
+      seasons: seasons.map((season) => _.pick(season, clientSchema)),
+    };
+
+    res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
   }

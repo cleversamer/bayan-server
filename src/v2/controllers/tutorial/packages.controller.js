@@ -1,3 +1,4 @@
+const { clientSchema } = require("../../models/tutorial/package.model");
 const { packagesService } = require("../../services");
 const httpStatus = require("http-status");
 const errors = require("../../config/errors");
@@ -16,7 +17,9 @@ module.exports.createPackage = async (req, res, next) => {
       months
     );
 
-    res.status(httpStatus.CREATED).json(package);
+    const response = _.pick(package, clientSchema);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
   }
@@ -34,7 +37,11 @@ module.exports.getGradePackages = async (req, res, next) => {
       throw new ApiError(statusCode, message);
     }
 
-    res.status(httpStatus.OK).json(packages);
+    const response = {
+      packages: packages.map((package) => _.pick(package, clientSchema)),
+    };
+
+    res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
   }

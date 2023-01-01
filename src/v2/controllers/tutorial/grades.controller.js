@@ -13,7 +13,9 @@ module.exports.createGrade = async (req, res, next) => {
 
     const grade = await gradesService.createGrade(user, levelId, number, photo);
 
-    res.status(httpStatus.CREATED).json(_.pick(grade, CLIENT_SCHEMA));
+    const response = _.pick(grade, CLIENT_SCHEMA);
+
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     if (err.code === errors.codes.duplicateIndexKey) {
       const statusCode = httpStatus.BAD_REQUEST;
@@ -28,8 +30,14 @@ module.exports.createGrade = async (req, res, next) => {
 module.exports.getLevelGrades = async (req, res, next) => {
   try {
     const { levelId } = req.query;
+
     const grades = await gradesService.getLevelGrades(levelId);
-    res.status(httpStatus.OK).json(grades);
+
+    const response = {
+      grades: grades.map((grade) => _.pick(grade, CLIENT_SCHEMA)),
+    };
+
+    res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
   }

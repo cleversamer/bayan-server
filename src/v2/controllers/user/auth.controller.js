@@ -25,12 +25,12 @@ module.exports.register = async (req, res, next) => {
       // Sending phone verification code to user's whatsapp account
     }
 
-    const body = {
+    const response = {
       user: _.pick(user, clientSchema),
       token: user.genAuthToken(),
     };
 
-    res.status(httpStatus.CREATED).json(body);
+    res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     if (err.code === errors.codes.duplicateIndexKey) {
       const statusCode = httpStatus.BAD_REQUEST;
@@ -52,12 +52,12 @@ module.exports.login = async (req, res, next) => {
       authType
     );
 
-    const body = {
+    const response = {
       user: _.pick(user, clientSchema),
       token: user.genAuthToken(),
     };
 
-    res.status(httpStatus.OK).json(body);
+    res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
   }
