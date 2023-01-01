@@ -35,7 +35,7 @@ module.exports.createGrade = async (user, levelId, number, photo) => {
 
     const localFile = await localStorage.storeFile(photo);
     const cloudFile = await cloudStorage.uploadFile(localFile);
-    // await localStorage.deleteFile(localFile);
+    await localStorage.deleteFile(localFile);
     savedGrade.photoURL = cloudFile;
 
     return await savedGrade.save();

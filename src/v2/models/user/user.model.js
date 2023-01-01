@@ -144,6 +144,10 @@ userSchema.methods.comparePassword = async function (candidate) {
   return await bcrypt.compare(candidate, this.password);
 };
 
+// Create an index on the `role` field to enhance
+// get user by role query
+userSchema.index({ role: 1 });
+
 const User = mongoose.model("User", userSchema);
 
 module.exports = {

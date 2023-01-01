@@ -7,11 +7,12 @@ const auth = require("../../middleware/auth");
 router
   .route("/")
   .get(
-    [packageValidator.validateGetGradePackages],
+    packageValidator.validateGetGradePackages,
     packagesController.getGradePackages
   )
   .post(
-    [auth("createAny", "package"), packageValidator.validateCreatePackage],
+    packageValidator.validateCreatePackage,
+    auth("createAny", "package"),
     packagesController.createPackage
   );
 

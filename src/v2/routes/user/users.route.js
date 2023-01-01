@@ -4,75 +4,80 @@ const { usersController } = require("../../controllers");
 const auth = require("../../middleware/auth");
 const { authValidator, userValidator } = require("../../middleware/validation");
 
-router.get("/isauth", [auth("readOwn", "user", true)], usersController.isAuth);
+router.get("/isauth", auth("readOwn", "user", true), usersController.isAuth);
 
 router
   .route("/verify")
   .get(
-    [auth("readOwn", "emailVerificationCode", true)],
+    auth("readOwn", "emailVerificationCode", true),
     usersController.resendEmailVerificationCode
   )
   .post(
-    [auth("updateOwn", "emailVerificationCode", true)],
+    auth("updateOwn", "emailVerificationCode", true),
     usersController.verifyUserEmail
   );
 
 router
   .route("/forgot-password")
-  .get([authValidator.emailValidator], usersController.sendForgotPasswordCode)
+  .get(authValidator.emailValidator, usersController.sendForgotPasswordCode)
   .post(
-    [authValidator.forgotPasswordValidator],
+    authValidator.forgotPasswordValidator,
     usersController.handleForgotPassword
   );
 
 router.post(
   "/reset-password",
-  [auth("updateOwn", "password"), authValidator.resetPasswordValidator],
+  authValidator.resetPasswordValidator,
+  auth("updateOwn", "password"),
   usersController.resetPassword
 );
 
-router.patch("/update", [
-  [auth("updateOwn", "user"), userValidator.validateUpdateProfile],
-  usersController.updateProfile,
-]);
+router.patch(
+  "/update",
+  userValidator.validateUpdateProfile,
+  auth("updateOwn", "user"),
+  usersController.updateProfile
+);
 
 router
   .route("/subscriptions")
   .post(
-    [
-      auth("createOwn", "subscription"),
-      userValidator.validateSubscripeToPackage,
-    ],
+    userValidator.validateSubscripeToPackage,
+    auth("createOwn", "subscription"),
     usersController.subscribeToPackage
   );
 
 router.get(
   "/admin/:id/subscriptions",
-  [userValidator.validateGetUserSubscriptions],
+  userValidator.validateGetUserSubscriptions,
   usersController.getUserSubscriptions
 );
 
 router.patch(
   "/admin/update-profile",
-  [auth("updateAny", "user"), userValidator.validateUpdateUserProfile],
+  userValidator.validateUpdateUserProfile,
+  auth("updateAny", "user"),
   usersController.updateUserProfile
 );
 
 router.patch(
   "/admin/change-user-role",
-  [auth("updateAny", "user"), userValidator.validateUpdateUserRole],
+  userValidator.validateUpdateUserRole,
+  auth("updateAny", "user"),
   usersController.changeUserRole
 );
 
 router.patch(
   "/admin/validate-user",
-  [auth("updateAny", "user"), userValidator.validateValidateUser],
+  userValidator.validateValidateUser,
+  auth("updateAny", "user"),
   usersController.validateUser
 );
 
 router.get(
   "/:role/:id",
-  [auth("readAny", "user"), userValidator.validateFindUserByEmailOrPhone],
+  userValidator.validateFindUserByEmailOrPhone,
+  auth("readAny", "user"),
   usersController.findUserByEmailOrPhone
 );
 

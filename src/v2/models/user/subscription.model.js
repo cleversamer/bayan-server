@@ -58,6 +58,10 @@ const subscriptionSchema = new mongoose.Schema(
   { minimize: false }
 );
 
+// Create an index on the `userId` field to enhance
+// get user's subscriptions query
+subscriptionSchema.index({ userId: 1 });
+
 const Subscription = mongoose.model("Subscription", subscriptionSchema);
 
 module.exports = { Subscription, clientSchema };

@@ -6,59 +6,60 @@ const auth = require("../../middleware/auth");
 
 router.post(
   "/",
-  [auth("createAny", "lesson"), lessonValidator.validateCreateLesson],
+  lessonValidator.validateCreateLesson,
+  auth("createAny", "lesson"),
   lessonsController.createLesson
 );
 
-router.get(
-  "/:id",
-  [auth("readAny", "lesson")],
-  lessonsController.getLessonById
-);
+router.get("/:id", auth("readAny", "lesson"), lessonsController.getLessonById);
 
 // Lesson APIs
 router.get(
   "/unit/:id",
-  [lessonValidator.validateGetUnitLessons],
+  lessonValidator.validateGetUnitLessons,
   lessonsController.getUnitLessons
 );
 
 // Document APIs
 router.post(
   "/document",
-  [auth("createAny", "document"), lessonValidator.validateAddDocument],
+  lessonValidator.validateAddDocument,
+  auth("createAny", "document"),
   lessonsController.addDocumnet
 );
 
 router.get(
   "/document/:id",
-  [lessonValidator.validateParamsId],
+  lessonValidator.validateParamsId,
   lessonsController.getDocumnent
 );
 
 // Video APIs
 router.post(
   "/video",
-  [auth("createAny", "video"), lessonValidator.validateAddVideo],
+  lessonValidator.validateAddVideo,
+  auth("createAny", "video"),
   lessonsController.addVideo
 );
 
 router.get(
   "/video/:id",
-  [lessonValidator.validateParamsId],
+  lessonValidator.validateParamsId,
   lessonsController.getVideo
 );
 
 // Quiz APIs
 router.post(
   "/quiz",
-  [auth("createAny", "quiz"), lessonValidator.validateAddQuiz],
+  lessonValidator.validateAddQuiz,
+  auth("createAny", "quiz"),
   lessonsController.addQuiz
 );
 
 router.get(
   "/quiz/:id",
-  [(auth("readOwn", "quiz"), lessonValidator.validateParamsId)],
+  lessonValidator.validateParamsId,
+  auth("readOwn", "quiz"),
   lessonsController.getQuiz
 );
 
@@ -66,14 +67,16 @@ router.get(
 router
   .route("/questions")
   .post(
-    [auth("createAny", "question"), lessonValidator.validateAddQuestionToQuiz],
+    lessonValidator.validateAddQuestionToQuiz,
+    auth("createAny", "question"),
     lessonsController.addQuestionToQuiz
   );
 
 // Submission APIs
-router.post("/submissions", [
+router.post(
+  "/submissions",
   auth("createAny", "submission"),
-  lessonValidator.validateAddSubmission,
-]);
+  lessonValidator.validateAddSubmission
+);
 
 module.exports = router;

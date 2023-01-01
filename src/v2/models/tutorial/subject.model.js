@@ -52,6 +52,10 @@ const subjectSchema = new mongoose.Schema({
   },
 });
 
+// Create an index on the `seasonId` field to enhance
+// get seasonId's subjects query
+subjectSchema.index({ seasonId: 1 });
+
 const Subject = mongoose.model("Subject", subjectSchema);
 
 module.exports = { Subject, clientSchema };

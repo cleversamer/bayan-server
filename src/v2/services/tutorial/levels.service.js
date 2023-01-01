@@ -39,7 +39,7 @@ module.exports.createLevel = async (user, title, photo) => {
 
     const localFile = await localStorage.storeFile(photo);
     const cloudFile = await cloudStorage.uploadFile(localFile);
-    // await localStorage.deleteFile(localFile);
+    await localStorage.deleteFile(localFile);
     savedLevel.photoURL = cloudFile;
 
     return await savedLevel.save();

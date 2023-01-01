@@ -7,12 +7,10 @@ const auth = require("../../middleware/auth");
 router
   .route("/")
   .post(
-    [auth("createAny", "unit"), unitValidator.validateCreateUnit],
+    unitValidator.validateCreateUnit,
+    auth("createAny", "unit"),
     unitsController.createUnit
   )
-  .get(
-    [unitValidator.validateGetSubjectUnits],
-    unitsController.getSubjectUnits
-  );
+  .get(unitValidator.validateGetSubjectUnits, unitsController.getSubjectUnits);
 
 module.exports = router;

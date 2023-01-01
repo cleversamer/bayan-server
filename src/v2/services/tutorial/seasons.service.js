@@ -42,7 +42,7 @@ module.exports.createSeason = async (user, gradeId, number, photo) => {
 
     const localFile = await localStorage.storeFile(photo);
     const cloudFile = await cloudStorage.uploadFile(localFile);
-    // await localStorage.deleteFile(localFile);
+    await localStorage.deleteFile(localFile);
 
     const season = new Season({
       author: user._id,

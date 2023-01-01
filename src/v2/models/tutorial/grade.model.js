@@ -33,6 +33,10 @@ const gradeSchema = new mongoose.Schema({
   },
 });
 
+// Create an index on the `levelId` field to enhance
+// get level's grades query
+gradeSchema.index({ levelId: 1 });
+
 const Grade = mongoose.model("Grade", gradeSchema);
 
 module.exports = { Grade, CLIENT_SCHEMA, SUPPORTED_GRADES };

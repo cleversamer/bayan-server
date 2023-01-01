@@ -46,6 +46,10 @@ const unitSchema = new mongoose.Schema(
   { minimize: false }
 );
 
+// Create an index on the `subjectId` field to enhance
+// get subject's units query
+unitSchema.index({ subjectId: 1 });
+
 const Unit = mongoose.model("Unit", unitSchema);
 
 module.exports = { Unit, clientSchema };

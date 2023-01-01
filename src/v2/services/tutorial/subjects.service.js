@@ -65,14 +65,14 @@ module.exports.createSubject = async (
     // Add photo
     let localFile = await localStorage.storeFile(photo);
     let cloudFile = await cloudStorage.uploadFile(localFile);
-    // await localStorage.deleteFile(localFile);
+    await localStorage.deleteFile(localFile);
     subject.photoURL = cloudFile;
 
     if (videoType === "video") {
       // Add video
       localFile = await localStorage.storeFile(video);
       cloudFile = await cloudStorage.uploadFile(localFile);
-      // await localStorage.deleteFile(localFile);
+      await localStorage.deleteFile(localFile);
       subject.videoURL = cloudFile;
     }
 

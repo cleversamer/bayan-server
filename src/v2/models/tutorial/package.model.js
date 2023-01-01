@@ -44,6 +44,10 @@ const packageSchema = new mongoose.Schema({
   },
 });
 
+// Create an index on the `gradeId` field to enhance
+// get grade's packages query
+packageSchema.index({ gradeId: 1 });
+
 const Package = mongoose.model("Package", packageSchema);
 
 module.exports = { Package, clientSchema };
