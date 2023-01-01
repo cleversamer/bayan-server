@@ -8,13 +8,14 @@ router
   .route("/")
   .get(levelsController.getAllLevels)
   .post(
-    [auth("createAny", "level"), levelValidator.validateCreateLevel],
+    auth("createAny", "level"),
+    levelValidator.validateCreateLevel,
     levelsController.createLevel
   );
 
 router.get(
   "/supported",
-  [auth("readAny", "level")],
+  auth("readAny", "level"),
   levelsController.getAllSupportedLevels
 );
 

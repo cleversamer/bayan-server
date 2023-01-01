@@ -7,11 +7,12 @@ const auth = require("../../middleware/auth");
 router
   .route("/")
   .get(
-    [seasonValidator.validateGetGradeSeasons],
+    seasonValidator.validateGetGradeSeasons,
     seasonsController.getGradeSeasons
   )
   .post(
-    [auth("createAny", "season"), seasonValidator.validateCreateSeason],
+    auth("createAny", "season"),
+    seasonValidator.validateCreateSeason,
     seasonsController.createSeason
   );
 

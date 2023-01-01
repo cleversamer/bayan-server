@@ -7,20 +7,19 @@ const auth = require("../../middleware/auth");
 router
   .route("/")
   .post(
-    [auth("createAny", "subject"), subjectValidator.validateCreateSubject],
+    auth("createAny", "subject"),
+    subjectValidator.validateCreateSubject,
     subjectsController.createSubject
   )
   .get(
-    [subjectValidator.validateGetSeasonSubjects],
+    subjectValidator.validateGetSeasonSubjects,
     subjectsController.getSeasonSubjects
   );
 
 router.patch(
   "/toggle-free",
-  [
-    auth("createAny", "freeSubject"),
-    subjectValidator.validateToggleIsSubjectFree,
-  ],
+  auth("createAny", "freeSubject"),
+  subjectValidator.validateToggleIsSubjectFree,
   subjectsController.toggleIsSubjectFree
 );
 
