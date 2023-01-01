@@ -70,7 +70,7 @@ const lessonSchema = new mongoose.Schema(
   { minimize: false }
 );
 
-// Create an index on the `levelId` field to enhance
+// Create an index on the `unitId` field to enhance
 // get unit's lessons query
 lessonSchema.index({ unitId: 1 });
 
