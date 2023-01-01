@@ -70,6 +70,10 @@ const lessonSchema = new mongoose.Schema(
   { minimize: false }
 );
 
+// Create an index on the `levelId` field to enhance
+// get unit's lessons query
+lessonSchema.index({ unitId: 1 });
+
 const Lesson = mongoose.model("Lesson", lessonSchema);
 
 module.exports = { Lesson, clientSchema };
