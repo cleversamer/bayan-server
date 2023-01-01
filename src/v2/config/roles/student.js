@@ -7,36 +7,44 @@ module.exports = Object.freeze({
     "read:own": ["*"],
     "update:own": ["*"],
   },
-  phoneVerificationCode: {
-    "read:own": ["*"],
-    "update:own": ["*"],
-  },
   password: {
     "update:own": ["*"],
   },
-  notification: {
-    "read:own": ["*"],
-    "delete:own": ["*"],
+  level: {
+    "read:any": ["*"],
   },
-  favorites: {
+  grade: {
+    "read:any": ["*"],
+  },
+  season: {
+    "read:any": ["*"],
+  },
+  subject: {
+    "read:any": ["*"],
+  },
+  unit: {
+    "read:any": ["*"],
+  },
+  lesson: {
+    "read:any": ["*"],
+  },
+  document: {
+    "read:own": ["*"],
+  },
+  video: {
+    "read:own": ["*"],
+  },
+  quiz: {
+    "read:own": ["*"],
+  },
+  question: {
+    "read:own": ["*"],
+  },
+  package: {
+    "read:any": ["*"],
+  },
+  subscription: {
+    "read:own": ["*"],
     "create:own": ["*"],
-    "read:own": ["*"],
-    "delete:own": ["*"],
-  },
-  purchaseCar: {
-    "create:own": ["*"],
-    "read:own": ["*"],
-  },
-  rentCar: {
-    "create:own": ["*"],
-    "read:own": ["*"],
-  },
-  rentOrder: {
-    "create:own": ["*"],
-  },
-  order: {
-    "read:own": ["*"],
-    "update:own": ["*"],
-    "delete:own": ["*"],
   },
 });
