@@ -4,6 +4,8 @@ const { server } = require("../config/system");
 module.exports = () => {
   mongoose.set("strictQuery", false);
 
+  console.log("server", server);
+
   mongoose
     .connect(server.DATABASE_URI)
     .then((value) => {
