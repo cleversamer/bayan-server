@@ -11,8 +11,8 @@ router
     packagesController.getGradePackages
   )
   .post(
-    auth("createAny", "package"),
     packageValidator.validateCreatePackage,
+    auth("createAny", "package"),
     packagesController.createPackage
   );
 

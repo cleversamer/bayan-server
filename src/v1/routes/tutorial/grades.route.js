@@ -8,8 +8,8 @@ router
   .route("/")
   .get(gradeValidator.validateGetLevelGrades, gradesController.getLevelGrades)
   .post(
-    auth("createAny", "grade"),
     gradeValidator.validateCreateGrade,
+    auth("createAny", "grade"),
     gradesController.createGrade
   );
 

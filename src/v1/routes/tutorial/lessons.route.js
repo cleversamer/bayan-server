@@ -6,8 +6,8 @@ const auth = require("../../middleware/auth");
 
 router.post(
   "/",
-  auth("createAny", "lesson"),
   lessonValidator.validateCreateLesson,
+  auth("createAny", "lesson"),
   lessonsController.createLesson
 );
 
@@ -23,8 +23,8 @@ router.get(
 // Document APIs
 router.post(
   "/document",
-  auth("createAny", "document"),
   lessonValidator.validateAddDocument,
+  auth("createAny", "document"),
   lessonsController.addDocumnet
 );
 
@@ -37,8 +37,8 @@ router.get(
 // Video APIs
 router.post(
   "/video",
-  auth("createAny", "video"),
   lessonValidator.validateAddVideo,
+  auth("createAny", "video"),
   lessonsController.addVideo
 );
 
@@ -51,14 +51,15 @@ router.get(
 // Quiz APIs
 router.post(
   "/quiz",
-  auth("createAny", "quiz"),
   lessonValidator.validateAddQuiz,
+  auth("createAny", "quiz"),
   lessonsController.addQuiz
 );
 
 router.get(
   "/quiz/:id",
-  (auth("readOwn", "quiz"), lessonValidator.validateParamsId),
+  lessonValidator.validateParamsId,
+  auth("readOwn", "quiz"),
   lessonsController.getQuiz
 );
 
@@ -66,8 +67,8 @@ router.get(
 router
   .route("/questions")
   .post(
-    auth("createAny", "question"),
     lessonValidator.validateAddQuestionToQuiz,
+    auth("createAny", "question"),
     lessonsController.addQuestionToQuiz
   );
 

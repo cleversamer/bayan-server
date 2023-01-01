@@ -27,23 +27,23 @@ router
 
 router.post(
   "/reset-password",
-  auth("updateOwn", "password"),
   authValidator.resetPasswordValidator,
+  auth("updateOwn", "password"),
   usersController.resetPassword
 );
 
 router.patch(
   "/update",
-  auth("updateOwn", "user"),
   userValidator.validateUpdateProfile,
+  auth("updateOwn", "user"),
   usersController.updateProfile
 );
 
 router
   .route("/subscriptions")
   .post(
-    auth("createOwn", "subscription"),
     userValidator.validateSubscripeToPackage,
+    auth("createOwn", "subscription"),
     usersController.subscribeToPackage
   );
 
@@ -55,29 +55,29 @@ router.get(
 
 router.patch(
   "/admin/update-profile",
-  auth("updateAny", "user"),
   userValidator.validateUpdateUserProfile,
+  auth("updateAny", "user"),
   usersController.updateUserProfile
 );
 
 router.patch(
   "/admin/change-user-role",
-  auth("updateAny", "user"),
   userValidator.validateUpdateUserRole,
+  auth("updateAny", "user"),
   usersController.changeUserRole
 );
 
 router.patch(
   "/admin/validate-user",
-  auth("updateAny", "user"),
   userValidator.validateValidateUser,
+  auth("updateAny", "user"),
   usersController.validateUser
 );
 
 router.get(
   "/:role/:id",
-  auth("readAny", "user"),
   userValidator.validateFindUserByEmailOrPhone,
+  auth("readAny", "user"),
   usersController.findUserByEmailOrPhone
 );
 

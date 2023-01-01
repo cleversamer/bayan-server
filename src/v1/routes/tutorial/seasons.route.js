@@ -11,8 +11,8 @@ router
     seasonsController.getGradeSeasons
   )
   .post(
-    auth("createAny", "season"),
     seasonValidator.validateCreateSeason,
+    auth("createAny", "season"),
     seasonsController.createSeason
   );
 
