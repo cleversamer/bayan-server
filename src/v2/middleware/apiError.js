@@ -43,9 +43,16 @@ const unsupportedRouteHandler = (req, res, next) => {
   throw new ApiError(statusCode, message);
 };
 
+const limitHandler = (req, res, next) => {
+  const statusCode = httpStatus.FORBIDDEN;
+  const message = errors.system.largeFile;
+  next(new ApiError(statusCode, message));
+};
+
 module.exports = {
   ApiError,
   errorHandler,
   errorConverter,
   unsupportedRouteHandler,
+  limitHandler,
 };
