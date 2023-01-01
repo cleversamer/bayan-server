@@ -55,7 +55,13 @@ const subscriptionSchema = new mongoose.Schema(
       },
     },
   },
-  { minimize: false }
+  {
+    // To not avoid empty object when creating the document
+    minimize: false,
+    // To automatically write creation/update timestamps
+    // Note: the update timestamp will be updated automatically
+    timestamps: true,
+  }
 );
 
 // Create an index on the `userId` field to enhance

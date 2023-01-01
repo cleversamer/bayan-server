@@ -11,33 +11,42 @@ const clientSchema = [
 
 const SUPPORTED_SEASONS = ["1", "2", "3", "4"];
 
-const seasonSchema = new mongoose.Schema({
-  photoURL: {
-    type: String,
-    default: "",
+const seasonSchema = new mongoose.Schema(
+  {
+    photoURL: {
+      type: String,
+      default: "",
+    },
+    author: {
+      type: mongoose.Types.ObjectId,
+      ref: "users",
+      required: true,
+    },
+    levelId: {
+      type: mongoose.Types.ObjectId,
+      ref: "levels",
+      required: true,
+    },
+    gradeId: {
+      type: mongoose.Types.ObjectId,
+      ref: "grades",
+      required: true,
+    },
+    number: {
+      type: String,
+      enum: SUPPORTED_SEASONS,
+      trim: true,
+      required: true,
+    },
   },
-  author: {
-    type: mongoose.Types.ObjectId,
-    ref: "users",
-    required: true,
-  },
-  levelId: {
-    type: mongoose.Types.ObjectId,
-    ref: "levels",
-    required: true,
-  },
-  gradeId: {
-    type: mongoose.Types.ObjectId,
-    ref: "grades",
-    required: true,
-  },
-  number: {
-    type: String,
-    enum: SUPPORTED_SEASONS,
-    trim: true,
-    required: true,
-  },
-});
+  {
+    // To not avoid empty object when creating the document
+    minimize: false,
+    // To automatically write creation/update timestamps
+    // Note: the update timestamp will be updated automatically
+    timestamps: true,
+  }
+);
 
 // Create an index on the `gradeId` field to enhance
 // get grade's seasons query

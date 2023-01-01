@@ -11,38 +11,47 @@ const clientSchema = [
   "numOfSubjects",
 ];
 
-const packageSchema = new mongoose.Schema({
-  author: {
-    type: mongoose.Types.ObjectId,
-    ref: "users",
-    required: true,
+const packageSchema = new mongoose.Schema(
+  {
+    author: {
+      type: mongoose.Types.ObjectId,
+      ref: "users",
+      required: true,
+    },
+    price: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+    months: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+    levelId: {
+      type: mongoose.Types.ObjectId,
+      ref: "levels",
+      required: true,
+    },
+    gradeId: {
+      type: mongoose.Types.ObjectId,
+      ref: "grades",
+      required: true,
+    },
+    numOfSubjects: {
+      type: String,
+      default: "1",
+      required: true,
+    },
   },
-  price: {
-    type: String,
-    trim: true,
-    required: true,
-  },
-  months: {
-    type: String,
-    trim: true,
-    required: true,
-  },
-  levelId: {
-    type: mongoose.Types.ObjectId,
-    ref: "levels",
-    required: true,
-  },
-  gradeId: {
-    type: mongoose.Types.ObjectId,
-    ref: "grades",
-    required: true,
-  },
-  numOfSubjects: {
-    type: String,
-    default: "1",
-    required: true,
-  },
-});
+  {
+    // To not avoid empty object when creating the document
+    minimize: false,
+    // To automatically write creation/update timestamps
+    // Note: the update timestamp will be updated automatically
+    timestamps: true,
+  }
+);
 
 // Create an index on the `gradeId` field to enhance
 // get grade's packages query
