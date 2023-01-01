@@ -39,6 +39,10 @@ const seasonSchema = new mongoose.Schema({
   },
 });
 
+// Create an index on the `gradeId` field to enhance
+// get grade's seasons query
+seasonSchema.index({ gradeId: 1 });
+
 const Season = mongoose.model("Season", seasonSchema);
 
 module.exports = { Season, clientSchema, SUPPORTED_SEASONS };
