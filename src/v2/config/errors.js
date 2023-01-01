@@ -27,6 +27,10 @@ const system = Object.freeze({
     en: "File extension is not supported",
     ar: "إمتداد الملف غير مدعوم",
   },
+  errorExportingExcel: {
+    en: "Error exporting excel file",
+    ar: "حصل خطأ عند تصدير ملف الإكسل",
+  },
 });
 
 const data = Object.freeze({
