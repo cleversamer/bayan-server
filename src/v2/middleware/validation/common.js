@@ -20,7 +20,10 @@ const checkPhone = (req, res, next) => {
   const { phone } = req.body;
 
   if (typeof phone !== "string") {
-    return console.log("Invalid phone");
+    const statusCode = httpStatus.BAD_REQUEST;
+    const message = errors.auth.invalidPhone;
+    const err = new ApiError(statusCode, message);
+    return next(err);
   }
 
   const kuwaitPhone = phone.startsWith("+965");

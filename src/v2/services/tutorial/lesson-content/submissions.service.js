@@ -26,7 +26,6 @@ module.exports.createSubmission = async (user, quizId, answers) => {
     }
 
     const userLessons = lessonsService.getUserUnitLessons(user, quiz.unitId);
-    console.log("userLessons", userLessons);
 
     // TODO:
 
