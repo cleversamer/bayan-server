@@ -61,4 +61,12 @@ module.exports = Object.freeze({
     en: "Your device has been temporarily blocked",
     ar: "تم حظر جهازك مؤقتًا",
   },
+  errorExportingExcel: {
+    en: "Error exporting excel file",
+    ar: "حصل خطأ عند تصدير ملف الاكسل",
+  },
+  noFile: {
+    en: "Please add file, image, or video",
+    ar: "يجب عليك إضافة ملف، صورة، أو فيديو",
+  },
 });

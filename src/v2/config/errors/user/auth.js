@@ -63,6 +63,10 @@ module.exports = Object.freeze({
     en: "Invalid email address",
     ar: "البريد الإلكتروني غير صالح",
   },
+  invalidAuthType: {
+    en: "Auth type should be either email or google",
+    ar: "نوع المصادقة يجب أن يكون إما عبر البريد أو جوجل",
+  },
   invalidEmailOrPhone: {
     en: "Invalid email or phone number",
     ar: "البريد الإلكتروني أو رقم الهاتف غير صالح",
@@ -86,5 +90,25 @@ module.exports = Object.freeze({
   invalidDeviceToken: {
     en: "Invalid device token",
     ar: "معرّف الجهاز غير صالح",
+  },
+  googleAccNotRegistered: {
+    en: "Google account is not registered",
+    ar: "حساب جوجل غير مسجل",
+  },
+  invalidGoogleToken: {
+    en: "Google user's token either not valid or expired",
+    ar: "مُعرف مستخدم جوجل غير صالح أو منتهي الصلاحية",
+  },
+  invalidCountryCode: {
+    en: "Invalid country code",
+    ar: "مقدمة الدولة غير صالحة",
+  },
+  emailNotVerified: {
+    en: "Your email is not verified",
+    ar: "يحب عليك تفعيل بريدك الإلكتروني لتتمكن من استخدام النظام",
+  },
+  phoneNotVerified: {
+    en: "Your phone number is not verified",
+    ar: "يحب عليك تفعيل رقم هاتفك لتتمكن من استخدام النظام",
   },
 });

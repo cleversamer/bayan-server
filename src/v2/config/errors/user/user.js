@@ -55,4 +55,8 @@ module.exports = Object.freeze({
     en: "You don't have favorite cars",
     ar: "ليس لديك سيّارات في المفضّلة",
   },
+  noUpdateInfo: {
+    en: "No update info",
+    ar: "لا يوجد بيانات جديدة لتحديثها",
+  },
 });

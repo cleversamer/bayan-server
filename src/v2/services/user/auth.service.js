@@ -107,7 +107,7 @@ const loginWithEmailOrPhone = async (emailOrPhone, password) => {
 
     if (!user) {
       const statusCode = httpStatus.NOT_FOUND;
-      const message = errors.auth.incorrectEmailOrPhone;
+      const message = errors.auth.incorrectCredentials;
       throw new ApiError(statusCode, message);
     }
 

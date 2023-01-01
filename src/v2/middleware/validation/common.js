@@ -90,7 +90,7 @@ const checkMongoIdQueryParam = (req, res, next) => {
   const emptyQueryParams = !Object.keys(req.query).length;
   if (emptyQueryParams) {
     const statusCode = httpStatus.BAD_REQUEST;
-    const message = errors.data.noMongoId;
+    const message = errors.system.noMongoId;
     const err = new ApiError(statusCode, message);
     return next(err);
   }
@@ -98,7 +98,7 @@ const checkMongoIdQueryParam = (req, res, next) => {
   for (let item in req.query) {
     if (!mongoose.isValidObjectId(req.query[item])) {
       const statusCode = httpStatus.BAD_REQUEST;
-      const message = errors.data.invalidMongoId;
+      const message = errors.system.invalidMongoId;
       const err = new ApiError(statusCode, message);
       return next(err);
     }
@@ -111,7 +111,7 @@ const checkMongoIdParam = (req, res, next) => {
   const emptyParams = !Object.keys(req.params).length;
   if (emptyParams) {
     const statusCode = httpStatus.BAD_REQUEST;
-    const message = errors.data.noMongoId;
+    const message = errors.system.noMongoId;
     const err = new ApiError(statusCode, message);
     return next(err);
   }
@@ -119,7 +119,7 @@ const checkMongoIdParam = (req, res, next) => {
   for (let item in req.params) {
     if (!mongoose.isValidObjectId(req.params[item])) {
       const statusCode = httpStatus.BAD_REQUEST;
-      const message = errors.data.invalidMongoId;
+      const message = errors.system.invalidMongoId;
       const err = new ApiError(statusCode, message);
       return next(err);
     }

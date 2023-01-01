@@ -1,5 +1,8 @@
 const { Storage } = require("@google-cloud/storage");
 const path = require("path");
+const httpStatus = require("http-status");
+const { ApiError } = require("../../middleware/apiError");
+const errors = require("../../config/errors");
 
 const uploadFile = async (file = { name: "", path: "" }) => {
   try {
@@ -26,7 +29,9 @@ const uploadFile = async (file = { name: "", path: "" }) => {
 
     return cloudFile[1].mediaLink;
   } catch (err) {
-    throw err;
+    const statusCode = httpStatus.BAD_REQUEST;
+    const message = errors.system.fileUploadError;
+    throw new ApiError(statusCode, message);
   }
 };
 
