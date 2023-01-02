@@ -43,8 +43,6 @@ const validateVerifyUser = [
   commonMiddleware.next,
 ];
 
-////////////////////////////////////////
-
 module.exports = {
   validateUpdateProfile,
   validateUpdateUserProfile,

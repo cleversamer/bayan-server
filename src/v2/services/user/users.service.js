@@ -2,10 +2,8 @@ const { User } = require("../../models/user/user.model");
 const httpStatus = require("http-status");
 const emailService = require("./email.service");
 const localStorage = require("../storage/localStorage.service");
-const cloudStorage = require("../storage/cloudStorage.service");
 const { ApiError } = require("../../middleware/apiError");
 const errors = require("../../config/errors");
-const bcrypt = require("bcrypt");
 
 module.exports.resendEmailOrPhoneVerificationCode = async (key, user, lang) => {
   try {
@@ -153,15 +151,27 @@ module.exports.handleForgotPassword = async (
   }
 };
 
-module.exports.changePassword = async (user, newPassword) => {
+module.exports.changePassword = async (user, oldPassword, newPassword) => {
   try {
-    // Update user's password
+    // Decoding user's password and comparing it with the old password
+    if (!(await user.comparePassword(oldPassword))) {
+      const statusCode = httpStatus.UNAUTHORIZED;
+      const message = errors.auth.incorrectOldPassword;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Decoding user's password and comparing it with the new password
+    if (await user.comparePassword(newPassword)) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.auth.oldPasswordMatchNew;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Update password
     await user.updatePassword(newPassword);
 
-    // Save the user to the DB
+    // Save user
     await user.save();
-
-    return user;
   } catch (err) {
     throw err;
   }
@@ -366,7 +376,7 @@ const updateUserProfile = async (user, body) => {
       const fullPhone = `${phone.icc}${phone.nsn}`;
       const phoneUsed = await this.findUserByEmailOrPhone(fullPhone);
       if (phoneUsed) {
-        const statusCode = httpStatus.NOT_FOUND;
+        const statusCode = httpStatus.BAD_REQUEST;
         const message = errors.auth.phoneUsed;
         throw new ApiError(statusCode, message);
       }

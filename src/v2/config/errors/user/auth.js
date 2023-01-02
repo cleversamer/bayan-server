@@ -90,39 +90,31 @@ module.exports = Object.freeze({
     en: "You don’t have enough rights",
     ar: "ليس لديك الصلاحيّات الكافية",
   },
+  phoneNotVerified: {
+    en: "You have to verify your phone number to continue using the app",
+    ar: "يجب عليك تفعيل رقم هاتفك لتتمكن من إستخدام التطبيق",
+  },
+  phoneNotOnlyNumbers: {
+    en: "Phone number should contain only numbers",
+    ar: "رقم الهاتف يجب أن يحتوي على أرقام فقط",
+  },
+  phoneUsed: {
+    en: "Phone number is already used",
+    ar: "رقم الهاتف مستخدم مسبقًا",
+  },
+  emailUsed: {
+    en: "Email address is already used",
+    ar: "البريد الإلكتروني مستخدم مسبقًا",
+  },
+  incorrectOldPassword: {
+    en: "Old password is incorrect",
+    ar: "كلمة المرور القديمة غير صحيحة",
+  },
+  oldPasswordMatchNew: {
+    en: "New password matches old password",
+    ar: "كلمة المرور الجديدة تطابق كلمة المرور القديمة",
+  },
   ////////////////////////////////////////
-  // phoneNotVerified: {
-  //   en: "You have to verify your phone number to continue using the app",
-  //   ar: "يجب عليك تفعيل رقم هاتفك لتتمكن من إستخدام التطبيق",
-  // },
-  // emailUsed: {
-  //   en: "Email address is already used",
-  //   ar: "البريد الإلكتروني مستخدم مسبقًا",
-  // },
-  // phoneUsed: {
-  //   en: "Phone number is already used",
-  //   ar: "رقم الهاتف مستخدم مسبقًا",
-  // },
-  // incorrectOldPassword: {
-  //   en: "Old password is incorrect",
-  //   ar: "كلمة المرور القديمة غير صحيحة",
-  // },
-  // oldPasswordMatchNew: {
-  //   en: "New password matches old password",
-  //   ar: "كلمة المرور الجديدة تطابق كلمة المرور القديمة",
-  // },
-  // phoneNotOnlyNumbers: {
-  //   en: "Phone number should contain only numbers",
-  //   ar: "رقم الهاتف يجب أن يحتوي على أرقام فقط",
-  // },
-  // invalidDeviceToken: {
-  //   en: "Invalid device token",
-  //   ar: "معرّف الجهاز غير صالح",
-  // },
-  // invalidCountryCode: {
-  //   en: "Invalid country code",
-  //   ar: "مقدمة الدولة غير صالحة",
-  // },
   // phoneNotVerified: {
   //   en: "Your phone number is not verified",
   //   ar: "يحب عليك تفعيل رقم هاتفك لتتمكن من استخدام النظام",

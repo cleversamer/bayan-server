@@ -121,15 +121,15 @@ module.exports.handleForgotPassword = async (req, res, next) => {
 module.exports.changePassword = async (req, res, next) => {
   try {
     const user = req.user;
-    const { newPassword } = req.body;
+    const { oldPassword, newPassword } = req.body;
 
-    // Reset user's password
-    const updatedUser = await usersService.changePassword(user, newPassword);
+    await usersService.changePassword(user, oldPassword, newPassword);
 
-    // Create the response object
-    const response = _.pick(updatedUser, userSchema);
+    const response = {
+      user: _.pick(user, userSchema),
+      token: user.genAuthToken(),
+    };
 
-    // Send response back to the client
     res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
@@ -152,7 +152,7 @@ module.exports.updateProfile = async (req, res, next) => {
     );
 
     const response = {
-      user: _.pick(info.newUser, CLIENT_SCHEMA),
+      user: _.pick(info.newUser, userSchema),
       changes: info.changes,
       token: info.newUser.genAuthToken(),
     };

@@ -10,11 +10,12 @@ const { server } = require("../../config/system");
 //////////////////// COMMON FUNCTIONS ////////////////////
 const next = (req, res, next) => {
   const errors = validationResult(req);
+
   if (!errors.isEmpty()) {
     const statusCode = httpStatus.BAD_REQUEST;
     const message = errors.array()[0].msg;
-    const error = new ApiError(statusCode, message);
-    return next(error);
+    const err = new ApiError(statusCode, message);
+    return next(err);
   }
 
   next();
@@ -91,9 +92,8 @@ const checkMongoIdParam = (req, res, next) => {
   next();
 };
 
-const conditionalCheck = (key, checker) => (req, res, next) => {
-  return req.body[key] ? checker(req, res, next) : next();
-};
+const conditionalCheck = (key, checker) => (req, res, next) =>
+  req.body[key] ? checker(req, res, next) : next();
 
 const checkFile =
   (key, supportedTypes, compulsory = true) =>
@@ -143,7 +143,6 @@ const checkCode = check("code")
     min: userValidation.verificationCode.exactLength,
     max: userValidation.verificationCode.exactLength,
   })
-  .isNumeric()
   .withMessage(errors.auth.invalidCode);
 
 const checkSendTo = check("sendTo")
@@ -163,6 +162,7 @@ const checkName = check("name")
 const checkEmail = check("email")
   .trim()
   .isEmail()
+  .withMessage(errors.auth.invalidEmail)
   .isLength({
     min: userValidation.email.minLength,
     max: userValidation.email.maxLength,
@@ -254,9 +254,6 @@ const checkNewPassword = check("newPassword")
   .withMessage(errors.auth.invalidNewPassword);
 
 const checkLanguage = check("lang")
-  .trim()
-  .notEmpty()
-  .withMessage(errors.user.noLanguage)
   .isIn(server.SUPPORTED_LANGUAGES)
   .withMessage(errors.user.unsupportedLanguage);
 

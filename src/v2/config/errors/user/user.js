@@ -31,22 +31,22 @@ module.exports = Object.freeze({
     en: "Invalid user ID",
     ar: "معرّف المستخدم غير صالح",
   },
+  unsupportedLanguage: {
+    en: "Unsupported language",
+    ar: "اللغة غير مدعومة",
+  },
+  notUpdated: {
+    en: "There's no new data to update",
+    ar: "لا يوجد بيانات جديدة للتحديث",
+  },
   ////////////////////////////////////////
-  // foundWithInvalidRole: {
-  //   en: "User is registered with another role",
-  //   ar: "المستخدم مسجّل بصلاحيّة أخرى",
-  // },
-  // unsupportedLanguage: {
-  //   en: "Unsupported language",
-  //   ar: "اللغة غير مدعومة",
-  // },
   // noLanguage: {
   //   en: "Please select your favorite language",
   //   ar: "من فضلك قم بإختيار لغتك المفضّلة",
   // },
-  // notUpdated: {
-  //   en: "There's no new data to update",
-  //   ar: "لا يوجد بيانات جديدة للتحديث",
+  // foundWithInvalidRole: {
+  //   en: "User is registered with another role",
+  //   ar: "المستخدم مسجّل بصلاحيّة أخرى",
   // },
   // notificationsSeen: {
   //   en: "There are no new notifications out there",

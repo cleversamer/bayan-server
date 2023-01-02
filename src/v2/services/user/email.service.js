@@ -1,6 +1,8 @@
 const nodemailer = require("nodemailer");
-const Mailgen = require("mailgen");
 const { mail } = require("../../config/system");
+const httpStatus = require("http-status");
+const errors = require("../../config/errors");
+const { ApiError } = require("../../middleware/apiError");
 
 const transporter = nodemailer.createTransport({
   service: "Gmail",
@@ -11,42 +13,65 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-module.exports.registerEmail = async (email, user) => {
+module.exports.registerEmail = async (lang, email, user) => {
   try {
-    const mailGenerator = new Mailgen({
-      theme: "default",
-      product: {
-        name: "منصة بيان التعليمية",
-        link: "#",
-        copyright: "حقوق النسخ © 2022 منصة بيان التعليمية. حميع الحقوق محفوظة.",
-      },
-    });
+    if (!["ar", "en"].includes(lang)) {
+      lang = "ar";
+    }
 
-    const emailBody = mailGenerator.generate({
-      body: {
-        title: `<br />
-        <center text-align="right">
-          هذا هو الكود الخاص بتفعيل بريدك الإلكتروني صالح لمدة 10 دقائق:
-          <br /> 
-          ${user.verification.email.code}
-          </center>
-         <br />`,
-        greeting: "Dear",
-        signature: user.name || "مستخدم منصة بيان",
-      },
-    });
+    const {
+      subject,
+      emailBody: { title, greeting },
+    } = mail.types.register;
 
-    const message = {
-      to: email,
-      from: "منصة بيان التعليمية",
-      html: emailBody,
-      subject: "أهلاً بك في منصة بيان التعليمية",
-    };
+    const mailGenerator = mail.getMailGenerator(lang);
+
+    const emailBody = mail.getEmailBody(
+      mailGenerator,
+      title[lang](user),
+      greeting[lang],
+      user
+    );
+
+    const message = mail.getMessage(email, emailBody, subject[lang]);
 
     await transporter.sendMail(message);
     return true;
   } catch (err) {
-    throw err;
+    const statusCode = httpStatus.INTERNAL_SERVER_ERROR;
+    const message = errors.system.emailError;
+    throw new ApiError(statusCode, message);
+  }
+};
+
+module.exports.changeEmail = async (lang, email, user) => {
+  try {
+    if (!["ar", "en"].includes(lang)) {
+      lang = "ar";
+    }
+
+    const {
+      subject,
+      emailBody: { title, greeting },
+    } = mail.types.changeEmail;
+
+    const mailGenerator = mail.getMailGenerator(lang);
+
+    const emailBody = mail.getEmailBody(
+      mailGenerator,
+      title[lang](user),
+      greeting[lang],
+      user
+    );
+
+    const message = mail.getMessage(email, emailBody, subject[lang]);
+
+    await transporter.sendMail(message);
+    return true;
+  } catch (err) {
+    const statusCode = httpStatus.INTERNAL_SERVER_ERROR;
+    const message = errors.system.emailError;
+    throw new ApiError(statusCode, message);
   }
 };
 

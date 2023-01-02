@@ -7,6 +7,10 @@ module.exports = Object.freeze({
     "read:own": ["*"],
     "update:own": ["*"],
   },
+  phoneVerificationCode: {
+    "read:own": ["*"],
+    "update:own": ["*"],
+  },
   password: {
     "update:own": ["*"],
   },
