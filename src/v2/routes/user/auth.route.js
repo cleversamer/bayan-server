@@ -4,11 +4,11 @@ const { authController } = require("../../controllers");
 const { authValidator } = require("../../middleware/validation");
 
 router.post(
-  "/register",
+  "/users/register",
   authValidator.registerValidator,
   authController.register
 );
 
-router.post("/login", authValidator.loginValidator, authController.login);
+router.post("/users/login", authValidator.loginValidator, authController.login);
 
 module.exports = router;
