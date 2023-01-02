@@ -86,23 +86,26 @@ module.exports.verifyEmailOrPhone = async (key, user, code) => {
   }
 };
 
-module.exports.sendForgotPasswordCode = async (email) => {
+module.exports.sendForgotPasswordCode = async (emailOrPhone, sendTo, lang) => {
   try {
     // Check if user exists
-    const user = await this.findUserByEmailOrPhone(email);
+    const user = await this.findUserByEmailOrPhone(emailOrPhone);
     if (!user) {
       const statusCode = httpStatus.NOT_FOUND;
-      const message = errors.auth.emailNotUsed;
+      const message = errors.auth.emailOrPhoneNotUsed;
       throw new ApiError(statusCode, message);
     }
 
-    // Update user's password reset code
+    // Update password reset code
     user.updateCode("password");
+    const updatedUser = await user.save();
 
-    // Save the user to the DB
-    await user.save();
-
-    return user;
+    // Send password reset code to phone or
+    if (sendTo === "phone") {
+      // TODO: send forgot password code to user's phone.
+    } else {
+      await emailService.forgotPasswordEmail(lang, user.email, updatedUser);
+    }
   } catch (err) {
     throw err;
   }
@@ -150,7 +153,7 @@ module.exports.handleForgotPassword = async (
   }
 };
 
-module.exports.resetPassword = async (user, newPassword) => {
+module.exports.changePassword = async (user, newPassword) => {
   try {
     // Update user's password
     await user.updatePassword(newPassword);
@@ -165,124 +168,54 @@ module.exports.resetPassword = async (user, newPassword) => {
 };
 
 module.exports.updateProfile = async (
+  lang,
   user,
   name,
-  avatar,
-  phone,
   email,
-  password
+  phone,
+  avatar
 ) => {
   try {
-    const noUpdateInfo = !name && !avatar && !phone && !email && !password;
-    if (noUpdateInfo) {
-      const statusCode = httpStatus.BAD_REQUEST;
-      const message = errors.user.noUpdateInfo;
-      throw new ApiError(statusCode, message);
-    }
+    const body = {
+      lang,
+      name,
+      email,
+      phone,
+      avatar,
+    };
 
-    if (avatar) {
-      const localFile = await localStorage.storeFile(avatar);
-      const cloudFile = await cloudStorage.uploadFile(localFile);
-      await localStorage.deleteFile(localFile);
-      user.avatarURL = cloudFile;
-      user = await user.save();
-    }
-
-    if (name && user.name !== name) {
-      user.name = name;
-      user = await user.save();
-    }
-
-    if (phone && user.phone !== phone) {
-      user.phone = phone;
-      user.verified.phone = false;
-      await user.save();
-      // TODO: Sending whatsapp message with phone verification code
-    }
-
-    if (password && user.password !== password) {
-      const salt = await bcrypt.genSalt(10);
-      const hashed = await bcrypt.hash(password, salt);
-      user.password = hashed;
-      user = await user.save();
-    }
-
-    // Should be the last one
-    if (email && user.email !== email) {
-      user.email = email;
-      user.verified.email = false;
-
-      // Saved here because in the middleware func "save"
-      // the emailVerificationCode will be updated
-      user = await user.save();
-
-      await emailService.registerEmail(email, user);
-    }
-
-    return user;
+    return await updateUserProfile(user, body);
   } catch (err) {
     throw err;
   }
 };
 
 module.exports.updateUserProfile = async (
-  userId,
+  lang,
+  emailOrPhone,
   name,
-  avatar,
-  phone,
   email,
-  password
+  phone,
+  avatar
 ) => {
   try {
-    const noUpdateInfo = !name && !avatar && !phone && !email && !password;
-    if (noUpdateInfo) {
-      const statusCode = httpStatus.BAD_REQUEST;
-      const message = errors.user.noUpdateInfo;
-      throw new ApiError(statusCode, message);
-    }
-
-    let user = await this.findUserById(userId);
+    // Checking if user exists
+    const user = await this.findUserByEmailOrPhone(emailOrPhone);
     if (!user) {
       const statusCode = httpStatus.NOT_FOUND;
       const message = errors.user.notFound;
       throw new ApiError(statusCode, message);
     }
 
-    if (avatar) {
-      const localFile = await localStorage.storeFile(avatar);
-      const cloudFile = await cloudStorage.uploadFile(localFile);
-      await localStorage.deleteFile(localFile);
-      user.avatarURL = cloudFile;
-      await user.save();
-    }
+    const body = {
+      lang,
+      name,
+      email,
+      phone,
+      avatar,
+    };
 
-    if (name && user.name !== name) {
-      user.name = name;
-      user = await user.save();
-    }
-
-    if (phone && user.phone !== phone) {
-      user.phone = phone;
-      user.verified.phone = false;
-      await user.save();
-      // Sending whatsapp message with phone verification code
-    }
-
-    if (password && user.password !== password) {
-      const salt = await bcrypt.genSalt(10);
-      const hashed = await bcrypt.hash(password, salt);
-      user.password = hashed;
-      user = await user.save();
-    }
-
-    // Should be the last one
-    if (email && user.email !== email) {
-      user.email = email;
-      user.verified.email = false;
-      user = await user.save();
-    }
-
-    return user;
+    return await updateUserProfile(user, body);
   } catch (err) {
     throw err;
   }
@@ -371,6 +304,94 @@ module.exports.verifyUser = async (userId) => {
 module.exports.getAllUsers = async () => {
   try {
     return await User.find({});
+  } catch (err) {
+    throw err;
+  }
+};
+
+//////////////////// INRERNAL SERVICES ////////////////////
+const updateUserProfile = async (user, body) => {
+  try {
+    const { name, avatar, email, phone, lang } = body;
+
+    // To store data changes
+    const changes = [];
+
+    // Updating name when there's new name
+    if (name && user.name !== name) {
+      user.name = name;
+      changes.push("name");
+    }
+
+    // Updating avatar when there's new avatar
+    if (avatar) {
+      const file = await localStorage.storeFile(avatar);
+      await localStorage.deleteFile(user.avatarURL);
+      user.avatarURL = file.path;
+      changes.push("avatarURL");
+    }
+
+    // Updating email, setting email as not verified,
+    // update email verification code, and sending
+    // email verification code to user's email
+    if (email && user.email !== email) {
+      // Checking if email used
+      const emailUsed = await this.findUserByEmailOrPhone(email);
+      if (emailUsed) {
+        const statusCode = httpStatus.NOT_FOUND;
+        const message = errors.auth.emailUsed;
+        throw new ApiError(statusCode, message);
+      }
+
+      // Updating email, setting email as not verified,
+      // update email verification code, and sending
+      // email verification code to user's email
+      user.email = email;
+      user.verified.email = false;
+      changes.push("email");
+      user.updateCode("email");
+      await emailService.changeEmail(lang, email, user);
+    }
+
+    // Updating phone, setting phone as not verified,
+    // update phone verification code, and sending
+    // phone verification code to user's phone
+    const isPhoneEqual =
+      user.phone.icc === phone?.icc && user.phone.nsn === phone?.nsn;
+    if (phone && !isPhoneEqual) {
+      // Checking if phone used
+      const fullPhone = `${phone.icc}${phone.nsn}`;
+      const phoneUsed = await this.findUserByEmailOrPhone(fullPhone);
+      if (phoneUsed) {
+        const statusCode = httpStatus.NOT_FOUND;
+        const message = errors.auth.phoneUsed;
+        throw new ApiError(statusCode, message);
+      }
+
+      // Updating email, setting email as not verified,
+      // update email verification code, and sending
+      // email verification code to user's email
+      user.phone = {
+        full: `${phone.icc}${phone.nsn}`,
+        icc: phone.icc,
+        nsn: phone.nsn,
+      };
+      user.verified.phone = false;
+      changes.push("phone");
+      user.updateCode("phone");
+
+      // TODO: send phone verification code to user's email.
+    }
+
+    if (!changes.length) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.user.notUpdated;
+      throw new ApiError(statusCode, message);
+    }
+
+    user = await user.save();
+
+    return { newUser: user, changes };
   } catch (err) {
     throw err;
   }

@@ -12,7 +12,7 @@ const validateCreateSeason = [
 
   commonCheckers.checkFile("photo", ["png", "jpg", "jpeg"]),
 
-  commonCheckers.handler,
+  commonCheckers.next,
 ];
 
 const validateGetGradeSeasons = [commonCheckers.checkMongoIdQueryParam];

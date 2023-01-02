@@ -9,7 +9,7 @@ const validateCreateUnit = [
     .isLength({ min: 1, max: 64 })
     .withMessage(errors.subject.invalidTitle),
 
-  commonCheckers.handler,
+  commonCheckers.next,
 ];
 
 const validateGetSubjectUnits = [commonCheckers.checkMongoIdQueryParam];

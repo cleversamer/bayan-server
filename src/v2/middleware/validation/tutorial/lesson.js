@@ -12,7 +12,7 @@ const validateCreateLesson = [
     .isLength({ min: 1, max: 64 })
     .withMessage(errors.lesson.invalidTitle),
 
-  commonCheckers.handler,
+  commonCheckers.next,
 ];
 
 const validateGetUnitLessons = [commonCheckers.checkMongoIdParam];
@@ -26,7 +26,7 @@ const validateAddDocument = [
 
   commonCheckers.checkFile("file", ["pdf", "rar"]),
 
-  commonCheckers.handler,
+  commonCheckers.next,
 ];
 
 const validateAddVideo = [
@@ -69,7 +69,7 @@ const validateAddVideo = [
     }
   },
 
-  commonCheckers.handler,
+  commonCheckers.next,
 ];
 
 const validateAddQuiz = [
@@ -79,7 +79,7 @@ const validateAddQuiz = [
     .isLength({ min: 1, max: 64 })
     .withMessage(errors.quiz.invalidTitle),
 
-  commonCheckers.handler,
+  commonCheckers.next,
 ];
 
 const validateAddQuestionToQuiz = [
@@ -161,7 +161,7 @@ const validateAddQuestionToQuiz = [
     next();
   },
 
-  commonCheckers.handler,
+  commonCheckers.next,
 ];
 
 const validateAddSubmission = [
@@ -197,7 +197,7 @@ const validateAddSubmission = [
     next();
   },
 
-  commonCheckers.handler,
+  commonCheckers.next,
 ];
 
 const validateQueryId = [commonCheckers.checkMongoIdQueryParam];

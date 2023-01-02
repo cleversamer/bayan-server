@@ -42,7 +42,7 @@ const validateCreateSubject = [
 
   commonCheckers.checkFile("photo", ["png", "jpg", "jpeg"]),
 
-  commonCheckers.handler,
+  commonCheckers.next,
 ];
 
 const validateGetSeasonSubjects = [commonCheckers.checkMongoIdQueryParam];
@@ -50,7 +50,7 @@ const validateGetSeasonSubjects = [commonCheckers.checkMongoIdQueryParam];
 const validateToggleIsSubjectFree = [
   check("subjectId").isMongoId().withMessage(errors.subject.invalidId),
 
-  commonCheckers.handler,
+  commonCheckers.next,
 ];
 
 module.exports = {

@@ -5,7 +5,7 @@ const commonCheckers = require("../common");
 const validateCreateSubscription = [
   check("packageId").isMongoId().withMessage(errors.season.invalidId),
 
-  commonCheckers.handler,
+  commonCheckers.next,
 ];
 
 const validateToggleSubscriptionActive = [
@@ -13,7 +13,7 @@ const validateToggleSubscriptionActive = [
     .isMongoId()
     .withMessage(errors.subscription.invalidId),
 
-  commonCheckers.handler,
+  commonCheckers.next,
 ];
 
 const validateToggleSubjectActive = [
@@ -23,7 +23,7 @@ const validateToggleSubjectActive = [
 
   check("subjectId").isMongoId().withMessage(errors.subject.invalidId),
 
-  commonCheckers.handler,
+  commonCheckers.next,
 ];
 
 const validateAddSubjectToSubscription = [
@@ -33,7 +33,7 @@ const validateAddSubjectToSubscription = [
 
   check("subjectId").isMongoId().withMessage(errors.subject.invalidId),
 
-  commonCheckers.handler,
+  commonCheckers.next,
 ];
 
 const validateDeleteSubscribedSubject = [
@@ -43,7 +43,7 @@ const validateDeleteSubscribedSubject = [
 
   check("subjectId").isMongoId().withMessage(errors.subject.invalidId),
 
-  commonCheckers.handler,
+  commonCheckers.next,
 ];
 
 module.exports = {

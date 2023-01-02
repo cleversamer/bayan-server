@@ -67,7 +67,7 @@ const validateCreatePackage = [
     next();
   },
 
-  commonCheckers.handler,
+  commonCheckers.next,
 ];
 
 const validateGetGradePackages = [commonCheckers.checkMongoIdQueryParam];

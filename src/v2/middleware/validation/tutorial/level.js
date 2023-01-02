@@ -9,7 +9,7 @@ const validateCreateLevel = [
 
   commonCheckers.checkFile("photo", ["png", "jpg", "jpeg"]),
 
-  commonCheckers.handler,
+  commonCheckers.next,
 ];
 
 const validateGetLevelGrades = [commonCheckers.checkMongoIdQueryParam];

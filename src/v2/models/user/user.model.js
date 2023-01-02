@@ -1,7 +1,9 @@
-const mongoose = require("mongoose");
+const { Schema, model } = require("mongoose");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { server } = require("../../config/system");
+const { user: validation } = require("../../config/models");
+const countriesData = require("../../data/countries");
 
 const clientSchema = [
   "_id",
@@ -15,10 +17,6 @@ const clientSchema = [
   "verified",
   "createdAt",
 ];
-
-const SUPPORTED_ROLES = ["student", "teacher", "admin"];
-
-const AUTH_TYPES = ["email", "google"];
 
 const verification = {
   email: {
@@ -35,39 +33,74 @@ const verification = {
   },
 };
 
-const userSchema = new mongoose.Schema(
+const userSchema = new Schema(
   {
+    // The URL of user's avatar
     avatarURL: {
       type: String,
       default: "",
-    },
-    phone: {
-      type: String,
-      unique: true,
       trim: true,
-      default: "",
     },
+    // The full name of the user
+    name: {
+      type: String,
+      trim: true,
+      required: true,
+      minLength: validation.name.minLength,
+      maxLength: validation.name.maxLength,
+    },
+    // The email of the user
     email: {
       type: String,
       required: true,
       unique: true,
       trim: true,
+      lowercase: true,
+      minLength: validation.email.minLength,
+      maxLength: validation.email.maxLength,
     },
+    // The phone of the user
+    phone: {
+      // The full phone number (icc + nsn)
+      full: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true,
+        minlength: countriesData.minPhone,
+        maxlength: countriesData.maxPhone,
+      },
+      // The icc of user's phone
+      icc: {
+        type: String,
+        required: true,
+        trim: true,
+        enum: countriesData.countries.map((c) => c.icc),
+        minlength: countriesData.minICC,
+        maxlength: countriesData.maxICC,
+      },
+      // The nsn of user's phone
+      nsn: {
+        type: String,
+        required: true,
+        trim: true,
+        minLength: countriesData.minNSN,
+        maxLength: countriesData.maxNSN,
+      },
+    },
+    // The hashed password of the user
     password: {
       type: String,
       trim: true,
       default: "",
     },
-    name: {
-      type: String,
-      trim: true,
-      required: true,
-    },
+    // The role of the user
     role: {
       type: String,
-      enum: ["student", "teacher", "admin"],
-      default: "student",
+      enum: validation.roles,
+      default: validation.roles[0],
     },
+    // The email and phone verification status of the user
     verified: {
       email: {
         type: Boolean,
@@ -78,44 +111,49 @@ const userSchema = new mongoose.Schema(
         default: false,
       },
     },
+    // How user joined to the system
     authType: {
       type: String,
-      enum: AUTH_TYPES,
+      enum: validation.authTypes,
       required: true,
       default: "email",
     },
+    // The last login date of the user
     lastLogin: {
       type: String,
-      default: "",
+      default: new Date(),
     },
-    emailVerificationCode: {
-      code: {
-        type: String,
-        default: "",
+    // The email, phone, and password verification codes
+    verification: {
+      email: {
+        code: {
+          type: String,
+          default: "",
+        },
+        expiryDate: {
+          type: String,
+          default: "",
+        },
       },
-      expiresAt: {
-        type: String,
-        default: "",
+      phone: {
+        code: {
+          type: String,
+          default: "",
+        },
+        expiryDate: {
+          type: String,
+          default: "",
+        },
       },
-    },
-    phoneVerificationCode: {
-      code: {
-        type: String,
-        default: "",
-      },
-      expiresAt: {
-        type: String,
-        default: "",
-      },
-    },
-    resetPasswordCode: {
-      code: {
-        type: String,
-        default: "",
-      },
-      expiresAt: {
-        type: String,
-        default: "",
+      password: {
+        code: {
+          type: String,
+          default: "",
+        },
+        expiryDate: {
+          type: String,
+          default: "",
+        },
       },
     },
   },
@@ -247,11 +285,9 @@ userSchema.methods.updateRole = function (newRole) {
   }
 };
 
-const User = mongoose.model("User", userSchema);
+const User = model("User", userSchema);
 
 module.exports = {
   User,
   clientSchema,
-  AUTH_TYPES,
-  SUPPORTED_ROLES,
 };

@@ -62,6 +62,7 @@ router.patch(
 );
 
 //////////////////// User: Subscription ////////////////////
+// TODO: missing paymentInfo param
 router.post(
   "/subscribe",
   userValidator.validateSubscripeToPackage,
@@ -69,6 +70,7 @@ router.post(
   usersController.subscribeToPackage
 );
 
+// TODO: update query code
 router.get(
   "/admin/:id/subscriptions",
   userValidator.validateGetUserSubscriptions,

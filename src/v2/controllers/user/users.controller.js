@@ -73,29 +73,21 @@ module.exports.verifyEmailOrPhone = (key) => async (req, res, next) => {
 
 module.exports.sendForgotPasswordCode = async (req, res, next) => {
   try {
-    const { email, sendTo } = req.query;
-
-    // Send forgot password email to the user
-    await usersService.sendForgotPasswordCode(email);
-
-    if (sendTo === "email") {
-      // Send email to the user
-      await emailService.forgotPasswordEmail(email, updatedUser);
-    } else {
-      // TODO:
-      // Send SMS message to the user
+    let { emailOrPhone, sendTo, lang } = req.query;
+    if (emailOrPhone.startsWith(" ")) {
+      emailOrPhone = `+${emailOrPhone.trim()}`;
     }
 
-    // Create the response object
+    await usersService.sendForgotPasswordCode(emailOrPhone, sendTo, lang);
+
     const response = {
       ok: true,
       message:
-        sendTo === "email"
-          ? success.auth.passwordResetCodeSentToEmail
-          : success.auth.passwordResetCodeSentToPhone,
+        sendTo === "phone"
+          ? success.auth.passwordResetCodeSentToPhone
+          : success.auth.passwordResetCodeSentToEmail,
     };
 
-    // Send response back to the client
     res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
@@ -132,7 +124,7 @@ module.exports.changePassword = async (req, res, next) => {
     const { newPassword } = req.body;
 
     // Reset user's password
-    const updatedUser = await usersService.resetPassword(user, newPassword);
+    const updatedUser = await usersService.changePassword(user, newPassword);
 
     // Create the response object
     const response = _.pick(updatedUser, userSchema);
@@ -147,34 +139,26 @@ module.exports.changePassword = async (req, res, next) => {
 module.exports.updateProfile = async (req, res, next) => {
   try {
     const user = req.user;
-    const { name, phone, email, password } = req.body;
+    const { name, email, phone, lang } = req.body;
     const avatar = req?.files?.avatar || null;
 
-    // Update user's profile
-    const newUser = await usersService.updateProfile(
+    const info = await usersService.updateProfile(
+      lang,
       user,
       name,
-      avatar,
-      phone,
       email,
-      password
+      phone,
+      avatar
     );
 
-    // Create the response object
     const response = {
-      user: _.pick(newUser, userSchema),
-      token: newUser.genAuthToken(),
+      user: _.pick(info.newUser, CLIENT_SCHEMA),
+      changes: info.changes,
+      token: info.newUser.genAuthToken(),
     };
 
-    // Send response back to the client
     res.status(httpStatus.CREATED).json(response);
   } catch (err) {
-    if (err.code === errors.codes.duplicateIndexKey) {
-      const statusCode = httpStatus.BAD_REQUEST;
-      const message = errors.auth.emailOrPhoneUsed;
-      err = new ApiError(statusCode, message);
-    }
-
     next(err);
   }
 };
@@ -278,10 +262,7 @@ module.exports.changeUserRole = async (req, res, next) => {
 
 module.exports.findUserByEmailOrPhone = async (req, res, next) => {
   try {
-    // This is come from `req.params` but added to `req.body`
-    // in the validation middleware.
-    // GET requests does not accept body data.
-    const { emailOrPhone, role } = req.body;
+    const { emailOrPhone, role } = req.query;
 
     // Find user with the specified email or phone
     const user = await usersService.findUserByEmailOrPhone(
