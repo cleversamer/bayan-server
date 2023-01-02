@@ -180,8 +180,8 @@ const checkPhone = (req, res, next) => {
   let { icc, nsn } = req.body.phone;
 
   // Convert phone to string if it's not a string.
-  icc = String(icc);
-  nsn = String(nsn);
+  icc = String(icc).trim();
+  nsn = String(nsn).trim();
 
   // Check if icc starts with a plus `+`
   if (!icc.startsWith("+")) {

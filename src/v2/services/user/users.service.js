@@ -252,7 +252,10 @@ module.exports.findUserByEmailOrPhone = async (
   try {
     // Find a user with the specified email or phone
     const user = await User.findOne({
-      $or: [{ email: { $eq: emailOrPhone } }, { phone: { $eq: emailOrPhone } }],
+      $or: [
+        { email: { $eq: emailOrPhone } },
+        { "phone.full": { $eq: emailOrPhone } },
+      ],
     });
 
     // Check if user exists or exist with another role

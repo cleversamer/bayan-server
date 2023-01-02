@@ -8,6 +8,8 @@ const _ = require("lodash");
 module.exports.register = async (req, res, next) => {
   try {
     const { email, password, name, phone, authType, googleToken } = req.body;
+
+    // Create the user
     const user = await authService.createUser(
       email,
       password,
@@ -17,27 +19,22 @@ module.exports.register = async (req, res, next) => {
       googleToken
     );
 
+    // Send a mail to user's email registering using an email
     if (authType === "email") {
       await emailService.registerEmail(email, user);
     }
 
-    if (!user.phone) {
-      // Sending phone verification code to user's whatsapp account
-    }
+    // TODO: always send phone verification code to user's phone
 
+    // Create the response object
     const response = {
       user: _.pick(user, clientSchema),
       token: user.genAuthToken(),
     };
 
+    // Send response back to the client
     res.status(httpStatus.CREATED).json(response);
   } catch (err) {
-    if (err.code === errors.codes.duplicateIndexKey) {
-      const statusCode = httpStatus.BAD_REQUEST;
-      const message = errors.auth.emailOrPhoneUsed;
-      err = new ApiError(statusCode, message);
-    }
-
     next(err);
   }
 };
@@ -45,6 +42,8 @@ module.exports.register = async (req, res, next) => {
 module.exports.login = async (req, res, next) => {
   try {
     const { emailOrPhone, password, authType, googleToken } = req.body;
+
+    // Find a user either with email and password or with a google token
     const user = await authService.login(
       emailOrPhone,
       password,
@@ -52,11 +51,13 @@ module.exports.login = async (req, res, next) => {
       authType
     );
 
+    // Create the response object
     const response = {
       user: _.pick(user, clientSchema),
       token: user.genAuthToken(),
     };
 
+    // Send response back to the client
     res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);

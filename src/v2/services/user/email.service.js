@@ -28,7 +28,7 @@ module.exports.registerEmail = async (email, user) => {
         <center text-align="right">
           هذا هو الكود الخاص بتفعيل بريدك الإلكتروني صالح لمدة 10 دقائق:
           <br /> 
-          ${user.emailVerificationCode.code}
+          ${user.verification.email.code}
           </center>
          <br />`,
         greeting: "Dear",

@@ -5,40 +5,45 @@ const errors = require("../config/errors");
 const roles = require("../config/roles");
 
 const verify = (req, res, resolve, reject, rights) => async (err, user) => {
-  const requireNoUser = rights[3];
-  if (!requireNoUser && (err || !user)) {
+  // Check if there's an error
+  // Or if no user found
+  if (err || !user) {
     const statusCode = httpStatus.UNAUTHORIZED;
     const message = errors.auth.invalidToken;
     return reject(new ApiError(statusCode, message));
   }
 
+  // Add user to the `req` object
   req.user = user;
 
-  if (requireNoUser) {
-    return resolve();
-  }
-
+  // Check if the email verification is skipped
   const requireNoVerified = rights[2];
-  if (!requireNoVerified && !user.isEmailVerified()) {
+  if (!requireNoVerified && !user.isPhoneVerified()) {
     const statusCode = httpStatus.FORBIDDEN;
-    const message = errors.auth.emailNotVerified;
+    const message = errors.auth.phoneNotVerified;
     return reject(new ApiError(statusCode, message));
   }
 
+  // Check if there are specified rights to be checked
   if (rights.length) {
     const action = rights[0];
     const resource = rights[1];
     const permission = roles.can(req.user.role)[action](resource);
 
+    // Check if user's role is authorized
     if (!permission.granted) {
       const statusCode = httpStatus.FORBIDDEN;
       const message = errors.auth.hasNoRights;
       return reject(new ApiError(statusCode, message));
     }
 
+    // Append permissions to the response object
     res.locals.permission = permission;
   }
 
+  // Resolve the promise in case of:
+  // 1. There are no rights required
+  // 2. There are rights required and user's role is authorized.
   resolve();
 };
 

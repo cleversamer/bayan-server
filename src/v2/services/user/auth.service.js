@@ -1,5 +1,4 @@
 const { User } = require("../../models/user/user.model");
-const bcrypt = require("bcrypt");
 const { ApiError } = require("../../middleware/apiError");
 const httpStatus = require("http-status");
 const errors = require("../../config/errors");
@@ -15,15 +14,12 @@ module.exports.createUser = async (
   googleToken
 ) => {
   try {
-    switch (authType) {
-      case "email":
-        return await registerWithEmail(email, password, name, phone);
-
-      case "google":
-        return await registerWithGoogle(googleToken, phone);
-
-      default:
-        return await registerWithEmail(email, password, name, phone);
+    if (authType === "email") {
+      // Create a new user using email and phone
+      return await registerWithEmail(email, password, name, phone);
+    } else {
+      // Creating a new user using Google account
+      return await registerWithGoogle(googleToken, phone);
     }
   } catch (err) {
     throw err;
@@ -32,35 +28,62 @@ module.exports.createUser = async (
 
 const registerWithEmail = async (email, password, name, phone) => {
   try {
-    const salt = await bcrypt.genSalt(10);
-    const hashed = await bcrypt.hash(password, salt);
-
+    // Create an instance of the User model
     const user = new User({
-      email,
-      password: hashed,
       name,
-      phone,
+      email,
+      phone: {
+        full: phone.icc + phone.nsn,
+        icc: phone.icc,
+        nsn: phone.nsn,
+      },
       authType: "email",
       lastLogin: new Date(),
     });
 
-    return await user.save();
+    // Update user's password
+    await user.updatePassword(password);
+
+    // Update user's email verification code
+    user.updateCode("email");
+
+    // Update user's phone verification code
+    user.updateCode("phone");
+
+    // Save the user to the DB
+    await user.save();
+
+    return user;
   } catch (err) {
+    // Check if the error is about a duplicate index key
+    // in unique values which are (email, phone)
+    // and notify the client with the error.
+    if (err.code === errors.codes.duplicateIndexKey) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.auth.emailOrPhoneUsed;
+      err = new ApiError(statusCode, message);
+    }
+
     throw err;
   }
 };
 
 const registerWithGoogle = async (googleToken, phone) => {
   try {
+    // Get the user data via google token
     const googleUser = await googleService.decodeToken(googleToken);
+
+    // Check if there is a user registered with the specified email
     const registeredUser = await usersService.findUserByEmailOrPhone(
       googleUser.email
     );
 
+    // Return the registered user if exists
     if (registeredUser) {
       return registeredUser;
     }
 
+    // Create an instance of the User model
     const newUser = new User({
       email: googleUser.email,
       name: googleUser.name,
@@ -73,7 +96,10 @@ const registerWithGoogle = async (googleToken, phone) => {
       lastLogin: new Date(),
     });
 
-    return await newUser.save();
+    // Save the user to the DB
+    await newUser.save();
+
+    return newUser;
   } catch (err) {
     throw err;
   }
@@ -86,15 +112,12 @@ module.exports.login = async (
   authType
 ) => {
   try {
-    switch (authType) {
-      case "email":
-        return await loginWithEmailOrPhone(emailOrPhone, password);
-
-      case "google":
-        return await loginWithGoogle(googleToken);
-
-      default:
-        return await loginWithEmailOrPhone(emailOrPhone, password);
+    if (authType === "email") {
+      // Login with email/phone and password
+      return await loginWithEmailOrPhone(emailOrPhone, password);
+    } else {
+      // Login with google token
+      return await loginWithGoogle(googleToken);
     }
   } catch (err) {
     throw err;
@@ -103,21 +126,25 @@ module.exports.login = async (
 
 const loginWithEmailOrPhone = async (emailOrPhone, password) => {
   try {
+    // Check if user exists
     const user = await usersService.findUserByEmailOrPhone(emailOrPhone);
-
     if (!user) {
       const statusCode = httpStatus.NOT_FOUND;
       const message = errors.auth.incorrectCredentials;
       throw new ApiError(statusCode, message);
     }
 
+    // Check if password is incorrect
     if (!(await user.comparePassword(password))) {
       const statusCode = httpStatus.UNAUTHORIZED;
       const message = errors.auth.incorrectCredentials;
       throw new ApiError(statusCode, message);
     }
 
-    user.lastLogin = new Date();
+    // Update user's last login date
+    user.updateLastLogin();
+
+    // Save the user to the DB
     await user.save();
 
     return user;

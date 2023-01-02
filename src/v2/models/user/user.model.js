@@ -8,14 +8,13 @@ const countriesData = require("../../data/countries");
 const clientSchema = [
   "_id",
   "avatarURL",
-  "phone",
-  "email",
   "name",
+  "email",
+  "phone",
   "role",
+  "verified",
   "authType",
   "lastLogin",
-  "verified",
-  "createdAt",
 ];
 
 const verification = {
@@ -114,6 +113,7 @@ const userSchema = new Schema(
     // How user joined to the system
     authType: {
       type: String,
+      trim: true,
       enum: validation.authTypes,
       required: true,
       default: "email",
@@ -121,6 +121,7 @@ const userSchema = new Schema(
     // The last login date of the user
     lastLogin: {
       type: String,
+      trim: true,
       default: new Date(),
     },
     // The email, phone, and password verification codes
@@ -129,30 +130,36 @@ const userSchema = new Schema(
         code: {
           type: String,
           default: "",
+          trim: true,
         },
         expiryDate: {
           type: String,
           default: "",
+          trim: true,
         },
       },
       phone: {
         code: {
           type: String,
           default: "",
+          trim: true,
         },
         expiryDate: {
           type: String,
           default: "",
+          trim: true,
         },
       },
       password: {
         code: {
           type: String,
           default: "",
+          trim: true,
         },
         expiryDate: {
           type: String,
           default: "",
+          trim: true,
         },
       },
     },
