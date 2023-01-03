@@ -1,8 +1,8 @@
-const { Unit } = require("../../models/tutorial/unit.model");
+const { Unit } = require("../../../models/tutorial/unit.model");
 const subjectsService = require("./subjects.service");
-const { ApiError } = require("../../middleware/apiError");
+const { ApiError } = require("../../../middleware/apiError");
 const httpStatus = require("http-status");
-const errors = require("../../config/errors");
+const errors = require("../../../config/errors");
 
 module.exports.findUnitById = async (unitId) => {
   try {

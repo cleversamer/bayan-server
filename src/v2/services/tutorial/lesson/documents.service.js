@@ -1,7 +1,7 @@
 const {
   Document,
 } = require("../../../models/tutorial/lesson-content/document.model");
-const lessonsService = require("../lessons.service");
+const lessonsService = require("./lessons.service");
 const localStorage = require("../../storage/localStorage.service");
 const cloudStorage = require("../../storage/cloudStorage.service");
 const httpStatus = require("http-status");

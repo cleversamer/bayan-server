@@ -1,8 +1,5 @@
-const {
-  Submission,
-} = require("../../../models/tutorial/lesson-content/submission.model");
-const quizzesService = require("../../tutorial/lesson-content/quizzes.service");
-const lessonsService = require("../../tutorial/lessons.service");
+const quizzesService = require("../../tutorial/quiz/quizzes.service");
+const lessonsService = require("../../tutorial/lesson/lessons.service");
 const errors = require("../../../config/errors");
 const httpStatus = require("http-status");
 const { ApiError } = require("../../../middleware/apiError");

@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
-const { Grade } = require("../../models/tutorial/grade.model");
+const { Grade } = require("../../../models/tutorial/grade.model");
 const levelsService = require("./levels.service");
-const localStorage = require("../storage/localStorage.service");
-const cloudStorage = require("../storage/cloudStorage.service");
-const { ApiError } = require("../../middleware/apiError");
+const localStorage = require("../../storage/localStorage.service");
+const cloudStorage = require("../../storage/cloudStorage.service");
+const { ApiError } = require("../../../middleware/apiError");
 const httpStatus = require("http-status");
-const errors = require("../../config/errors");
+const errors = require("../../../config/errors");
 
 module.exports.findGradeById = async (gradeId) => {
   try {

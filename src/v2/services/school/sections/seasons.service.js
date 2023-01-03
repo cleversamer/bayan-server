@@ -1,10 +1,10 @@
-const { Season } = require("../../models/tutorial/season.model");
+const { Season } = require("../../../models/tutorial/season.model");
 const gradesService = require("./grades.service");
-const localStorage = require("../storage/localStorage.service");
-const cloudStorage = require("../storage/cloudStorage.service");
-const { ApiError } = require("../../middleware/apiError");
+const localStorage = require("../../storage/localStorage.service");
+const cloudStorage = require("../../storage/cloudStorage.service");
+const { ApiError } = require("../../../middleware/apiError");
 const httpStatus = require("http-status");
-const errors = require("../../config/errors");
+const errors = require("../../../config/errors");
 
 module.exports.findSeasonsByIds = async (seasons = []) => {
   try {

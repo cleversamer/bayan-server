@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const httpStatus = require("http-status");
 const { Subscription } = require("../../models/user/subscription.model");
-const packagesService = require("../tutorial/packages.service");
-const subjectsService = require("../tutorial/subjects.service");
+const packagesService = require("../subscription/packages.service");
+const subjectsService = require("../school/sections/subjects.service");
 const errors = require("../../config/errors");
 const { ApiError } = require("../../middleware/apiError");
 

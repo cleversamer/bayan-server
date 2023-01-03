@@ -1,13 +1,13 @@
-const { Lesson } = require("../../models/tutorial/lesson.model");
-const unitsService = require("./units.service");
-const subscriptionsService = require("../user/subscriptions.service");
-const videosService = require("./lesson-content/videos.service");
-const documentsService = require("./lesson-content/documents.service");
-const quizzesService = require("./lesson-content/quizzes.service");
-const submissionsService = require("./lesson-content/submissions.service");
-const { ApiError } = require("../../middleware/apiError");
+const { Lesson } = require("../../../models/tutorial/lesson.model");
+const unitsService = require("../../school/sections/units.service");
+const subscriptionsService = require("../../subscription/subscriptions.service");
+const videosService = require("./videos.service");
+const documentsService = require("./documents.service");
+const quizzesService = require("../quiz/quizzes.service");
+const submissionsService = require("../quiz/submissions.service");
+const { ApiError } = require("../../../middleware/apiError");
 const httpStatus = require("http-status");
-const errors = require("../../config/errors");
+const errors = require("../../../config/errors");
 const mongoose = require("mongoose");
 
 module.exports.getLessonById = async (user, lessonId, mapped = true) => {

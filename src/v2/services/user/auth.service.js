@@ -3,7 +3,7 @@ const { ApiError } = require("../../middleware/apiError");
 const httpStatus = require("http-status");
 const errors = require("../../config/errors");
 const usersService = require("./users.service");
-const googleService = require("./google.service");
+const googleService = require("../mail/google.service");
 
 module.exports.createUser = async (
   email,

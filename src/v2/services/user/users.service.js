@@ -1,6 +1,6 @@
 const { User } = require("../../models/user/user.model");
 const httpStatus = require("http-status");
-const emailService = require("./email.service");
+const emailService = require("../mail/email.service");
 const localStorage = require("../storage/localStorage.service");
 const { ApiError } = require("../../middleware/apiError");
 const errors = require("../../config/errors");

@@ -1,9 +1,9 @@
-const { Level } = require("../../models/tutorial/level.model");
-const localStorage = require("../storage/localStorage.service");
-const cloudStorage = require("../storage/cloudStorage.service");
-const { ApiError } = require("../../middleware/apiError");
+const { Level } = require("../../../models/tutorial/level.model");
+const localStorage = require("../../storage/localStorage.service");
+const cloudStorage = require("../../storage/cloudStorage.service");
+const { ApiError } = require("../../../middleware/apiError");
 const httpStatus = require("http-status");
-const errors = require("../../config/errors");
+const errors = require("../../../config/errors");
 
 module.exports.findLevelById = async (levelId) => {
   try {
