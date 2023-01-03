@@ -65,7 +65,7 @@ module.exports.verifyEmailOrPhone = (key) => async (req, res, next) => {
     const verifiedUser = await usersService.verifyEmailOrPhone(key, user, code);
 
     // Send response back to the client
-    res.status(httpStatus.OK).json(_.pick(verifiedUser, CLIENT_SCHEMA));
+    res.status(httpStatus.OK).json(_.pick(verifiedUser, userSchema));
   } catch (err) {
     next(err);
   }
