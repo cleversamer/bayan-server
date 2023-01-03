@@ -4,41 +4,42 @@ const { subscriptionsController } = require("../../controllers");
 const { subscriptionValidator } = require("../../middleware/validation");
 const auth = require("../../middleware/auth");
 
-router
-  .route("/")
-  .get(
-    auth("readOwn", "subscription"),
-    subscriptionsController.getUserSubscriptions
-  )
-  .post(
-    subscriptionValidator.validateCreateSubscription,
-    auth("createOwn", "subscription"),
-    subscriptionsController.createSubscription
-  );
+router.get(
+  "/my",
+  auth("readOwn", "subscription"),
+  subscriptionsController.getUserSubscriptions
+);
+
+router.post(
+  "/add",
+  subscriptionValidator.validateCreateSubscription,
+  auth("createOwn", "subscription"),
+  subscriptionsController.createSubscription
+);
 
 router.patch(
-  "/toggle-active",
+  "/:subscriptionId/toggle-active",
   subscriptionValidator.validateToggleSubscriptionActive,
   auth("updateAny", "subscription"),
   subscriptionsController.toggleSubscriptionActive
 );
 
 router.patch(
-  "/toggle-subject-active",
+  "/:subscriptionId/subjects/:subjectId/toggle-active",
   subscriptionValidator.validateToggleSubjectActive,
   auth("updateAny", "subscription"),
   subscriptionsController.toggleSubjectActive
 );
 
-router.patch(
-  "/add-subject",
+router.post(
+  "/:subscriptionId/subjects/add",
   subscriptionValidator.validateAddSubjectToSubscription,
   auth("updateAny", "subscription"),
   subscriptionsController.addSubjectToSubscription
 );
 
-router.patch(
-  "/delete-subject",
+router.delete(
+  "/:subscriptionId/subjects/:subjectId/delete",
   subscriptionValidator.validateDeleteSubscribedSubject,
   auth("updateAny", "subscription"),
   subscriptionsController.deleteSubscribedSubject

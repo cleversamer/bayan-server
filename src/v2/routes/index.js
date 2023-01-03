@@ -3,57 +3,57 @@ const router = Router();
 
 const authRoute = require("./user/auth.route");
 const usersRoute = require("./user/users.route");
-const subscriptionsRoute = require("./user/subscriptions.route");
 
-const levelsRoute = require("./tutorial/levels.route");
-const gradesRoute = require("./tutorial/grades.route");
-const seasonsRoute = require("./tutorial/seasons.route");
-const subjectsRoute = require("./tutorial/subjects.route");
-const unitsRoute = require("./tutorial/units.route");
-const lessonsRoute = require("./tutorial/lessons.route");
-const packagesRoute = require("./tutorial/packages.route");
+const schoolsRoute = require("./school/staff/schools.route");
+const levelsRoute = require("./school/sections/levels.route");
+const gradesRoute = require("./school/sections/grades.route");
+const seasonsRoute = require("./school/sections/seasons.route");
+const subjectsRoute = require("./school/sections/subjects.route");
+const unitsRoute = require("./school/sections/units.route");
+
+const packagesRoute = require("./subscription/packages.route");
+const subscriptionsRoute = require("./subscription/subscriptions.route");
+
+const lessonsRoute = require("./tutorial/lesson/lessons.route");
+const documentsRoute = require("./tutorial/lesson/documents.route");
+const videosRoute = require("./tutorial/lesson/videos.route");
+const quizzesRoute = require("./tutorial/quiz/quizzes.route");
+const questionsRoute = require("./tutorial/quiz/questions.route");
+const submissionsRoute = require("./tutorial/quiz/submissions.route");
+
+const userRoutes = [
+  { path: "/auth", route: authRoute },
+  { path: "/users", route: usersRoute },
+];
+
+const schoolRoutes = [
+  { path: "/schools", route: schoolsRoute },
+  { path: "/schools/:schoolId/levels", route: levelsRoute },
+  { path: "/schools/:schoolId/grades", route: gradesRoute },
+  { path: "/schools/:schoolId/seasons", route: seasonsRoute },
+  { path: "/schools/:schoolId/subjects", route: subjectsRoute },
+  { path: "/schools/:schoolId/units", route: unitsRoute },
+];
+
+const subscriptionRoutes = [
+  { path: "/packages", route: packagesRoute },
+  { path: "/subscriptions", route: subscriptionsRoute },
+];
+
+const tutorialRoutes = [
+  { path: "/lessons", route: lessonsRoute },
+  { path: "/documents", route: documentsRoute },
+  { path: "/videos", route: videosRoute },
+  { path: "/quizzes", route: quizzesRoute },
+  { path: "/questions", route: questionsRoute },
+  { path: "/submissions", route: submissionsRoute },
+];
 
 const routes = [
-  {
-    path: "/auth",
-    route: authRoute,
-  },
-  {
-    path: "/users",
-    route: usersRoute,
-  },
-  {
-    path: "/levels",
-    route: levelsRoute,
-  },
-  {
-    path: "/grades",
-    route: gradesRoute,
-  },
-  {
-    path: "/seasons",
-    route: seasonsRoute,
-  },
-  {
-    path: "/subjects",
-    route: subjectsRoute,
-  },
-  {
-    path: "/units",
-    route: unitsRoute,
-  },
-  {
-    path: "/lessons",
-    route: lessonsRoute,
-  },
-  {
-    path: "/packages",
-    route: packagesRoute,
-  },
-  {
-    path: "/subscriptions",
-    route: subscriptionsRoute,
-  },
+  ...userRoutes,
+  ...schoolRoutes,
+  ...subscriptionRoutes,
+  ...tutorialRoutes,
 ];
 
 routes.forEach((route) => {

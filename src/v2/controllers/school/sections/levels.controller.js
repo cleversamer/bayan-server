@@ -1,8 +1,8 @@
-const { CLIENT_SCHEMA } = require("../../models/tutorial/level.model");
-const { levelsService } = require("../../services");
-const { ApiError } = require("../../middleware/apiError");
+const { CLIENT_SCHEMA } = require("../../../models/tutorial/level.model");
+const { levelsService } = require("../../../services");
+const { ApiError } = require("../../../middleware/apiError");
 const httpStatus = require("http-status");
-const errors = require("../../config/errors");
+const errors = require("../../../config/errors");
 const _ = require("lodash");
 
 module.exports.getAllLevels = async (req, res, next) => {
@@ -37,20 +37,6 @@ module.exports.createLevel = async (req, res, next) => {
       err = new ApiError(statusCode, message);
     }
 
-    next(err);
-  }
-};
-
-module.exports.getAllSupportedLevels = (req, res, next) => {
-  try {
-    const supportedLevels = levelsService.getAllSupportedLevels();
-
-    const response = {
-      supportedLevels,
-    };
-
-    res.status(httpStatus.OK).json(response);
-  } catch (err) {
     next(err);
   }
 };

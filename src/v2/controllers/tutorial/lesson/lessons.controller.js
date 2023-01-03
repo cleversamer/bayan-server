@@ -1,22 +1,22 @@
 const {
   clientSchema: lessonSchema,
-} = require("../../models/tutorial/lesson.model");
+} = require("../../../models/tutorial/lesson.model");
 const {
   clientSchema: subscriptionSchema,
-} = require("../../models/user/subscription.model");
+} = require("../../../models/user/subscription.model");
 const {
   CLIENT_SCHEMA: documentSchema,
-} = require("../../models/tutorial/lesson-content/document.model");
+} = require("../../../models/tutorial/lesson-content/document.model");
 const {
   CLIENT_SCHEMA: videoSchema,
-} = require("../../models/tutorial/lesson-content/video.model");
+} = require("../../../models/tutorial/lesson-content/video.model");
 const {
   CLIENT_SCHEMA: quizSchema,
-} = require("../../models/tutorial/lesson-content/quiz.model");
+} = require("../../../models/tutorial/lesson-content/quiz.model");
 const {
   CLIENT_SCHEMA: questionSchema,
-} = require("../../models/tutorial/lesson-content/question.model");
-const { lessonsService } = require("../../services");
+} = require("../../../models/tutorial/lesson-content/question.model");
+const { lessonsService } = require("../../../services");
 const httpStatus = require("http-status");
 const _ = require("lodash");
 

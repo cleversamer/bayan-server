@@ -1,8 +1,8 @@
-const { CLIENT_SCHEMA } = require("../../models/tutorial/grade.model");
-const { gradesService } = require("../../services");
-const { ApiError } = require("../../middleware/apiError");
+const { CLIENT_SCHEMA } = require("../../../models/tutorial/grade.model");
+const { gradesService } = require("../../../services");
+const { ApiError } = require("../../../middleware/apiError");
 const httpStatus = require("http-status");
-const errors = require("../../config/errors");
+const errors = require("../../../config/errors");
 const _ = require("lodash");
 
 module.exports.createGrade = async (req, res, next) => {
