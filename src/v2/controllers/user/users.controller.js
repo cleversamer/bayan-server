@@ -2,7 +2,7 @@ const httpStatus = require("http-status");
 const { clientSchema: userSchema } = require("../../models/user/user.model");
 const {
   clientSchema: subscriptionSchema,
-} = require("../../models/user/subscription.model");
+} = require("../../models/subscription/subscription.model");
 const {
   emailService,
   usersService,

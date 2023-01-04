@@ -1,4 +1,6 @@
-const { CLIENT_SCHEMA } = require("../../../models/tutorial/grade.model");
+const {
+  CLIENT_SCHEMA,
+} = require("../../../models/school/sections/grade.model");
 const { gradesService } = require("../../../services");
 const { ApiError } = require("../../../middleware/apiError");
 const httpStatus = require("http-status");

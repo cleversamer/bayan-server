@@ -1,4 +1,4 @@
-const { Season } = require("../../../models/tutorial/season.model");
+const { Season } = require("../../../models/school/sections/season.model");
 const gradesService = require("./grades.service");
 const localStorage = require("../../storage/localStorage.service");
 const cloudStorage = require("../../storage/cloudStorage.service");

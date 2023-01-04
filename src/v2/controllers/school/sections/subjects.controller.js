@@ -1,4 +1,6 @@
-const { clientSchema } = require("../../../models/tutorial/subject.model");
+const {
+  clientSchema,
+} = require("../../../models/school/sections/subject.model");
 const { subjectsService } = require("../../../services");
 const httpStatus = require("http-status");
 const _ = require("lodash");

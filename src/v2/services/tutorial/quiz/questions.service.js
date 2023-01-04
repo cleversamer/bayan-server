@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
-const {
-  Question,
-} = require("../../../models/tutorial/lesson-content/question.model");
+const { Question } = require("../../../models/tutorial/quiz/question.model");
 const quizzesService = require("./quizzes.service");
 const localStorage = require("../../storage/localStorage.service");
 const cloudStorage = require("../../storage/cloudStorage.service");

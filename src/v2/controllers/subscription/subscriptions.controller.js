@@ -1,4 +1,6 @@
-const { clientSchema } = require("../../models/user/subscription.model");
+const {
+  clientSchema,
+} = require("../../models/subscription/subscription.model");
 const { subscriptionsService } = require("../../services");
 const httpStatus = require("http-status");
 const { ApiError } = require("../../middleware/apiError");

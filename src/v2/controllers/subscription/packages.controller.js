@@ -1,4 +1,4 @@
-const { clientSchema } = require("../../models/tutorial/package.model");
+const { clientSchema } = require("../../models/subscription/package.model");
 const { packagesService } = require("../../services");
 const httpStatus = require("http-status");
 const errors = require("../../config/errors");

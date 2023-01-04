@@ -1,4 +1,4 @@
-const { Lesson } = require("../../../models/tutorial/lesson.model");
+const { Lesson } = require("../../../models/tutorial/lesson/lesson.model");
 const unitsService = require("../../school/sections/units.service");
 const subscriptionsService = require("../../subscription/subscriptions.service");
 const videosService = require("./videos.service");

@@ -1,4 +1,4 @@
-const { Unit } = require("../../../models/tutorial/unit.model");
+const { Unit } = require("../../../models/school/sections/unit.model");
 const subjectsService = require("./subjects.service");
 const { ApiError } = require("../../../middleware/apiError");
 const httpStatus = require("http-status");

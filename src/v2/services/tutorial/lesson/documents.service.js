@@ -1,6 +1,4 @@
-const {
-  Document,
-} = require("../../../models/tutorial/lesson-content/document.model");
+const { Document } = require("../../../models/tutorial/lesson/document.model");
 const lessonsService = require("./lessons.service");
 const localStorage = require("../../storage/localStorage.service");
 const cloudStorage = require("../../storage/cloudStorage.service");

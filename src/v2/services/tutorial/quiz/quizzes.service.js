@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { Quiz } = require("../../../models/tutorial/lesson-content/quiz.model");
+const { Quiz } = require("../../../models/tutorial/quiz/quiz.model");
 const lessonsService = require("../lesson/lessons.service");
 const questionsService = require("./questions.service");
 const httpStatus = require("http-status");

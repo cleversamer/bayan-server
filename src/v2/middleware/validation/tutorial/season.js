@@ -1,4 +1,6 @@
-const { SUPPORTED_SEASONS } = require("../../../models/tutorial/season.model");
+const {
+  SUPPORTED_SEASONS,
+} = require("../../../models/school/sections/season.model");
 const { check } = require("express-validator");
 const errors = require("../../../config/errors");
 const commonCheckers = require("../common");

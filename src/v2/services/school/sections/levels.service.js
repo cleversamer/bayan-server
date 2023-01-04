@@ -1,4 +1,4 @@
-const { Level } = require("../../../models/tutorial/level.model");
+const { Level } = require("../../../models/school/sections/level.model");
 const localStorage = require("../../storage/localStorage.service");
 const cloudStorage = require("../../storage/cloudStorage.service");
 const { ApiError } = require("../../../middleware/apiError");

@@ -1,4 +1,6 @@
-const { SUPPORTED_GRADES } = require("../../../models/tutorial/grade.model");
+const {
+  SUPPORTED_GRADES,
+} = require("../../../models/school/sections/grade.model");
 const { check } = require("express-validator");
 const errors = require("../../../config/errors");
 const commonCheckers = require("../common");
