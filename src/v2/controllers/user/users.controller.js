@@ -71,7 +71,7 @@ module.exports.verifyEmailOrPhone = (key) => async (req, res, next) => {
 module.exports.sendForgotPasswordCode = async (req, res, next) => {
   try {
     let { emailOrPhone, sendTo, lang } = req.query;
-    if (emailOrPhone.startsWith(" ")) {
+    if (!emailOrPhone.includes("@")) {
       emailOrPhone = `+${emailOrPhone.trim()}`;
     }
 
