@@ -1,6 +1,7 @@
 const commonMiddleware = require("../common");
 
 const registerValidator = [
+  commonMiddleware.checkLanguage,
   commonMiddleware.checkName,
   commonMiddleware.checkEmail,
   commonMiddleware.checkPhone,

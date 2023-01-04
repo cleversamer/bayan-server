@@ -5,7 +5,8 @@ const _ = require("lodash");
 
 module.exports.register = async (req, res, next) => {
   try {
-    const { email, password, name, phone, authType, googleToken } = req.body;
+    const { lang, email, password, name, phone, authType, googleToken } =
+      req.body;
 
     // Create the user
     const user = await authService.createUser(
@@ -19,7 +20,7 @@ module.exports.register = async (req, res, next) => {
 
     // Send a mail to user's email registering using an email
     if (authType === "email") {
-      await emailService.registerEmail(email, user);
+      await emailService.registerEmail(lang, email, user);
     }
 
     // TODO: always send phone verification code to user's phone
