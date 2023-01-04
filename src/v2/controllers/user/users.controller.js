@@ -4,13 +4,10 @@ const {
   clientSchema: subscriptionSchema,
 } = require("../../models/subscription/subscription.model");
 const {
-  emailService,
   usersService,
   subscriptionsService,
   excelService,
 } = require("../../services");
-const { ApiError } = require("../../middleware/apiError");
-const errors = require("../../config/errors");
 const success = require("../../config/success");
 const _ = require("lodash");
 
@@ -232,12 +229,6 @@ module.exports.updateUserProfile = async (req, res, next) => {
     // Send response back to the client
     res.status(httpStatus.CREATED).json(response);
   } catch (err) {
-    if (err.code === errors.codes.duplicateIndexKey) {
-      const statusCode = httpStatus.BAD_REQUEST;
-      const message = errors.auth.emailOrPhoneUsed;
-      err = new ApiError(statusCode, message);
-    }
-
     next(err);
   }
 };

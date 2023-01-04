@@ -1,8 +1,6 @@
 const { authService, emailService } = require("../../services");
 const httpStatus = require("http-status");
-const { ApiError } = require("../../middleware/apiError");
 const { clientSchema } = require("../../models/user/user.model");
-const errors = require("../../config/errors");
 const _ = require("lodash");
 
 module.exports.register = async (req, res, next) => {
