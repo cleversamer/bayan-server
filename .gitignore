@@ -14,6 +14,7 @@ firebase.json
 
 # development
 **.log
+**.xlsx
 
 # misc
 .DS_Store

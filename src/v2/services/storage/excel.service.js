@@ -11,46 +11,60 @@ module.exports.exportUsersToExcelFile = async (users = []) => {
     let worksheet = workbook.addWorksheet("مستخدمين تطبيق بيان");
 
     // Specify excel sheet's columns
-    worksheet.columns = [
-      { header: "ID", key: "_id" },
-      { header: "الإسم الكامل", key: "fullname" },
-      { header: "البريد الإلكتروني", key: "email" },
-      { header: "رقم الهاتف", key: "phone" },
-      { header: "نوع المستخدم", key: "role" },
-      { header: "مفعّل البريد", key: "emailVerified" },
-      { header: "مفعّل الهاتف", key: "phoneVerified" },
-      { header: "منضمّ بواسطة", key: "joinedBy" },
-      { header: "أخر دخول", key: "lastLogin" },
-    ];
+    worksheet.addRow([
+      "ID",
+      "الإسم الكامل",
+      "البريد الإلكتروني",
+      "رقم الهاتف",
+      "نوع المستخدم",
+      "مفعّل البريد",
+      "مفعّل الهاتف",
+      "منضمّ بواسطة",
+      "أخر دخول",
+    ]);
 
     // Add row for each user in the Database
     users.forEach(function (user) {
-      worksheet.addRow({
-        _id: user._id,
-        fullname: user.name,
-        email: user.email,
-        phone: user.phone,
-        role: user.role,
-        emailVerified: user.verified.email,
-        phoneVerified: user.verified.phone,
-        joinedBy: user.authType,
-        lastLogin: user.lastLogin,
-      });
-    });
+      worksheet.addRow([
+        user._id,
+        user.name,
+        user.email,
+        user.phone.full,
+        user.role,
+        user.verified.email,
+        user.verified.phone,
+        user.authType,
+        user.lastLogin,
+      ]);
+    }, "i");
 
     // Decide excel's file
-    const currentDate = new Date().toLocaleString();
-    const fileName = `ملف_مستخدمين_بيان_${currentDate}`;
+    const fileName = filterName(`bayan_users_${getCurrentDate()}`) + ".xlsx";
     const filePath = `/${fileName}`;
 
     // Generate and save excel file
-    await workbook.xlsx.writeFile(`${fileName}.xlsx`);
+    await workbook.xlsx.writeFile(`./uploads/${fileName}`);
 
     // Return file's path
     return filePath;
   } catch (err) {
+    console.log("err", err.message);
     const statusCode = httpStatus.INTERNAL_SERVER_ERROR;
     const message = errors.system.errorExportingExcel;
     throw new ApiError(statusCode, message);
   }
+};
+
+const filterName = (name = "") => {
+  return name.split(" ").join("_").split(":").join("_");
+};
+
+const getCurrentDate = () => {
+  let strDate = new Date().toLocaleString();
+  strDate = strDate.split(", ");
+  let part1 = strDate[0];
+
+  let date = `${part1}`;
+  date = date.split("/").join("-");
+  return date;
 };
