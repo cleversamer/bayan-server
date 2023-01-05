@@ -6,6 +6,7 @@ module.exports = {
   },
   // First role in this array === default role
   roles: ["student", "teacher", "admin"],
+  // First auth type in this array === default auth type
   authTypes: ["email", "google"],
   password: { minLength: 8, maxLength: 64 },
   verificationCode: { exactLength: 4 },

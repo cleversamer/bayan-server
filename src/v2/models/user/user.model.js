@@ -113,10 +113,10 @@ const userSchema = new Schema(
     // How user joined to the system
     authType: {
       type: String,
+      required: true,
       trim: true,
       enum: validation.authTypes,
-      required: true,
-      default: "email",
+      default: validation.authTypes[0],
     },
     // The last login date of the user
     lastLogin: {
@@ -175,6 +175,7 @@ const userSchema = new Schema(
 
 userSchema.methods.genAuthToken = function () {
   try {
+    // The body of the token (Encrypted)
     const body = {
       sub: this._id.toHexString(),
       email: this.email,
@@ -182,6 +183,7 @@ userSchema.methods.genAuthToken = function () {
       password: this.password + server.PASSWORD_SALT,
     };
 
+    // Generate a new token for this user with the above info
     return jwt.sign(body, process.env["JWT_PRIVATE_KEY"]);
   } catch (err) {
     // TODO: write the error to the database
@@ -190,11 +192,13 @@ userSchema.methods.genAuthToken = function () {
 };
 
 userSchema.methods.updateLastLogin = function () {
+  // Update user's last login
   this.lastLogin = new Date();
 };
 
 userSchema.methods.genCode = function (length = 4) {
   try {
+    // Generate a random numeric code with the specified length
     const possibleNums = Math.pow(10, length - 1);
     return Math.floor(possibleNums + Math.random() * 9 * possibleNums);
   } catch (err) {
@@ -204,6 +208,7 @@ userSchema.methods.genCode = function (length = 4) {
 
 userSchema.methods.updateCode = function (key) {
   try {
+    // Get verification type data
     const { codeLength, expiryInMins } = verification[key];
 
     // Generate code
@@ -222,6 +227,7 @@ userSchema.methods.updateCode = function (key) {
 
 userSchema.methods.isMatchingCode = function (key, code) {
   try {
+    // Return if the arg `code` === verification type code
     return this.verification[key].code == code;
   } catch (err) {
     // TODO: write the error to the database
@@ -231,7 +237,9 @@ userSchema.methods.isMatchingCode = function (key, code) {
 
 userSchema.methods.isValidCode = function (key) {
   try {
+    // Get expiry date for the verification type
     const { expiryDate } = this.verification[key];
+    // Get the allowed time of the verification type
     const { expiryInMins } = verification[key];
 
     // Measure the difference between now and code's expiry date
@@ -250,23 +258,29 @@ userSchema.methods.isValidCode = function (key) {
 };
 
 userSchema.methods.isEmailVerified = function () {
+  // Return if user's email is verified
   return this.verified.email;
 };
 
 userSchema.methods.verifyEmail = function () {
+  // Verify user's email
   this.verified.email = true;
 };
 
 userSchema.methods.isPhoneVerified = function () {
+  // Return if user's phone is verified
   return this.verified.phone;
 };
 
 userSchema.methods.verifyPhone = function () {
+  // Verify user's phone
   this.verified.phone = true;
 };
 
 userSchema.methods.comparePassword = async function (candidate) {
   try {
+    // Return if the `newPassword` arg === user's password
+    // after decrypting user's password
     return await bcrypt.compare(candidate, this.password);
   } catch (err) {
     // TODO: write the error to the database
@@ -276,8 +290,11 @@ userSchema.methods.comparePassword = async function (candidate) {
 
 userSchema.methods.updatePassword = async function (newPassword) {
   try {
+    // Generate a salt for hasing the password
     const salt = await bcrypt.genSalt(10);
+    // Hash the password
     const hashed = await bcrypt.hash(newPassword, salt);
+    // Update user's password
     this.password = hashed;
   } catch (err) {
     // TODO: write the error to the database
@@ -286,6 +303,7 @@ userSchema.methods.updatePassword = async function (newPassword) {
 
 userSchema.methods.updateRole = function (newRole) {
   try {
+    // Update user's role
     this.role = newRole;
   } catch (err) {
     // TODO: write the error to the database
