@@ -59,4 +59,7 @@ packageSchema.index({ gradeId: 1 });
 
 const Package = mongoose.model("Package", packageSchema);
 
-module.exports = { Package, clientSchema };
+module.exports = {
+  Package,
+  clientSchema,
+};

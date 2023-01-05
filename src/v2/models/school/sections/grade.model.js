@@ -48,4 +48,8 @@ gradeSchema.index({ levelId: 1 });
 
 const Grade = mongoose.model("Grade", gradeSchema);
 
-module.exports = { Grade, CLIENT_SCHEMA, SUPPORTED_GRADES };
+module.exports = {
+  Grade,
+  CLIENT_SCHEMA,
+  SUPPORTED_GRADES,
+};

@@ -82,4 +82,7 @@ lessonSchema.index({ unitId: 1 });
 
 const Lesson = mongoose.model("Lesson", lessonSchema);
 
-module.exports = { Lesson, clientSchema };
+module.exports = {
+  Lesson,
+  clientSchema,
+};

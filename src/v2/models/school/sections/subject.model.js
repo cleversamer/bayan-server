@@ -67,4 +67,7 @@ subjectSchema.index({ seasonId: 1 });
 
 const Subject = mongoose.model("Subject", subjectSchema);
 
-module.exports = { Subject, clientSchema };
+module.exports = {
+  Subject,
+  clientSchema,
+};

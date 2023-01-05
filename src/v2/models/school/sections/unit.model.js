@@ -58,4 +58,7 @@ unitSchema.index({ subjectId: 1 });
 
 const Unit = mongoose.model("Unit", unitSchema);
 
-module.exports = { Unit, clientSchema };
+module.exports = {
+  Unit,
+  clientSchema,
+};

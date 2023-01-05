@@ -71,4 +71,7 @@ const documentSchema = new mongoose.Schema(
 
 const Document = mongoose.model("Document", documentSchema);
 
-module.exports = { Document, CLIENT_SCHEMA };
+module.exports = {
+  Document,
+  CLIENT_SCHEMA,
+};

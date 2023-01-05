@@ -70,4 +70,7 @@ subscriptionSchema.index({ userId: 1 });
 
 const Subscription = mongoose.model("Subscription", subscriptionSchema);
 
-module.exports = { Subscription, clientSchema };
+module.exports = {
+  Subscription,
+  clientSchema,
+};

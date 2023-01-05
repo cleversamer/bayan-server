@@ -54,4 +54,8 @@ seasonSchema.index({ gradeId: 1 });
 
 const Season = mongoose.model("Season", seasonSchema);
 
-module.exports = { Season, clientSchema, SUPPORTED_SEASONS };
+module.exports = {
+  Season,
+  clientSchema,
+  SUPPORTED_SEASONS,
+};

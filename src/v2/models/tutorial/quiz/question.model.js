@@ -87,4 +87,7 @@ const questionSchema = new mongoose.Schema(
 
 const Question = mongoose.model("Question", questionSchema);
 
-module.exports = { Question, CLIENT_SCHEMA };
+module.exports = {
+  Question,
+  CLIENT_SCHEMA,
+};
