@@ -4,7 +4,10 @@ const httpStatus = require("http-status");
 const { ApiError } = require("../apiError");
 const errors = require("../../config/errors");
 const countries = require("../../data/countries.json");
-const { user: userValidation } = require("../../config/models");
+const {
+  user: userValidation,
+  level: levelValidation,
+} = require("../../config/models");
 const { server } = require("../../config/system");
 
 //////////////////// COMMON FUNCTIONS ////////////////////
@@ -261,6 +264,14 @@ const checkUserId = check("userId")
   .isMongoId()
   .withMessage(errors.user.invalidId);
 
+//////////////////// LEVEL FUNCTIONS ////////////////////
+const checkLevelTitle = check("title")
+  .isLength({
+    min: levelValidation.title.minLength,
+    max: levelValidation.title.maxLength,
+  })
+  .withMessage(errors.level.invalidTitle);
+
 //////////////////// PACKAGE FUNCTIONS ////////////////////
 const checkPackageId = check("packageId")
   .isMongoId()
@@ -313,6 +324,8 @@ module.exports = {
   checkNewPassword,
   checkLanguage,
   checkUserId,
+  // LEVEL
+  checkLevelTitle,
   // PACKAGE
   checkPackageId,
   // SUBJECT

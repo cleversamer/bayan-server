@@ -1,18 +1,12 @@
-const { check } = require("express-validator");
-const errors = require("../../../config/errors");
-const commonCheckers = require("../common");
+const commonMiddleware = require("../common");
 
 const validateCreateLevel = [
-  check("title")
-    .isLength({ min: 1, max: 64 })
-    .withMessage(errors.level.invalidTitle),
-
-  commonCheckers.checkFile("photo", ["png", "jpg", "jpeg"]),
-
-  commonCheckers.next,
+  commonMiddleware.checkLevelTitle,
+  commonMiddleware.checkFile("photo", ["png", "jpg", "jpeg"]),
+  commonMiddleware.next,
 ];
 
-const validateGetLevelGrades = [commonCheckers.checkMongoIdQueryParam];
+const validateGetLevelGrades = [commonMiddleware.checkMongoIdQueryParam];
 
 module.exports = {
   validateCreateLevel,

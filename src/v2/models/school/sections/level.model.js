@@ -1,12 +1,14 @@
 const mongoose = require("mongoose");
+const { level: validation } = require("../../../config/models");
 
-const CLIENT_SCHEMA = ["_id", "title", "author", "photoURL", "number"];
+const clientSchema = ["_id", "title", "author", "photoURL", "number"];
 
 const levelSchema = new mongoose.Schema(
   {
     photoURL: {
       type: String,
       default: "",
+      trim: true,
     },
     author: {
       type: mongoose.Types.ObjectId,
@@ -18,6 +20,8 @@ const levelSchema = new mongoose.Schema(
       required: true,
       unique: true,
       trim: true,
+      minLength: validation.title.minLength,
+      maxLength: validation.title.maxLength,
     },
   },
   {
@@ -33,5 +37,5 @@ const Level = mongoose.model("Level", levelSchema);
 
 module.exports = {
   Level,
-  CLIENT_SCHEMA,
+  clientSchema,
 };

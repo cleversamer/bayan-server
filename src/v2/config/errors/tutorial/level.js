@@ -1,7 +1,9 @@
+const { title } = require("../../models/level");
+
 module.exports = Object.freeze({
   invalidTitle: {
-    en: "Level title should be (1 ~ 64 characters) length",
-    ar: "عنوان المرحلة يجب أن يكون بين 1-64 حرفاً",
+    en: `Level title should be ${title.minLength}-${title.maxLength} characters length`,
+    ar: `عنوان المرحلة يجب أن يكون بين ${title.minLength}-${title.maxLength} حرفاً`,
   },
   invalidLevel: {
     en: "Level should be either primary, middle or high",
