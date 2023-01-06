@@ -1,10 +1,23 @@
 const mongoose = require("mongoose");
 
+const clientSchema = [
+  "author",
+  "date",
+  "answers",
+  "levelId",
+  "gradeId",
+  "seasonId",
+  "subjectId",
+  "unitId",
+  "lessonId",
+  "quizId",
+];
+
 const submissionSchema = new mongoose.Schema(
   {
     author: {
       type: mongoose.Types.ObjectId,
-      ref: "users",
+      ref: "User",
       required: true,
     },
     date: {
@@ -18,37 +31,37 @@ const submissionSchema = new mongoose.Schema(
     ],
     levelId: {
       type: mongoose.Types.ObjectId,
-      ref: "levels",
+      ref: "Level",
       required: true,
     },
     gradeId: {
       type: mongoose.Types.ObjectId,
-      ref: "grades",
+      ref: "Grade",
       required: true,
     },
     seasonId: {
       type: mongoose.Types.ObjectId,
-      ref: "seasons",
+      ref: "Season",
       required: true,
     },
     subjectId: {
       type: mongoose.Types.ObjectId,
-      ref: "subjects",
+      ref: "Subject",
       required: true,
     },
     unitId: {
       type: mongoose.Types.ObjectId,
-      ref: "units",
+      ref: "Unit",
       required: true,
     },
     lessonId: {
       type: mongoose.Types.ObjectId,
-      ref: "lessons",
+      ref: "Lesson",
       required: true,
     },
     quizId: {
       type: mongoose.Types.ObjectId,
-      ref: "quizzes",
+      ref: "Quiz",
       required: true,
     },
   },
@@ -65,4 +78,5 @@ const Submission = mongoose.model("Submission", submissionSchema);
 
 module.exports = {
   Submission,
+  clientSchema,
 };
