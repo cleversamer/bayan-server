@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+const { question: validation } = require("../../../config/models");
 
-const CLIENT_SCHEMA = [
+const clientSchema = [
   "_id",
   "author",
   "title",
@@ -20,60 +21,67 @@ const questionSchema = new mongoose.Schema(
   {
     author: {
       type: mongoose.Types.ObjectId,
-      ref: "users",
+      ref: "User",
       required: true,
     },
     levelId: {
       type: mongoose.Types.ObjectId,
-      ref: "levels",
+      ref: "Level",
       required: true,
     },
     gradeId: {
       type: mongoose.Types.ObjectId,
-      ref: "grades",
+      ref: "Grade",
       required: true,
     },
     seasonId: {
       type: mongoose.Types.ObjectId,
-      ref: "seasons",
+      ref: "Season",
       required: true,
     },
     subjectId: {
       type: mongoose.Types.ObjectId,
-      ref: "subjects",
+      ref: "Subject",
       required: true,
     },
     unitId: {
       type: mongoose.Types.ObjectId,
-      ref: "units",
+      ref: "Unit",
       required: true,
     },
     lessonId: {
       type: mongoose.Types.ObjectId,
-      ref: "lessons",
+      ref: "Lesson",
       required: true,
     },
     quizId: {
       type: mongoose.Types.ObjectId,
-      ref: "quizzes",
+      ref: "Quiz",
       required: true,
     },
     title: {
       type: String,
       trim: true,
       required: true,
+      minLength: validation.title.minLength,
+      maxLength: validation.title.maxLength,
     },
     photoURL: {
       type: String,
       default: "",
+      trim: true,
     },
     options: [
       {
         type: String,
+        minLength: validation.option.minLength,
+        maxLength: validation.option.maxLength,
       },
     ],
     answer: {
       type: String,
+      minLength: validation.answer.minLength,
+      maxLength: validation.answer.maxLength,
     },
   },
   {
@@ -89,5 +97,5 @@ const Question = mongoose.model("Question", questionSchema);
 
 module.exports = {
   Question,
-  CLIENT_SCHEMA,
+  clientSchema,
 };

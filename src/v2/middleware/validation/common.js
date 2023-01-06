@@ -11,8 +11,10 @@ const {
   season: seasonValidation,
   subject: subjectValidation,
   unit: unitValidation,
+  lesson: lessonValidation,
   video: videoValidation,
   document: documentValidation,
+  question: questionValidation,
 } = require("../../config/models");
 const { server } = require("../../config/system");
 
@@ -359,7 +361,10 @@ const checkLessonId = check("lessonId")
   .withMessage(errors.lesson.invalidId);
 
 const checkLessonTitle = check("title")
-  .isLength({ min: 1, max: 64 })
+  .isLength({
+    min: lessonValidation.title.minLength,
+    max: lessonValidation.title.maxLength,
+  })
   .withMessage(errors.lesson.invalidTitle);
 
 //////////////////// VIDEO FUNCTIONS ////////////////////
@@ -413,6 +418,99 @@ const checkDocumentTitle = check("title")
     max: documentValidation.title.maxLength,
   })
   .withMessage(errors.document.invalidTitle);
+
+//////////////////// QUIZ FUNCTIONS ////////////////////
+const checkQuizId = check("quizId")
+  .isMongoId()
+  .withMessage(errors.quiz.invalidId);
+
+//////////////////// QUESTION FUNCTIONS ////////////////////
+const checkQuestionTitle = check("title")
+  .isLength({
+    min: questionValidation.title.minLength,
+    max: questionValidation.title.maxLength,
+  })
+  .withMessage(errors.question.invalidTitle);
+
+const checkQuestionOptions = (req, res, next) => {
+  const { options = [] } = req.body;
+
+  if (!Array.isArray(options)) {
+    const statusCode = httpStatus.BAD_REQUEST;
+    const message = errors.question.invalidOptionsType;
+    const err = new ApiError(statusCode, message);
+    return next(err);
+  }
+
+  const isValidOptionsNumber =
+    options.length >= questionValidation.options.min &&
+    options.length <= questionValidation.options.max;
+
+  if (!isValidOptionsNumber) {
+    const statusCode = httpStatus.BAD_REQUEST;
+    const message = errors.question.invalidOptionsLength;
+    const err = new ApiError(statusCode, message);
+    return next(err);
+  }
+
+  for (let option of options) {
+    if (typeof option !== "string") {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.question.invalidOptionsType;
+      const err = new ApiError(statusCode, message);
+      return next(err);
+    }
+
+    const isValidOptionLength =
+      option.length >= questionValidation.option.minLength &&
+      option.length <= questionValidation.option.maxLength;
+
+    if (!isValidOptionLength) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.question.invalidOptionLength;
+      const err = new ApiError(statusCode, message);
+      return next(err);
+    }
+  }
+
+  const extraOptions = questionValidation.options.max - options.length;
+  for (let i = 0; i < extraOptions; i++) {
+    options.push("");
+  }
+
+  next();
+};
+
+const checkQuestionAnswer = (req, res, next) => {
+  const { options = [], answer } = req.body;
+
+  if (typeof answer !== "string") {
+    const statusCode = httpStatus.BAD_REQUEST;
+    const message = errors.question.invalidAnswerType;
+    const err = new ApiError(statusCode, message);
+    return next(err);
+  }
+
+  const isValidAnswerLength =
+    answer.length >= questionValidation.answer.minLength &&
+    answer.length <= questionValidation.answer.maxLength;
+
+  if (!isValidAnswerLength) {
+    const statusCode = httpStatus.BAD_REQUEST;
+    const message = errors.question.invalidAnswerLength;
+    const err = new ApiError(statusCode, message);
+    return next(err);
+  }
+
+  if (!options.includes(answer)) {
+    const statusCode = httpStatus.BAD_REQUEST;
+    const message = errors.question.answerNotMatchOption;
+    const err = new ApiError(statusCode, message);
+    return next(err);
+  }
+
+  next();
+};
 
 //////////////////// PACKAGE FUNCTIONS ////////////////////
 const checkPackageId = check("packageId")
@@ -491,6 +589,12 @@ module.exports = {
   checkVideoType,
   // DOCUMENT
   checkDocumentTitle,
+  // QUIZ
+  checkQuizId,
+  // QUESTION
+  checkQuestionTitle,
+  checkQuestionOptions,
+  checkQuestionAnswer,
   // PACKAGE
   checkPackageId,
   // SUBJECT
