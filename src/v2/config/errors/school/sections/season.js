@@ -1,7 +1,13 @@
+const { supportedSeasons } = require("../../../models/school/sections/season");
+
 module.exports = Object.freeze({
   invalidSeason: {
-    en: "Season number should be a number between 1-4",
-    ar: "رقم الفصل يجب أن تكون بين 1-4",
+    en: `Season number should be a number between ${supportedSeasons[0]}-${
+      supportedSeasons[supportedSeasons.length - 1]
+    }`,
+    ar: `رقم الفصل يجب أن يكون بين ${supportedSeasons[0]}-${
+      supportedSeasons[supportedSeasons.length - 1]
+    }`,
   },
   noSeasons: {
     en: "No seasons registered for this grade yet",
