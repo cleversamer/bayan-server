@@ -11,6 +11,7 @@ const {
   season: seasonValidation,
   subject: subjectValidation,
   unit: unitValidation,
+  document: documentValidation,
 } = require("../../config/models");
 const { server } = require("../../config/system");
 
@@ -347,6 +348,19 @@ const checkUnitTitle = check("title")
   })
   .withMessage(errors.unit.invalidTitle);
 
+//////////////////// LESSON FUNCTIONS ////////////////////
+const checkLessonId = check("lessonId")
+  .isMongoId()
+  .withMessage(errors.lesson.invalidId);
+
+//////////////////// DOCUMENT FUNCTIONS ////////////////////
+const checkDocumentTitle = check("title")
+  .isLength({
+    min: documentValidation.title.minLength,
+    max: documentValidation.title.maxLength,
+  })
+  .withMessage(errors.document.invalidTitle);
+
 //////////////////// PACKAGE FUNCTIONS ////////////////////
 const checkPackageId = check("packageId")
   .isMongoId()
@@ -414,6 +428,10 @@ module.exports = {
   checkSubjectVideoType,
   // UNIT
   checkUnitTitle,
+  // LESSON
+  checkLessonId,
+  // DOCUMENT
+  checkDocumentTitle,
   // PACKAGE
   checkPackageId,
   // SUBJECT

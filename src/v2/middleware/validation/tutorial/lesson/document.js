@@ -1,20 +1,16 @@
-const { check } = require("express-validator");
-const errors = require("../../../../config/errors");
-const commonCheckers = require("../../common");
+const commonMiddleware = require("../../common");
 
 const validateAddDocument = [
-  check("lessonId").isMongoId().withMessage(errors.lesson.invalidId),
-
-  check("title")
-    .isLength({ min: 1, max: 64 })
-    .withMessage(errors.document.invalidTitle),
-
-  commonCheckers.checkFile("file", ["pdf", "rar"]),
-
-  commonCheckers.next,
+  commonMiddleware.checkLessonId,
+  commonMiddleware.checkDocumentTitle,
+  commonMiddleware.checkFile("file", ["pdf", "rar"]),
+  commonMiddleware.next,
 ];
 
-const validateParamsId = [commonCheckers.checkMongoIdParam];
+const validateParamsId = [
+  commonMiddleware.checkMongoIdParam,
+  commonMiddleware.next,
+];
 
 module.exports = {
   validateAddDocument,
