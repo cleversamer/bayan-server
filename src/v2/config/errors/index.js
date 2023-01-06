@@ -4,16 +4,18 @@ module.exports.system = require("./common/system");
 module.exports.auth = require("./user/auth");
 module.exports.user = require("./user/user");
 
-module.exports.level = require("./tutorial/level");
-module.exports.grade = require("./tutorial/grade");
-module.exports.season = require("./tutorial/season");
-module.exports.subject = require("./tutorial/subject");
-module.exports.unit = require("./tutorial/unit");
-module.exports.lesson = require("./tutorial/lesson");
-module.exports.document = require("./tutorial/document");
-module.exports.video = require("./tutorial/video");
-module.exports.quiz = require("./tutorial/quiz");
-module.exports.question = require("./tutorial/question");
-module.exports.submission = require("./tutorial/submission");
-module.exports.subscription = require("./tutorial/subscription");
-module.exports.package = require("./tutorial/package");
+module.exports.level = require("./school/sections/level");
+module.exports.grade = require("./school/sections/grade");
+module.exports.season = require("./school/sections/season");
+module.exports.subject = require("./school/sections/subject");
+module.exports.unit = require("./school/sections/unit");
+
+module.exports.lesson = require("./tutorial/lesson/lesson");
+module.exports.document = require("./tutorial/lesson/document");
+module.exports.video = require("./tutorial/lesson/video");
+module.exports.quiz = require("./tutorial/quiz/quiz");
+module.exports.question = require("./tutorial/quiz/question");
+module.exports.submission = require("./tutorial/quiz/submission");
+
+module.exports.subscription = require("./subscription/subscription");
+module.exports.package = require("./subscription/package");

@@ -1,8 +1,8 @@
 const { check } = require("express-validator");
-const errors = require("../../../config/errors");
-const commonCheckers = require("../common");
+const errors = require("../../../../config/errors");
+const commonCheckers = require("../../common");
 const httpStatus = require("http-status");
-const { ApiError } = require("../../apiError");
+const { ApiError } = require("../../../apiError");
 
 const validateCreateSubject = [
   check("seasonId").isMongoId().withMessage(errors.season.invalidId),

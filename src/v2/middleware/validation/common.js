@@ -8,6 +8,7 @@ const {
   user: userValidation,
   level: levelValidation,
   grade: gradeValidation,
+  season: seasonValidation,
 } = require("../../config/models");
 const { server } = require("../../config/system");
 
@@ -278,9 +279,18 @@ const checkLevelTitle = check("title")
   .withMessage(errors.level.invalidTitle);
 
 //////////////////// GRADE FUNCTIONS ////////////////////
+const checkGradeId = check("gradeId")
+  .isMongoId()
+  .withMessage(errors.grade.invalidId);
+
 const checkGradeNumber = check("number")
   .isIn(gradeValidation.supportedGrades.all)
   .withMessage(errors.grade.invalidGrade);
+
+//////////////////// SEASON FUNCTIONS ////////////////////
+const checkkSeasonNumber = check("number")
+  .isIn(seasonValidation.supportedSeasons)
+  .withMessage(errors.season.invalidSeason);
 
 //////////////////// PACKAGE FUNCTIONS ////////////////////
 const checkPackageId = check("packageId")
@@ -338,7 +348,10 @@ module.exports = {
   checkLevelId,
   checkLevelTitle,
   // GRADE
+  checkGradeId,
   checkGradeNumber,
+  // SEASON
+  checkkSeasonNumber,
   // PACKAGE
   checkPackageId,
   // SUBJECT

@@ -3,7 +3,7 @@ const {
   email,
   password,
   verificationCode,
-} = require("../../models/user");
+} = require("../../models/user/user");
 
 module.exports = Object.freeze({
   invalidName: {

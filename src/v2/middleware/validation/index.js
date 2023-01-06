@@ -1,11 +1,12 @@
 module.exports.authValidator = require("./user/auth");
 module.exports.userValidator = require("./user/user");
-module.exports.subscriptionValidator = require("./user/subscription");
 
-module.exports.gradeValidator = require("./tutorial/grade");
-module.exports.lessonValidator = require("./tutorial/lesson");
-module.exports.levelValidator = require("./tutorial/level");
-module.exports.packageValidator = require("./tutorial/package");
-module.exports.seasonValidator = require("./tutorial/season");
-module.exports.subjectValidator = require("./tutorial/subject");
-module.exports.unitValidator = require("./tutorial/unit");
+module.exports.levelValidator = require("./school/sections/level");
+module.exports.gradeValidator = require("./school/sections/grade");
+module.exports.seasonValidator = require("./school/sections/season");
+module.exports.subjectValidator = require("./school/sections/subject");
+module.exports.unitValidator = require("./school/sections/unit");
+module.exports.lessonValidator = require("./tutorial/lesson/lesson");
+
+module.exports.subscriptionValidator = require("./subscription/subscription");
+module.exports.packageValidator = require("./subscription/package");

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { season: validation } = require("../../../config/models");
 
 const clientSchema = [
   "_id",
@@ -9,32 +10,31 @@ const clientSchema = [
   "number",
 ];
 
-const SUPPORTED_SEASONS = ["1", "2", "3", "4"];
-
 const seasonSchema = new mongoose.Schema(
   {
     photoURL: {
       type: String,
       default: "",
+      trim: true,
     },
     author: {
       type: mongoose.Types.ObjectId,
-      ref: "users",
+      ref: "User",
       required: true,
     },
     levelId: {
       type: mongoose.Types.ObjectId,
-      ref: "levels",
+      ref: "Level",
       required: true,
     },
     gradeId: {
       type: mongoose.Types.ObjectId,
-      ref: "grades",
+      ref: "Grade",
       required: true,
     },
     number: {
-      type: String,
-      enum: SUPPORTED_SEASONS,
+      type: Number,
+      enum: validation.supportedSeasons,
       trim: true,
       required: true,
     },
@@ -57,5 +57,4 @@ const Season = mongoose.model("Season", seasonSchema);
 module.exports = {
   Season,
   clientSchema,
-  SUPPORTED_SEASONS,
 };

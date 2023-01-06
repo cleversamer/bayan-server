@@ -1,4 +1,4 @@
-const { title } = require("../../models/level");
+const { title } = require("../../../models/school/sections/level");
 
 module.exports = Object.freeze({
   invalidTitle: {

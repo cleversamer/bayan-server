@@ -1,3 +1,5 @@
-module.exports.user = require("./user");
-module.exports.level = require("./level");
-module.exports.grade = require("./grade");
+module.exports.user = require("./user/user");
+
+module.exports.level = require("./school/sections/level");
+module.exports.grade = require("./school/sections/grade");
+module.exports.season = require("./school/sections/season");

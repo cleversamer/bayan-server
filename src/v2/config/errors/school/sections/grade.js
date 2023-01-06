@@ -1,4 +1,4 @@
-const { supportedGrades } = require("../../models/grade");
+const { supportedGrades } = require("../../../models/school/sections/grade");
 
 module.exports = Object.freeze({
   gradeExist: {

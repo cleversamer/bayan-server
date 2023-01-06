@@ -1,8 +1,7 @@
-const commonMiddleware = require("../common");
+const commonMiddleware = require("../../common");
 
-const validateCreateGrade = [
-  commonMiddleware.checkLevelId,
-  commonMiddleware.checkGradeNumber,
+const validateCreateLevel = [
+  commonMiddleware.checkLevelTitle,
   commonMiddleware.checkFile("photo", ["png", "jpg", "jpeg"]),
   commonMiddleware.next,
 ];
@@ -13,6 +12,6 @@ const validateGetLevelGrades = [
 ];
 
 module.exports = {
-  validateCreateGrade,
+  validateCreateLevel,
   validateGetLevelGrades,
 };

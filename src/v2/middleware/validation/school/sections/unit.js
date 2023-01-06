@@ -1,6 +1,6 @@
 const { check } = require("express-validator");
-const errors = require("../../../config/errors");
-const commonCheckers = require("../common");
+const errors = require("../../../../config/errors");
+const commonCheckers = require("../../common");
 
 const validateCreateUnit = [
   check("subjectId").isMongoId().withMessage(errors.subject.invalidId),
