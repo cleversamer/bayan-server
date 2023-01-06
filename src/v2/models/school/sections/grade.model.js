@@ -1,13 +1,7 @@
 const mongoose = require("mongoose");
+const { grade: validation } = require("../../../config/models");
 
-const CLIENT_SCHEMA = ["_id", "author", "levelId", "photoURL", "number"];
-
-const SUPPORTED_GRADES = {
-  ALL: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
-  PRIMARY: ["1", "2", "3", "4", "5"],
-  MIDDLE: ["6", "7", "8", "9"],
-  HIGH: ["10", "11", "12"],
-};
+const clientSchema = ["_id", "author", "levelId", "photoURL", "number"];
 
 const gradeSchema = new mongoose.Schema(
   {
@@ -17,20 +11,19 @@ const gradeSchema = new mongoose.Schema(
     },
     author: {
       type: mongoose.Types.ObjectId,
-      ref: "users",
+      ref: "User",
       required: true,
     },
     levelId: {
       type: mongoose.Types.ObjectId,
-      ref: "levels",
+      ref: "Level",
       required: true,
     },
     number: {
-      type: String,
-      enum: SUPPORTED_GRADES.ALL,
+      type: Number,
+      enum: validation.supportedGrades.all,
       trim: true,
       required: true,
-      unique: true,
     },
   },
   {
@@ -50,6 +43,5 @@ const Grade = mongoose.model("Grade", gradeSchema);
 
 module.exports = {
   Grade,
-  CLIENT_SCHEMA,
-  SUPPORTED_GRADES,
+  clientSchema,
 };

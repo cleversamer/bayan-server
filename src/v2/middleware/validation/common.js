@@ -7,6 +7,7 @@ const countries = require("../../data/countries.json");
 const {
   user: userValidation,
   level: levelValidation,
+  grade: gradeValidation,
 } = require("../../config/models");
 const { server } = require("../../config/system");
 
@@ -265,12 +266,21 @@ const checkUserId = check("userId")
   .withMessage(errors.user.invalidId);
 
 //////////////////// LEVEL FUNCTIONS ////////////////////
+const checkLevelId = check("levelId")
+  .isMongoId()
+  .withMessage(errors.level.invalidId);
+
 const checkLevelTitle = check("title")
   .isLength({
     min: levelValidation.title.minLength,
     max: levelValidation.title.maxLength,
   })
   .withMessage(errors.level.invalidTitle);
+
+//////////////////// GRADE FUNCTIONS ////////////////////
+const checkGradeNumber = check("number")
+  .isIn(gradeValidation.supportedGrades.all)
+  .withMessage(errors.grade.invalidGrade);
 
 //////////////////// PACKAGE FUNCTIONS ////////////////////
 const checkPackageId = check("packageId")
@@ -325,7 +335,10 @@ module.exports = {
   checkLanguage,
   checkUserId,
   // LEVEL
+  checkLevelId,
   checkLevelTitle,
+  // GRADE
+  checkGradeNumber,
   // PACKAGE
   checkPackageId,
   // SUBJECT

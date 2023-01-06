@@ -1,23 +1,16 @@
-const {
-  SUPPORTED_GRADES,
-} = require("../../../models/school/sections/grade.model");
-const { check } = require("express-validator");
-const errors = require("../../../config/errors");
-const commonCheckers = require("../common");
+const commonMiddleware = require("../common");
 
 const validateCreateGrade = [
-  check("levelId").isMongoId().withMessage(errors.level.invalidId),
-
-  check("number")
-    .isIn(SUPPORTED_GRADES.ALL)
-    .withMessage(errors.grade.invalidGrade),
-
-  commonCheckers.checkFile("photo", ["png", "jpg", "jpeg"]),
-
-  commonCheckers.next,
+  commonMiddleware.checkLevelId,
+  commonMiddleware.checkGradeNumber,
+  commonMiddleware.checkFile("photo", ["png", "jpg", "jpeg"]),
+  commonMiddleware.next,
 ];
 
-const validateGetLevelGrades = [commonCheckers.checkMongoIdQueryParam];
+const validateGetLevelGrades = [
+  commonMiddleware.checkMongoIdQueryParam,
+  commonMiddleware.next,
+];
 
 module.exports = {
   validateCreateGrade,

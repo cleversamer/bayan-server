@@ -6,7 +6,10 @@ const validateCreateLevel = [
   commonMiddleware.next,
 ];
 
-const validateGetLevelGrades = [commonMiddleware.checkMongoIdQueryParam];
+const validateGetLevelGrades = [
+  commonMiddleware.checkMongoIdQueryParam,
+  commonMiddleware.next,
+];
 
 module.exports = {
   validateCreateLevel,

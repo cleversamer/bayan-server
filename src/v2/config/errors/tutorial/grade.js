@@ -1,11 +1,17 @@
+const { supportedGrades } = require("../../models/grade");
+
 module.exports = Object.freeze({
   gradeExist: {
     en: "Grade has been already added",
     ar: "تم إضافة الصف بالفعل",
   },
   invalidGrade: {
-    en: "Grade should be a number between 1-12",
-    ar: "الصف يجب أن يكون بين 1-12",
+    en: `Grade should be a number between ${supportedGrades.all[0]}-${
+      supportedGrades.all[supportedGrades.all.length - 1]
+    }`,
+    ar: `الصف يحب أن يكون بين ${supportedGrades.all[0]}-${
+      supportedGrades.all[supportedGrades.all.length - 1]
+    }`,
   },
   noGrades: {
     en: "No grades registered yet",

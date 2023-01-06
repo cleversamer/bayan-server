@@ -12,7 +12,7 @@ const levelSchema = new mongoose.Schema(
     },
     author: {
       type: mongoose.Types.ObjectId,
-      ref: "users",
+      ref: "User",
       required: true,
     },
     title: {
