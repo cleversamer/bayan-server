@@ -9,6 +9,7 @@ const {
   level: levelValidation,
   grade: gradeValidation,
   season: seasonValidation,
+  subject: subjectValidation,
 } = require("../../config/models");
 const { server } = require("../../config/system");
 
@@ -288,9 +289,54 @@ const checkGradeNumber = check("number")
   .withMessage(errors.grade.invalidGrade);
 
 //////////////////// SEASON FUNCTIONS ////////////////////
+const checkSeasonId = check("seasonId")
+  .isMongoId()
+  .withMessage(errors.season.invalidId);
+
 const checkkSeasonNumber = check("number")
   .isIn(seasonValidation.supportedSeasons)
   .withMessage(errors.season.invalidSeason);
+
+//////////////////// SUBJECT FUNCTIONS ////////////////////
+const checkSubjectId = check("subjectId")
+  .isMongoId()
+  .withMessage(errors.subject.invalidId);
+
+const checkSubjectTitle = check("title")
+  .isLength({
+    min: subjectValidation.title.minLength,
+    max: subjectValidation.title.maxLength,
+  })
+  .withMessage(errors.subject.invalidTitle);
+
+const checkSubjectVideoType = (req, res, next) => {
+  const { videoType } = req.body;
+
+  if (!videoType) {
+    const statusCode = httpStatus.BAD_REQUEST;
+    const message = errors.video.noVideo;
+    const err = new ApiError(statusCode, message);
+    return next(err);
+  }
+
+  switch (videoType) {
+    case "url":
+      return check("videoURL").isURL().withMessage(errors.video.invalidURL)(
+        req,
+        res,
+        next
+      );
+
+    case "video":
+      return commonMiddleware.checkFile("video", ["mp4"])(req, res, next);
+
+    default:
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.video.invalidType;
+      const err = new ApiError(statusCode, message);
+      return next(err);
+  }
+};
 
 //////////////////// PACKAGE FUNCTIONS ////////////////////
 const checkPackageId = check("packageId")
@@ -351,7 +397,12 @@ module.exports = {
   checkGradeId,
   checkGradeNumber,
   // SEASON
+  checkSeasonId,
   checkkSeasonNumber,
+  // SUBJECT
+  checkSubjectId,
+  checkSubjectTitle,
+  checkSubjectVideoType,
   // PACKAGE
   checkPackageId,
   // SUBJECT

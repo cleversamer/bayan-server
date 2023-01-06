@@ -1,3 +1,5 @@
+const { title } = require("../../../models/school/sections/subject");
+
 module.exports = Object.freeze({
   subjectExist: {
     en: "Subject for this season has been already added",
@@ -8,8 +10,8 @@ module.exports = Object.freeze({
     ar: "لا يوجد مواد مسجلة لهذا الفصل بعد",
   },
   invalidTitle: {
-    en: "Subject title should be (1 ~ 64 characters) length",
-    ar: "عنوان المادة يجب أن يكون بين 1-64 حرفاً",
+    en: `Subject title should be ${title.minLength}-${title.maxLength} characters length`,
+    ar: `عنوان المادة يجب أن يكون بين ${title.minLength}-${title.maxLength} حرفاً`,
   },
   invalidId: {
     en: "Invalid subject id",
