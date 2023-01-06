@@ -6,4 +6,5 @@ module.exports.season = require("./school/sections/season");
 module.exports.subject = require("./school/sections/subject");
 module.exports.unit = require("./school/sections/unit");
 
+module.exports.lesson = require("./tutorial/lesson/lesson");
 module.exports.document = require("./tutorial/lesson/document");

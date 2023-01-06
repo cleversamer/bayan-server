@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { lesson: validation } = require("../../../config/models");
 
 const clientSchema = [
   "_id",
@@ -18,52 +19,54 @@ const lessonSchema = new mongoose.Schema(
   {
     author: {
       type: mongoose.Types.ObjectId,
-      ref: "users",
+      ref: "User",
       required: true,
     },
     title: {
       type: String,
       trim: true,
       required: true,
+      minLength: validation.title.minLength,
+      maxLength: validation.title.maxLength,
     },
     levelId: {
       type: mongoose.Types.ObjectId,
-      ref: "levels",
+      ref: "Level",
       required: true,
     },
     gradeId: {
       type: mongoose.Types.ObjectId,
-      ref: "grades",
+      ref: "Grade",
       required: true,
     },
     seasonId: {
       type: mongoose.Types.ObjectId,
-      ref: "seasons",
+      ref: "Season",
       required: true,
     },
     subjectId: {
       type: mongoose.Types.ObjectId,
-      ref: "subjects",
+      ref: "Subject",
       required: true,
     },
     unitId: {
       type: mongoose.Types.ObjectId,
-      ref: "units",
+      ref: "Unit",
       required: true,
     },
     videoId: {
-      type: Object,
-      ref: "videos",
+      type: mongoose.Types.ObjectId,
+      ref: "Video",
       default: "",
     },
     documentId: {
-      type: Object,
-      ref: "documents",
+      type: mongoose.Types.ObjectId,
+      ref: "Document",
       default: "",
     },
     quizId: {
-      type: Object,
-      ref: "quizzes",
+      type: mongoose.Types.ObjectId,
+      ref: "Quiz",
       default: "",
     },
   },

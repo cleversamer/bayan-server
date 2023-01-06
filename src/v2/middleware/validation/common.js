@@ -341,6 +341,10 @@ const checkSubjectVideoType = (req, res, next) => {
 };
 
 //////////////////// UNIT FUNCTIONS ////////////////////
+const checkUnitId = check("unitId")
+  .isMongoId()
+  .withMessage(errors.unit.invalidId);
+
 const checkUnitTitle = check("title")
   .isLength({
     min: unitValidation.title.minLength,
@@ -352,6 +356,10 @@ const checkUnitTitle = check("title")
 const checkLessonId = check("lessonId")
   .isMongoId()
   .withMessage(errors.lesson.invalidId);
+
+const checkLessonTitle = check("title")
+  .isLength({ min: 1, max: 64 })
+  .withMessage(errors.lesson.invalidTitle);
 
 //////////////////// DOCUMENT FUNCTIONS ////////////////////
 const checkDocumentTitle = check("title")
@@ -427,9 +435,11 @@ module.exports = {
   checkSubjectTitle,
   checkSubjectVideoType,
   // UNIT
+  checkUnitId,
   checkUnitTitle,
   // LESSON
   checkLessonId,
+  checkLessonTitle,
   // DOCUMENT
   checkDocumentTitle,
   // PACKAGE

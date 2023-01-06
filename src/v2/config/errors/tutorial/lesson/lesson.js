@@ -1,11 +1,13 @@
+const { title } = require("../../../models/tutorial/lesson/lesson");
+
 module.exports = Object.freeze({
   invalidLesson: {
     en: "Lesson should be either video",
     ar: "الصف يجب أن يكون بين 1-12",
   },
   invalidTitle: {
-    en: "Lesson title should be (1 ~ 64 characters) length",
-    ar: "عنوان الدرس يجب أن يكون بين 1-64 حرفاً",
+    en: `Lesson title should be ${title.minLength}-${title.maxLength} characters length`,
+    ar: `عنوان الدرس يجب أن يكون بين ${title.minLength}-${title.maxLength} حرفاً`,
   },
   noLessons: {
     en: "No lessons registered for this unit yet",
