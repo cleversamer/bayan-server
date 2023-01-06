@@ -11,6 +11,7 @@ const {
   season: seasonValidation,
   subject: subjectValidation,
   unit: unitValidation,
+  video: videoValidation,
   document: documentValidation,
 } = require("../../config/models");
 const { server } = require("../../config/system");
@@ -361,6 +362,50 @@ const checkLessonTitle = check("title")
   .isLength({ min: 1, max: 64 })
   .withMessage(errors.lesson.invalidTitle);
 
+//////////////////// VIDEO FUNCTIONS ////////////////////
+const checkVideoTitle = check("title")
+  .isLength({
+    min: videoValidation.title.minLength,
+    max: videoValidation.title.maxLength,
+  })
+  .withMessage(errors.video.invalidTitle);
+
+const checkVideoDescription = check("description")
+  .isLength({
+    min: videoValidation.description.minLength,
+    max: videoValidation.description.maxLength,
+  })
+  .withMessage(errors.video.invalidDescription);
+
+const checkVideoType = (req, res, next) => {
+  const { type } = req.body;
+
+  if (!type) {
+    const statusCode = httpStatus.BAD_REQUEST;
+    const message = errors.video.noVideo;
+    const err = new ApiError(statusCode, message);
+    return next(err);
+  }
+
+  switch (type) {
+    case "url":
+      return check("url").isURL().withMessage(errors.video.invalidURL)(
+        req,
+        res,
+        next
+      );
+
+    case "video":
+      return commonCheckers.checkFile("video", ["mp4"])(req, res, next);
+
+    default:
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.video.invalidType;
+      const err = new ApiError(statusCode, message);
+      return next(err);
+  }
+};
+
 //////////////////// DOCUMENT FUNCTIONS ////////////////////
 const checkDocumentTitle = check("title")
   .isLength({
@@ -440,6 +485,10 @@ module.exports = {
   // LESSON
   checkLessonId,
   checkLessonTitle,
+  // VIDEO
+  checkVideoTitle,
+  checkVideoDescription,
+  checkVideoType,
   // DOCUMENT
   checkDocumentTitle,
   // PACKAGE

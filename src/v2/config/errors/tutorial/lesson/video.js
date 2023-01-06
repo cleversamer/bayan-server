@@ -1,19 +1,21 @@
+const { title, description } = require("../../../models/tutorial/lesson/video");
+
 module.exports = Object.freeze({
   notFound: {
     en: "Video not found",
     ar: "الفيديو غير موجود",
   },
   invalidTitle: {
-    en: "Video title should be (1 ~ 64 characters) length",
-    ar: "عنوان الفيديو يجب أن يكون بين 1-64 حرفاً",
+    en: `Video title should be ${title.minLength}-${title.maxLength} characters length`,
+    ar: `عنوان الفيديو يجب أن يكون بين ${title.minLength}-${title.maxLength} حرفاً`,
   },
   invalidURL: {
     en: "Invalid video url",
     ar: "رابط الفيديو غير صالح",
   },
   invalidDescription: {
-    en: "Video description should be (1 ~ 1024 characters) length",
-    ar: "وصف الفيديو يجب أن يكون بين 1-1024 حرفاً",
+    en: `Video description should be ${description.minLength}-${description.maxLength} characters length`,
+    ar: `وصف الفيديو يجب أن يكون بين ${description.minLength}-${description.maxLength} حرفاً`,
   },
   noVideo: {
     en: "Please add either video or video url",
