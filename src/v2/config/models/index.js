@@ -9,4 +9,5 @@ module.exports.unit = require("./school/sections/unit");
 module.exports.lesson = require("./tutorial/lesson/lesson");
 module.exports.document = require("./tutorial/lesson/document");
 module.exports.video = require("./tutorial/lesson/video");
+module.exports.quiz = require("./tutorial/quiz/quiz");
 module.exports.question = require("./tutorial/quiz/question");

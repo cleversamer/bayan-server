@@ -15,6 +15,7 @@ const {
   video: videoValidation,
   document: documentValidation,
   question: questionValidation,
+  quiz: quizValidation,
 } = require("../../config/models");
 const { server } = require("../../config/system");
 
@@ -424,6 +425,13 @@ const checkQuizId = check("quizId")
   .isMongoId()
   .withMessage(errors.quiz.invalidId);
 
+const checkQuizTitle = check("title")
+  .isLength({
+    min: quizValidation.title.minLength,
+    max: quizValidation.title.maxLength,
+  })
+  .withMessage(errors.quiz.invalidTitle);
+
 //////////////////// QUESTION FUNCTIONS ////////////////////
 const checkQuestionTitle = check("title")
   .isLength({
@@ -591,6 +599,7 @@ module.exports = {
   checkDocumentTitle,
   // QUIZ
   checkQuizId,
+  checkQuizTitle,
   // QUESTION
   checkQuestionTitle,
   checkQuestionOptions,

@@ -1,20 +1,15 @@
-const { check } = require("express-validator");
-const errors = require("../../../../config/errors");
-const commonCheckers = require("../../common");
-const httpStatus = require("http-status");
-const { ApiError } = require("../../../apiError");
+const commonMiddleware = require("../../common");
 
 const validateAddQuiz = [
-  check("lessonId").isMongoId().withMessage(errors.lesson.invalidId),
-
-  check("title")
-    .isLength({ min: 1, max: 64 })
-    .withMessage(errors.quiz.invalidTitle),
-
-  commonCheckers.next,
+  commonMiddleware.checkLessonId,
+  commonMiddleware.checkQuizTitle,
+  commonMiddleware.next,
 ];
 
-const validateParamsId = [commonCheckers.checkMongoIdParam];
+const validateParamsId = [
+  commonMiddleware.checkMongoIdParam,
+  commonMiddleware.next,
+];
 
 module.exports = {
   validateAddQuiz,
