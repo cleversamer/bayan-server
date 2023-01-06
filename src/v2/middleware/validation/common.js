@@ -10,6 +10,7 @@ const {
   grade: gradeValidation,
   season: seasonValidation,
   subject: subjectValidation,
+  unit: unitValidation,
 } = require("../../config/models");
 const { server } = require("../../config/system");
 
@@ -338,6 +339,14 @@ const checkSubjectVideoType = (req, res, next) => {
   }
 };
 
+//////////////////// UNIT FUNCTIONS ////////////////////
+const checkUnitTitle = check("title")
+  .isLength({
+    min: unitValidation.title.minLength,
+    max: unitValidation.title.maxLength,
+  })
+  .withMessage(errors.unit.invalidTitle);
+
 //////////////////// PACKAGE FUNCTIONS ////////////////////
 const checkPackageId = check("packageId")
   .isMongoId()
@@ -403,6 +412,8 @@ module.exports = {
   checkSubjectId,
   checkSubjectTitle,
   checkSubjectVideoType,
+  // UNIT
+  checkUnitTitle,
   // PACKAGE
   checkPackageId,
   // SUBJECT

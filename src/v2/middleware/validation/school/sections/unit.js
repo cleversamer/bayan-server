@@ -1,18 +1,15 @@
-const { check } = require("express-validator");
-const errors = require("../../../../config/errors");
-const commonCheckers = require("../../common");
+const commonMiddleware = require("../../common");
 
 const validateCreateUnit = [
-  check("subjectId").isMongoId().withMessage(errors.subject.invalidId),
-
-  check("title")
-    .isLength({ min: 1, max: 64 })
-    .withMessage(errors.subject.invalidTitle),
-
-  commonCheckers.next,
+  commonMiddleware.checkSubjectId,
+  commonMiddleware.checkUnitTitle,
+  commonMiddleware.next,
 ];
 
-const validateGetSubjectUnits = [commonCheckers.checkMongoIdQueryParam];
+const validateGetSubjectUnits = [
+  commonMiddleware.checkMongoIdQueryParam,
+  commonMiddleware.next,
+];
 
 module.exports = {
   validateCreateUnit,
