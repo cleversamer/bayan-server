@@ -1,20 +1,20 @@
 const { Router } = require("express");
 const router = Router();
 const { lessonsController } = require("../../../controllers");
-const { lessonValidator } = require("../../../middleware/validation");
+const { videoValidator } = require("../../../middleware/validation");
 const auth = require("../../../middleware/auth");
 
 // Video APIs
 router.post(
   "/add",
-  lessonValidator.validateAddVideo,
+  videoValidator.validateAddVideo,
   auth("createAny", "video"),
   lessonsController.addVideo
 );
 
 router.get(
   "/:id/details",
-  lessonValidator.validateParamsId,
+  videoValidator.validateParamsId,
   lessonsController.getVideo
 );
 

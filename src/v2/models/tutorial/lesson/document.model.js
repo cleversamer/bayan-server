@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+const { document: validation } = require("../../../config/models");
 
-const CLIENT_SCHEMA = [
+const clientSchema = [
   "_id",
   "author",
   "title",
@@ -17,47 +18,50 @@ const documentSchema = new mongoose.Schema(
   {
     author: {
       type: mongoose.Types.ObjectId,
-      ref: "users",
+      ref: "User",
       required: true,
     },
     levelId: {
       type: mongoose.Types.ObjectId,
-      ref: "levels",
+      ref: "Level",
       required: true,
     },
     gradeId: {
       type: mongoose.Types.ObjectId,
-      ref: "grades",
+      ref: "Grade",
       required: true,
     },
     seasonId: {
       type: mongoose.Types.ObjectId,
-      ref: "seasons",
+      ref: "Season",
       required: true,
     },
     subjectId: {
       type: mongoose.Types.ObjectId,
-      ref: "subjects",
+      ref: "Subject",
       required: true,
     },
     unitId: {
       type: mongoose.Types.ObjectId,
-      ref: "units",
+      ref: "Unit",
       required: true,
     },
     lessonId: {
       type: mongoose.Types.ObjectId,
-      ref: "lessons",
+      ref: "Lesson",
       required: true,
     },
     title: {
       type: String,
-      trim: true,
       required: true,
+      trim: true,
+      minLength: validation.title.minLength,
+      maxLength: validation.title.maxLength,
     },
     fileUrl: {
       type: String,
       required: true,
+      trim: true,
     },
   },
   {
@@ -73,5 +77,5 @@ const Document = mongoose.model("Document", documentSchema);
 
 module.exports = {
   Document,
-  CLIENT_SCHEMA,
+  clientSchema,
 };

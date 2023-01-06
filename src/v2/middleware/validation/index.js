@@ -7,6 +7,11 @@ module.exports.seasonValidator = require("./school/sections/season");
 module.exports.subjectValidator = require("./school/sections/subject");
 module.exports.unitValidator = require("./school/sections/unit");
 module.exports.lessonValidator = require("./tutorial/lesson/lesson");
+module.exports.videoValidator = require("./tutorial/lesson/video");
+module.exports.documentValidator = require("./tutorial/lesson/document");
+module.exports.quizValidator = require("./tutorial/quiz/quiz");
+module.exports.questionValidator = require("./tutorial/quiz/question");
+module.exports.submissionValidator = require("./tutorial/quiz/submission");
 
 module.exports.subscriptionValidator = require("./subscription/subscription");
 module.exports.packageValidator = require("./subscription/package");

@@ -1,19 +1,19 @@
 const { Router } = require("express");
 const router = Router();
 const { lessonsController } = require("../../../controllers");
-const { lessonValidator } = require("../../../middleware/validation");
+const { quizValidator } = require("../../../middleware/validation");
 const auth = require("../../../middleware/auth");
 
 router.post(
   "/add",
-  lessonValidator.validateAddQuiz,
+  quizValidator.validateAddQuiz,
   auth("createAny", "quiz"),
   lessonsController.addQuiz
 );
 
 router.get(
   "/:id/details",
-  lessonValidator.validateParamsId,
+  quizValidator.validateParamsId,
   auth("readOwn", "quiz"),
   lessonsController.getQuiz
 );
