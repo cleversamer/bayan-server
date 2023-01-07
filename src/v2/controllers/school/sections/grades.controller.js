@@ -1,6 +1,4 @@
-const {
-  CLIENT_SCHEMA,
-} = require("../../../models/school/sections/grade.model");
+const { clientSchema } = require("../../../models/school/sections/grade.model");
 const { gradesService } = require("../../../services");
 const { ApiError } = require("../../../middleware/apiError");
 const httpStatus = require("http-status");
@@ -15,7 +13,7 @@ module.exports.createGrade = async (req, res, next) => {
 
     const grade = await gradesService.createGrade(user, levelId, number, photo);
 
-    const response = _.pick(grade, CLIENT_SCHEMA);
+    const response = _.pick(grade, clientSchema);
 
     res.status(httpStatus.CREATED).json(response);
   } catch (err) {
@@ -36,7 +34,7 @@ module.exports.getLevelGrades = async (req, res, next) => {
     const grades = await gradesService.getLevelGrades(levelId);
 
     const response = {
-      grades: grades.map((grade) => _.pick(grade, CLIENT_SCHEMA)),
+      grades: grades.map((grade) => _.pick(grade, clientSchema)),
     };
 
     res.status(httpStatus.OK).json(response);

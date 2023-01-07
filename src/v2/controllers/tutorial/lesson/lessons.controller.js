@@ -5,16 +5,16 @@ const {
   clientSchema: subscriptionSchema,
 } = require("../../../models/subscription/subscription.model");
 const {
-  CLIENT_SCHEMA: documentSchema,
+  clientSchema: documentSchema,
 } = require("../../../models/tutorial/lesson/document.model");
 const {
-  CLIENT_SCHEMA: videoSchema,
+  clientSchema: videoSchema,
 } = require("../../../models/tutorial/lesson/video.model");
 const {
-  CLIENT_SCHEMA: quizSchema,
+  clientSchema: quizSchema,
 } = require("../../../models/tutorial/quiz/quiz.model");
 const {
-  CLIENT_SCHEMA: questionSchema,
+  clientSchema: questionSchema,
 } = require("../../../models/tutorial/quiz/question.model");
 const { lessonsService } = require("../../../services");
 const httpStatus = require("http-status");

@@ -1,6 +1,4 @@
-const {
-  CLIENT_SCHEMA,
-} = require("../../../models/school/sections/level.model");
+const { clientSchema } = require("../../../models/school/sections/level.model");
 const { levelsService } = require("../../../services");
 const { ApiError } = require("../../../middleware/apiError");
 const httpStatus = require("http-status");
@@ -12,7 +10,7 @@ module.exports.getAllLevels = async (req, res, next) => {
     const levels = await levelsService.getAllLevels();
 
     const response = {
-      levels: levels.map((level) => _.pick(level, CLIENT_SCHEMA)),
+      levels: levels.map((level) => _.pick(level, clientSchema)),
     };
 
     res.status(httpStatus.OK).json(response);
@@ -29,7 +27,7 @@ module.exports.createLevel = async (req, res, next) => {
 
     const level = await levelsService.createLevel(user, title, photo);
 
-    const response = _.pick(level, CLIENT_SCHEMA);
+    const response = _.pick(level, clientSchema);
 
     res.status(httpStatus.CREATED).json(response);
   } catch (err) {
