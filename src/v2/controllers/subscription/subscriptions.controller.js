@@ -55,7 +55,7 @@ module.exports.getMySubscriptions = async (req, res, next) => {
 
 module.exports.toggleSubscriptionActive = async (req, res, next) => {
   try {
-    const { subscriptionId } = req.body;
+    const { subscriptionId } = req.params;
 
     const subscription = await subscriptionsService.toggleSubscriptionActive(
       subscriptionId
@@ -71,7 +71,7 @@ module.exports.toggleSubscriptionActive = async (req, res, next) => {
 
 module.exports.toggleSubjectActive = async (req, res, next) => {
   try {
-    const { subscriptionId, subjectId } = req.body;
+    const { subscriptionId, subjectId } = req.params;
 
     const subscription = await subscriptionsService.toggleSubjectActive(
       subscriptionId,
@@ -88,7 +88,8 @@ module.exports.toggleSubjectActive = async (req, res, next) => {
 
 module.exports.addSubjectToSubscription = async (req, res, next) => {
   try {
-    const { subscriptionId, subjectId } = req.body;
+    const { subscriptionId } = req.params;
+    const { subjectId } = req.body;
 
     const subscription = await subscriptionsService.addSubjectToSubscription(
       subscriptionId,
@@ -105,7 +106,7 @@ module.exports.addSubjectToSubscription = async (req, res, next) => {
 
 module.exports.deleteSubscribedSubject = async (req, res, next) => {
   try {
-    const { subscriptionId, subjectId } = req.body;
+    const { subscriptionId, subjectId } = req.params;
 
     const subscription = await subscriptionsService.deleteSubscribedSubject(
       subscriptionId,
