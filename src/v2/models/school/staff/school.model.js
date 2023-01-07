@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { school: validation } = require("../../../config/models");
 
 const clientSchema = ["_id", "name"];
 
@@ -9,6 +10,8 @@ const schoolSchema = new mongoose.Schema(
       required: true,
       trim: true,
       unique: true,
+      minLength: validation.name.minLength,
+      maxLength: validation.name.maxLength,
     },
   },
   {

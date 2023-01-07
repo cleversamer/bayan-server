@@ -4,6 +4,7 @@ module.exports.system = require("./common/system");
 module.exports.auth = require("./user/auth");
 module.exports.user = require("./user/user");
 
+module.exports.school = require("./school/staff/school");
 module.exports.level = require("./school/sections/level");
 module.exports.grade = require("./school/sections/grade");
 module.exports.season = require("./school/sections/season");

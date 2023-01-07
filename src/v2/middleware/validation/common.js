@@ -6,6 +6,7 @@ const errors = require("../../config/errors");
 const countries = require("../../data/countries.json");
 const {
   user: userValidation,
+  school: schoolValidation,
   level: levelValidation,
   grade: gradeValidation,
   season: seasonValidation,
@@ -231,6 +232,14 @@ const checkLanguage = check("lang")
 const checkUserId = check("userId")
   .isMongoId()
   .withMessage(errors.user.invalidId);
+
+//////////////////// SCHOOL FUNCTIONS ////////////////////
+const checkSchoolName = check("name")
+  .isLength({
+    min: schoolValidation.name.minLength,
+    max: schoolValidation.name.maxLength,
+  })
+  .withMessage(errors.school.invalidName);
 
 //////////////////// LEVEL FUNCTIONS ////////////////////
 const checkLevelId = check("levelId")
@@ -643,6 +652,8 @@ module.exports = {
   checkNewPassword,
   checkLanguage,
   checkUserId,
+  // SCHOOL
+  checkSchoolName,
   // LEVEL
   checkLevelId,
   checkLevelTitle,
