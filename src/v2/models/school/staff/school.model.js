@@ -1,17 +1,15 @@
 const mongoose = require("mongoose");
 
-const clientSchema = [
-  "_id",
-  "userId",
-  "package",
-  "grade",
-  "subjects",
-  "active",
-];
+const clientSchema = ["_id", "name"];
 
 const schoolSchema = new mongoose.Schema(
   {
-    //
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+      unique: true,
+    },
   },
   {
     // To not avoid empty object when creating the document
