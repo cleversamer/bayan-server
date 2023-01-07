@@ -5,7 +5,12 @@ const { levelValidator } = require("../../../middleware/validation");
 const auth = require("../../../middleware/auth");
 
 //////////////////// STUDENT/TEACHER ROUTES ////////////////////
-router.get("/get", auth("readOwn", "level"), levelsController.getSchoolLevels);
+router.get(
+  "/get",
+  levelValidator.validateGetSchoolLevels,
+  auth("readOwn", "level"),
+  levelsController.getSchoolLevels
+);
 
 //////////////////// SCHOOL MANAGER ROUTES ////////////////////
 router.post(

@@ -7,12 +7,17 @@ const _ = require("lodash");
 
 module.exports.getSchoolLevels = async (req, res, next) => {
   try {
-    const levels = await levelsService.getSchoolLevels();
+    const { schoolId } = req.query;
 
+    // Asking service to find school's levels
+    const levels = await levelsService.getSchoolLevels(schoolId);
+
+    // Genereate the response object
     const response = {
       levels: levels.map((level) => _.pick(level, clientSchema)),
     };
 
+    // Send the data back to the client
     res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
@@ -22,13 +27,16 @@ module.exports.getSchoolLevels = async (req, res, next) => {
 module.exports.createLevel = async (req, res, next) => {
   try {
     const user = req.user;
-    const { title } = req.body;
+    const { schoolId, title } = req.body;
     const { photo } = req.files;
 
-    const level = await levelsService.createLevel(user, title, photo);
+    // Asking service to create a new level
+    const level = await levelsService.createLevel(user, schoolId, title, photo);
 
+    // Genereate the response object
     const response = _.pick(level, clientSchema);
 
+    // Send the data back to the client
     res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     if (err.code === errors.codes.duplicateIndexKey) {

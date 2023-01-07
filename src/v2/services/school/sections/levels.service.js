@@ -1,4 +1,5 @@
 const { Level } = require("../../../models/school/sections/level.model");
+const schoolsService = require("../../school/staff/schools.service");
 const localStorage = require("../../storage/localStorage.service");
 const cloudStorage = require("../../storage/cloudStorage.service");
 const { ApiError } = require("../../../middleware/apiError");
@@ -13,12 +14,12 @@ module.exports.findLevelById = async (levelId) => {
   }
 };
 
-module.exports.getSchoolLevels = async () => {
+module.exports.getSchoolLevels = async (schoolId) => {
   try {
-    const levels = await Level.find({}, { __v: 0, grades: 0 }).sort({
-      title: "asc",
-    });
+    // Find all levels for a school
+    const levels = await Level.find({ schoolId });
 
+    // Check if there are no levels
     if (!levels || !levels.length) {
       const statusCode = httpStatus.NOT_FOUND;
       const message = errors.level.noLevels;
@@ -31,18 +32,37 @@ module.exports.getSchoolLevels = async () => {
   }
 };
 
-module.exports.createLevel = async (user, title, photo) => {
+module.exports.createLevel = async (user, schoolId, title, photo) => {
   try {
-    const level = new Level({ author: user._id, title });
+    // Asking service to find school
+    const school = await schoolsService.findSchoolById(schoolId);
 
+    // Create a new level
+    const level = new Level({
+      author: user._id,
+      schoolId: school._id,
+      title,
+    });
+
+    // Save the level to the DB
     const savedLevel = await level.save();
 
+    // Store level's photo locally
     const localFile = await localStorage.storeFile(photo);
+
+    // Store level's photo on the cloud
     const cloudFile = await cloudStorage.uploadFile(localFile);
+
+    // Delete local level's photo
     await localStorage.deleteFile(localFile);
+
+    // Update level's photo URL
     savedLevel.photoURL = cloudFile;
 
-    return await savedLevel.save();
+    // Save the level to the DB
+    await savedLevel.save();
+
+    return savedLevel;
   } catch (err) {
     throw err;
   }

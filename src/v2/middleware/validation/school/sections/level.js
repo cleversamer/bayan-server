@@ -1,17 +1,19 @@
 const commonMiddleware = require("../../common");
 
 const validateCreateLevel = [
+  commonMiddleware.checkSchoolId,
   commonMiddleware.checkLevelTitle,
   commonMiddleware.checkFile("photo", ["png", "jpg", "jpeg"]),
   commonMiddleware.next,
 ];
 
-const validateGetLevelGrades = [
-  commonMiddleware.checkMongoIdQueryParam,
+const validateGetSchoolLevels = [
+  commonMiddleware.putQueryParamsInBody,
+  commonMiddleware.checkSchoolId,
   commonMiddleware.next,
 ];
 
 module.exports = {
   validateCreateLevel,
-  validateGetLevelGrades,
+  validateGetSchoolLevels,
 };

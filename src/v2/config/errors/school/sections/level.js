@@ -14,8 +14,8 @@ module.exports = Object.freeze({
     ar: "المرحلة التعليمية غير مسجل",
   },
   noLevels: {
-    en: "No levels registered yet",
-    ar: "لا يوجد مراحل تعليمية مسجلة بعد",
+    en: "No levels registered for this school yet",
+    ar: "لا يوجد مراحل تعليمية مسجلة لهذه المدرسة بعد",
   },
   levelExist: {
     en: "Level has been already added",

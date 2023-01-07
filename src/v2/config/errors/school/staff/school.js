@@ -9,4 +9,8 @@ module.exports = Object.freeze({
     en: `School name should be ${name.minLength}-${name.maxLength} characters length`,
     ar: `إسم المدرسة يجب أن يكون بين ${name.minLength}-${name.maxLength} حرفًا`,
   },
+  notFound: {
+    en: "School was not found",
+    ar: "المدرسة غير موجودة",
+  },
 });
