@@ -4,17 +4,20 @@ const { lessonsController } = require("../../../controllers");
 const { documentValidator } = require("../../../middleware/validation");
 const auth = require("../../../middleware/auth");
 
-router.post(
-  "/add",
-  documentValidator.validateAddDocument,
-  auth("createAny", "document"),
-  lessonsController.addDocumnet
-);
-
+//////////////////// STUDENT/TEACHER ROUTES ////////////////////
 router.get(
   "/:documentId/details",
   documentValidator.validateGetDocument,
+  auth("readOwn", "document"),
   lessonsController.getDocumnent
+);
+
+//////////////////// TEACHER/SCHOOL ROUTES ////////////////////
+router.post(
+  "/add",
+  documentValidator.validateAddDocument,
+  auth("createOwn", "document"),
+  lessonsController.addDocumnet
 );
 
 module.exports = router;

@@ -15,22 +15,22 @@ module.exports = Object.freeze({
     "update:own": ["*"],
   },
   level: {
-    "read:any": ["*"],
+    "read:own": ["*"],
   },
   grade: {
-    "read:any": ["*"],
+    "read:own": ["*"],
   },
   season: {
-    "read:any": ["*"],
+    "read:own": ["*"],
   },
   subject: {
-    "read:any": ["*"],
+    "read:own": ["*"],
   },
   unit: {
-    "read:any": ["*"],
+    "read:own": ["*"],
   },
   lesson: {
-    "read:any": ["*"],
+    "read:own": ["*"],
   },
   document: {
     "read:own": ["*"],
@@ -45,10 +45,10 @@ module.exports = Object.freeze({
     "read:own": ["*"],
   },
   package: {
-    "read:any": ["*"],
+    "read:own": ["*"],
   },
   subscription: {
-    "read:own": ["*"],
     "create:own": ["*"],
+    "read:own": ["*"],
   },
 });

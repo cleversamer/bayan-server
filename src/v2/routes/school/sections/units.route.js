@@ -4,16 +4,19 @@ const { unitsController } = require("../../../controllers");
 const { unitValidator } = require("../../../middleware/validation");
 const auth = require("../../../middleware/auth");
 
+//////////////////// STUDENT/TEACHER ROUTES ////////////////////
 router.get(
   "/get",
   unitValidator.validateGetSubjectUnits,
+  auth("readOwn", "unit"),
   unitsController.getSubjectUnits
 );
 
+//////////////////// SCHOOL/TEACHER ROUTES ////////////////////
 router.post(
   "/add",
   unitValidator.validateCreateUnit,
-  auth("createAny", "unit"),
+  auth("createOwn", "unit"),
   unitsController.createUnit
 );
 

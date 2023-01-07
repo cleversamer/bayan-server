@@ -4,10 +4,11 @@ const { lessonsController } = require("../../../controllers");
 const { questionValidator } = require("../../../middleware/validation");
 const auth = require("../../../middleware/auth");
 
+//////////////////// TEACHER/SCHOOL ROUTES ////////////////////
 router.post(
   "/add",
   questionValidator.validateAddQuestionToQuiz,
-  auth("createAny", "question"),
+  auth("createOwn", "question"),
   lessonsController.addQuestionToQuiz
 );
 

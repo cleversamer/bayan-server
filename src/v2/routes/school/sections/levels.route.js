@@ -4,12 +4,14 @@ const { levelsController } = require("../../../controllers");
 const { levelValidator } = require("../../../middleware/validation");
 const auth = require("../../../middleware/auth");
 
-router.get("/get", levelsController.getAllLevels);
+//////////////////// STUDENT/TEACHER ROUTES ////////////////////
+router.get("/get", auth("readOwn", "level"), levelsController.getSchoolLevels);
 
+//////////////////// SCHOOL ROUTES ////////////////////
 router.post(
   "/add",
   levelValidator.validateCreateLevel,
-  auth("createAny", "level"),
+  auth("createOwn", "level"),
   levelsController.createLevel
 );
 

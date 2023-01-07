@@ -5,9 +5,9 @@ const httpStatus = require("http-status");
 const errors = require("../../../config/errors");
 const _ = require("lodash");
 
-module.exports.getAllLevels = async (req, res, next) => {
+module.exports.getSchoolLevels = async (req, res, next) => {
   try {
-    const levels = await levelsService.getAllLevels();
+    const levels = await levelsService.getSchoolLevels();
 
     const response = {
       levels: levels.map((level) => _.pick(level, clientSchema)),

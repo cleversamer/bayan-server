@@ -4,17 +4,20 @@ const { lessonsController } = require("../../../controllers");
 const { videoValidator } = require("../../../middleware/validation");
 const auth = require("../../../middleware/auth");
 
-router.post(
-  "/add",
-  videoValidator.validateAddVideo,
-  auth("createAny", "video"),
-  lessonsController.addVideo
-);
-
+//////////////////// STUDENT/TEACHER ROUTES ////////////////////
 router.get(
   "/:videoId/details",
   videoValidator.validateGetVideo,
+  auth("readOwn", "video"),
   lessonsController.getVideo
+);
+
+//////////////////// TEACHER/SCHOOL ROUTES ////////////////////
+router.post(
+  "/add",
+  videoValidator.validateAddVideo,
+  auth("createOwn", "video"),
+  lessonsController.addVideo
 );
 
 module.exports = router;

@@ -4,24 +4,27 @@ const { lessonsController } = require("../../../controllers");
 const { lessonValidator } = require("../../../middleware/validation");
 const auth = require("../../../middleware/auth");
 
+//////////////////// STUDENT/TEACHER ROUTES ////////////////////
 router.get(
   "/get",
   lessonValidator.validateGetUnitLessons,
+  auth("readOwn", "lesson"),
   lessonsController.getUnitLessons
-);
-
-router.post(
-  "/add",
-  lessonValidator.validateCreateLesson,
-  auth("createAny", "lesson"),
-  lessonsController.createLesson
 );
 
 router.get(
   "/:lessonId/details",
   lessonValidator.validateGetLesson,
-  auth("readAny", "lesson"),
+  auth("readOwn", "lesson"),
   lessonsController.getLessonById
+);
+
+//////////////////// TEACHER/SCHOOl ROUTES ////////////////////
+router.post(
+  "/add",
+  lessonValidator.validateCreateLesson,
+  auth("createOwn", "lesson"),
+  lessonsController.createLesson
 );
 
 module.exports = router;

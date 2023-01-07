@@ -3,6 +3,7 @@ const router = Router();
 const { submissionValidator } = require("../../../middleware/validation");
 const auth = require("../../../middleware/auth");
 
+//////////////////// STUDENT ROUTES ////////////////////
 // TODO:
 router.post(
   "/add",

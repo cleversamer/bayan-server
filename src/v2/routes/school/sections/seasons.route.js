@@ -4,16 +4,19 @@ const { seasonsController } = require("../../../controllers");
 const { seasonValidator } = require("../../../middleware/validation");
 const auth = require("../../../middleware/auth");
 
+//////////////////// STUDENT/TEACHER ROUTES ////////////////////
 router.get(
   "/get",
   seasonValidator.validateGetGradeSeasons,
+  auth("readOwn", "season"),
   seasonsController.getGradeSeasons
 );
 
+//////////////////// SCHOOL ROUTES ////////////////////
 router.post(
   "/add",
   seasonValidator.validateCreateSeason,
-  auth("createAny", "season"),
+  auth("createOwn", "season"),
   seasonsController.createSeason
 );
 

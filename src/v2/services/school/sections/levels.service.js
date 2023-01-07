@@ -13,7 +13,7 @@ module.exports.findLevelById = async (levelId) => {
   }
 };
 
-module.exports.getAllLevels = async () => {
+module.exports.getSchoolLevels = async () => {
   try {
     const levels = await Level.find({}, { __v: 0, grades: 0 }).sort({
       title: "asc",

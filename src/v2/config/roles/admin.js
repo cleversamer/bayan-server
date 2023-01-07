@@ -9,7 +9,6 @@ module.exports = Object.freeze({
   grade: allRights,
   season: allRights,
   subject: allRights,
-  freeSubject: allRights,
   unit: allRights,
   lesson: allRights,
   document: allRights,

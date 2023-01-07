@@ -4,23 +4,26 @@ const { subjectsController } = require("../../../controllers");
 const { subjectValidator } = require("../../../middleware/validation");
 const auth = require("../../../middleware/auth");
 
+//////////////////// STUDENT/TEACHER ROUTES ////////////////////
 router.get(
-  "/add",
+  "/get",
   subjectValidator.validateGetSeasonSubjects,
+  auth("readOwn", "subject"),
   subjectsController.getSeasonSubjects
 );
 
+//////////////////// SCHOOL ROUTES ////////////////////
 router.post(
   "/add",
   subjectValidator.validateCreateSubject,
-  auth("createAny", "subject"),
+  auth("createOwn", "subject"),
   subjectsController.createSubject
 );
 
 router.patch(
   "/:subjectId/toggle-free",
   subjectValidator.validateToggleIsSubjectFree,
-  auth("createAny", "freeSubject"),
+  auth("updateOwn", "subject"),
   subjectsController.toggleIsSubjectFree
 );
 
