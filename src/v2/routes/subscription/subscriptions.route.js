@@ -7,7 +7,7 @@ const auth = require("../../middleware/auth");
 router.get(
   "/my",
   auth("readOwn", "subscription"),
-  subscriptionsController.getUserSubscriptions
+  subscriptionsController.getMySubscriptions
 );
 
 router.post(

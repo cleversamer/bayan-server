@@ -26,9 +26,10 @@ module.exports.createSubscription = async (req, res, next) => {
   }
 };
 
-module.exports.getUserSubscriptions = async (req, res, next) => {
+module.exports.getMySubscriptions = async (req, res, next) => {
   try {
     const user = req.user;
+
     let subscriptions = await subscriptionsService.getUserSubscriptions(
       user._id,
       false
