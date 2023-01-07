@@ -7,10 +7,11 @@ const _ = require("lodash");
 
 module.exports.getSchoolLevels = async (req, res, next) => {
   try {
+    const user = req.user;
     const { schoolId } = req.query;
 
     // Asking service to find school's levels
-    const levels = await levelsService.getSchoolLevels(schoolId);
+    const levels = await levelsService.getSchoolLevels(user, schoolId);
 
     // Genereate the response object
     const response = {

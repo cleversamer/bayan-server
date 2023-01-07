@@ -14,8 +14,15 @@ module.exports.findLevelById = async (levelId) => {
   }
 };
 
-module.exports.getSchoolLevels = async (schoolId) => {
+module.exports.getSchoolLevels = async (user, schoolId) => {
   try {
+    // Check if user belongs to the school
+    if (!user.isBelongToSchool(schoolId)) {
+      const statusCode = httpStatus.FORBIDDEN;
+      const message = errors.user.notBelongToSchool;
+      throw new ApiError(statusCode, message);
+    }
+
     // Find all levels for a school
     const levels = await Level.find({ schoolId });
 
