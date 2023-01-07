@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
+const { subscription: validation } = require("../../config/models");
 
 const clientSchema = [
   "_id",
   "userId",
-  "package",
-  "grade",
+  "packageId",
+  "gradeId",
   "subjects",
   "active",
 ];
@@ -13,34 +14,34 @@ const subscriptionSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Types.ObjectId,
-      ref: "users",
+      ref: "User",
       required: true,
     },
     packageId: {
       type: mongoose.Types.ObjectId,
-      ref: "packages",
+      ref: "Package",
       required: true,
     },
     gradeId: {
       type: mongoose.Types.ObjectId,
-      ref: "grades",
+      ref: "Grade",
       required: true,
     },
     subjects: [
       {
         ref: {
           type: mongoose.Types.ObjectId,
-          ref: "subjects",
+          ref: "Subject",
         },
         active: {
           type: Boolean,
-          default: true,
+          default: validation.subject.active.default,
         },
       },
     ],
     active: {
       type: Boolean,
-      default: false,
+      default: validation.active.default,
     },
     date: {
       type: String,
@@ -50,7 +51,8 @@ const subscriptionSchema = new mongoose.Schema(
       type: String,
       default: () => {
         const date = new Date();
-        date.setMonth(date.getMonth() + 1);
+        const { defaultMonths } = validation.expiresAt;
+        date.setMonth(date.getMonth() + defaultMonths);
         return date;
       },
     },

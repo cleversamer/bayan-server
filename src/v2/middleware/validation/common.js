@@ -345,6 +345,28 @@ const checkSubjectVideoType = (req, res, next) => {
   }
 };
 
+const checkSubjects = (req, res, next) => {
+  const { subjects } = req.body;
+
+  if (!Array.isArray(subjects) || !subjects.length) {
+    const statusCode = httpStatus.BAD_REQUEST;
+    const message = errors.subscription.noSubjectsAdded;
+    const err = new ApiError(statusCode, message);
+    return next(err);
+  }
+
+  for (let subject of subjects) {
+    if (!mongoose.isValidObjectId(subject)) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.subscription.invalidSubjects;
+      const err = new ApiError(statusCode, message);
+      return next(err);
+    }
+  }
+
+  next();
+};
+
 //////////////////// UNIT FUNCTIONS ////////////////////
 const checkUnitId = check("unitId")
   .isMongoId()
@@ -628,28 +650,10 @@ const checkPackageMonths = (req, res, next) => {
   next();
 };
 
-//////////////////// SUBJECT FUNCTIONS ////////////////////
-const checkSubjects = (req, res, next) => {
-  const { subjects } = req.body;
-
-  if (!Array.isArray(subjects) || !subjects.length) {
-    const statusCode = httpStatus.BAD_REQUEST;
-    const message = errors.subscription.noSubjectsAdded;
-    const err = new ApiError(statusCode, message);
-    return next(err);
-  }
-
-  for (let subject of subjects) {
-    if (!mongoose.isValidObjectId(subject)) {
-      const statusCode = httpStatus.BAD_REQUEST;
-      const message = errors.subscription.invalidSubjects;
-      const err = new ApiError(statusCode, message);
-      return next(err);
-    }
-  }
-
-  next();
-};
+//////////////////// SUBSCRIPTION FUNCTIONS ////////////////////
+const checkSubscriptionId = check("subscriptionId")
+  .isMongoId()
+  .withMessage(errors.subscription.invalidId);
 
 module.exports = {
   // COMMON
@@ -688,6 +692,7 @@ module.exports = {
   checkSubjectId,
   checkSubjectTitle,
   checkSubjectVideoType,
+  checkSubjects,
   // UNIT
   checkUnitId,
   checkUnitTitle,
@@ -714,6 +719,6 @@ module.exports = {
   checkPackageNumOfSubjects,
   checkPackagePrice,
   checkPackageMonths,
-  // SUBJECT
-  checkSubjects,
+  // SUBSCRIPTOON
+  checkSubscriptionId,
 };

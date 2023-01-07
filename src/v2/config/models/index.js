@@ -12,4 +12,5 @@ module.exports.video = require("./tutorial/lesson/video");
 module.exports.quiz = require("./tutorial/quiz/quiz");
 module.exports.question = require("./tutorial/quiz/question");
 
+module.exports.subscription = require("./subscription/subscription");
 module.exports.package = require("./subscription/package");
