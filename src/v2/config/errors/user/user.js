@@ -39,6 +39,10 @@ module.exports = Object.freeze({
     en: "There's no new data to update",
     ar: "لا يوجد بيانات جديدة للتحديث",
   },
+  notBelongToSchool: {
+    en: "You don't belong to this school",
+    ar: "أنت لا تنتمي لهذه المدرسة",
+  },
   ////////////////////////////////////////
   // noLanguage: {
   //   en: "Please select your favorite language",

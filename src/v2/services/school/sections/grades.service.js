@@ -15,39 +15,75 @@ module.exports.findGradeById = async (gradeId) => {
   }
 };
 
-module.exports.createGrade = async (user, levelId, number, photo) => {
+module.exports.createGrade = async (user, schoolId, levelId, number, photo) => {
   try {
-    const level = await levelsService.findLevelById(levelId);
+    // Check if user belongs to the school
+    if (!user.isBelongToSchool(schoolId)) {
+      const statusCode = httpStatus.FORBIDDEN;
+      const message = errors.user.notBelongToSchool;
+      throw new ApiError(statusCode, message);
+    }
 
+    // Asking servide to find level
+    const level = await levelsService.findLevelById(schoolId, levelId);
+
+    // Check if level does not exist
     if (!level) {
       const statusCode = httpStatus.NOT_FOUND;
       const message = errors.level.notFound;
       throw new ApiError(statusCode, message);
     }
 
+    // Create a new grade
     const grade = new Grade({
       author: user._id,
       number,
       levelId: new mongoose.Types.ObjectId(levelId),
     });
 
+    // Save grade to the DB
     const savedGrade = await grade.save();
 
+    // Store file locally
     const localFile = await localStorage.storeFile(photo);
+
+    // Store file on the cloud
     const cloudFile = await cloudStorage.uploadFile(localFile);
+
+    // Delete local file
     await localStorage.deleteFile(localFile);
+
+    // Update grade's photo URL
     savedGrade.photoURL = cloudFile;
 
-    return await savedGrade.save();
+    // Save the grade to the DB
+    await savedGrade.save();
+
+    return savedGrade;
   } catch (err) {
+    if (err.code === errors.codes.duplicateIndexKey) {
+      const statusCode = httpStatus.BAD_REQUEST;
+      const message = errors.grade.gradeExist;
+      err = new ApiError(statusCode, message);
+    }
+
     throw err;
   }
 };
 
-module.exports.getLevelGrades = async (levelId) => {
+module.exports.getLevelGrades = async (user, schoolId, levelId) => {
   try {
-    const grades = await Grade.find({ levelId });
+    // Check if user belongs to the school
+    if (!user.isBelongToSchool(schoolId)) {
+      const statusCode = httpStatus.FORBIDDEN;
+      const message = errors.user.notBelongToSchool;
+      throw new ApiError(statusCode, message);
+    }
 
+    // Get grades that belong to the specified school and level
+    const grades = await Grade.find({ schoolId, levelId });
+
+    // Check if there are no grades
     if (!grades || !grades.length) {
       const statusCode = httpStatus.NOT_FOUND;
       const message = errors.grade.noGrades;

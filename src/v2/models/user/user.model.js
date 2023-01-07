@@ -40,6 +40,12 @@ const userSchema = new Schema(
       default: "",
       trim: true,
     },
+    // User's school reference
+    schoolId: {
+      type: mongoose.Types.ObjectId,
+      ref: "School",
+      required: true,
+    },
     // The full name of the user
     name: {
       type: String,
@@ -307,6 +313,15 @@ userSchema.methods.updateRole = function (newRole) {
     this.role = newRole;
   } catch (err) {
     // TODO: write the error to the database
+  }
+};
+
+userSchema.methods.isBelongToSchool = function (schoolId) {
+  try {
+    return this.schoolId.toString() === schoolId.toString();
+  } catch (err) {
+    // TODO: write the error to the database
+    return false;
   }
 };
 

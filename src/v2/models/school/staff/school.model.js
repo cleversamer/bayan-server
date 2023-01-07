@@ -1,10 +1,15 @@
 const mongoose = require("mongoose");
 const { school: validation } = require("../../../config/models");
 
-const clientSchema = ["_id", "name"];
+const clientSchema = ["_id", "managerId", "name"];
 
 const schoolSchema = new mongoose.Schema(
   {
+    managerId: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
     name: {
       type: String,
       required: true,

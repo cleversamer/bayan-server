@@ -234,6 +234,10 @@ const checkUserId = check("userId")
   .withMessage(errors.user.invalidId);
 
 //////////////////// SCHOOL FUNCTIONS ////////////////////
+const checkSchoolId = check("schoolId")
+  .isMongoId()
+  .withMessage(errors.school.invalidId);
+
 const checkSchoolName = check("name")
   .isLength({
     min: schoolValidation.name.minLength,
@@ -653,6 +657,7 @@ module.exports = {
   checkLanguage,
   checkUserId,
   // SCHOOL
+  checkSchoolId,
   checkSchoolName,
   // LEVEL
   checkLevelId,
