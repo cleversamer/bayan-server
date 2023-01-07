@@ -3,19 +3,32 @@ const { unit: validation } = require("../../../config/models");
 
 const clientSchema = [
   "_id",
+  "title",
+  "authorId",
+  "schoolId",
   "levelId",
   "gradeId",
   "seasonId",
   "subjectId",
-  "author",
-  "title",
 ];
 
 const unitSchema = new mongoose.Schema(
   {
-    author: {
+    title: {
+      type: String,
+      trim: true,
+      required: true,
+      minLength: validation.title.minLength,
+      maxLength: validation.title.maxLength,
+    },
+    authorId: {
       type: mongoose.Types.ObjectId,
       ref: "User",
+      required: true,
+    },
+    schoolId: {
+      type: mongoose.Types.ObjectId,
+      ref: "School",
       required: true,
     },
     levelId: {
@@ -37,13 +50,6 @@ const unitSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "Subject",
       required: true,
-    },
-    title: {
-      type: String,
-      trim: true,
-      required: true,
-      minLength: validation.title.minLength,
-      maxLength: validation.title.maxLength,
     },
   },
   {

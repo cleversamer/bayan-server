@@ -3,30 +3,16 @@ const { subscription: validation } = require("../../config/models");
 
 const clientSchema = [
   "_id",
+  "subjects",
+  "active",
+  "schoolId",
   "userId",
   "packageId",
   "gradeId",
-  "subjects",
-  "active",
 ];
 
 const subscriptionSchema = new mongoose.Schema(
   {
-    userId: {
-      type: mongoose.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    packageId: {
-      type: mongoose.Types.ObjectId,
-      ref: "Package",
-      required: true,
-    },
-    gradeId: {
-      type: mongoose.Types.ObjectId,
-      ref: "Grade",
-      required: true,
-    },
     subjects: [
       {
         ref: {
@@ -55,6 +41,26 @@ const subscriptionSchema = new mongoose.Schema(
         date.setMonth(date.getMonth() + defaultMonths);
         return date;
       },
+    },
+    schoolId: {
+      type: mongoose.Types.ObjectId,
+      ref: "School",
+      required: true,
+    },
+    userId: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    packageId: {
+      type: mongoose.Types.ObjectId,
+      ref: "Package",
+      required: true,
+    },
+    gradeId: {
+      type: mongoose.Types.ObjectId,
+      ref: "Grade",
+      required: true,
     },
   },
   {

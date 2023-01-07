@@ -3,22 +3,18 @@ const { package: validation } = require("../../config/models");
 
 const clientSchema = [
   "_id",
-  "author",
   "price",
   "months",
+  "numOfSubjects",
+  "authorId",
+  "schoolId",
   "levelId",
   "gradeId",
   "seasonId",
-  "numOfSubjects",
 ];
 
 const packageSchema = new mongoose.Schema(
   {
-    author: {
-      type: mongoose.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
     price: {
       type: Number,
       required: true,
@@ -31,6 +27,23 @@ const packageSchema = new mongoose.Schema(
       min: validation.months.min,
       max: validation.months.max,
     },
+    numOfSubjects: {
+      type: Number,
+      required: true,
+      default: validation.numOfSubjects.default,
+      min: validation.numOfSubjects.min,
+      max: validation.numOfSubjects.max,
+    },
+    authorId: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    schoolId: {
+      type: mongoose.Types.ObjectId,
+      ref: "School",
+      required: true,
+    },
     levelId: {
       type: mongoose.Types.ObjectId,
       ref: "Level",
@@ -40,13 +53,6 @@ const packageSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "Grade",
       required: true,
-    },
-    numOfSubjects: {
-      type: Number,
-      required: true,
-      default: validation.numOfSubjects.default,
-      min: validation.numOfSubjects.min,
-      max: validation.numOfSubjects.max,
     },
   },
   {

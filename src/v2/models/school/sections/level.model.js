@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { level: validation } = require("../../../config/models");
 
-const clientSchema = ["_id", "title", "author", "photoURL", "number"];
+const clientSchema = ["_id", "photoURL", "title", "authorId", "schoolId"];
 
 const levelSchema = new mongoose.Schema(
   {
@@ -10,18 +10,22 @@ const levelSchema = new mongoose.Schema(
       default: "",
       trim: true,
     },
-    author: {
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+      minLength: validation.title.minLength,
+      maxLength: validation.title.maxLength,
+    },
+    authorId: {
       type: mongoose.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    title: {
-      type: String,
+    schoolId: {
+      type: mongoose.Types.ObjectId,
+      ref: "School",
       required: true,
-      unique: true,
-      trim: true,
-      minLength: validation.title.minLength,
-      maxLength: validation.title.maxLength,
     },
   },
   {

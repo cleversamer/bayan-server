@@ -3,10 +3,11 @@ const { video: validation } = require("../../../config/models");
 
 const clientSchema = [
   "_id",
-  "author",
   "title",
-  "url",
+  "URL",
   "description",
+  "authorId",
+  "schoolId",
   "levelId",
   "gradeId",
   "seasonId",
@@ -17,9 +18,33 @@ const clientSchema = [
 
 const videoSchema = new mongoose.Schema(
   {
-    author: {
+    title: {
+      type: String,
+      trim: true,
+      required: true,
+      minLength: validation.title.minLength,
+      maxLength: validation.title.maxLength,
+    },
+    URL: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    description: {
+      type: String,
+      required: true,
+      trim: true,
+      minLength: validation.description.minLength,
+      maxLength: validation.description.maxLength,
+    },
+    authorId: {
       type: mongoose.Types.ObjectId,
       ref: "User",
+      required: true,
+    },
+    schoolId: {
+      type: mongoose.Types.ObjectId,
+      ref: "School",
       required: true,
     },
     levelId: {
@@ -51,25 +76,6 @@ const videoSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "Lesson",
       required: true,
-    },
-    title: {
-      type: String,
-      trim: true,
-      required: true,
-      minLength: validation.title.minLength,
-      maxLength: validation.title.maxLength,
-    },
-    url: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    description: {
-      type: String,
-      required: true,
-      trim: true,
-      minLength: validation.description.minLength,
-      maxLength: validation.description.maxLength,
     },
   },
   {

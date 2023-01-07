@@ -4,7 +4,8 @@ const { lesson: validation } = require("../../../config/models");
 const clientSchema = [
   "_id",
   "title",
-  "author",
+  "authorId",
+  "schoolId",
   "levelId",
   "gradeId",
   "seasonId",
@@ -17,17 +18,22 @@ const clientSchema = [
 
 const lessonSchema = new mongoose.Schema(
   {
-    author: {
-      type: mongoose.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
     title: {
       type: String,
       trim: true,
       required: true,
       minLength: validation.title.minLength,
       maxLength: validation.title.maxLength,
+    },
+    authorId: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    schoolId: {
+      type: mongoose.Types.ObjectId,
+      ref: "School",
+      required: true,
     },
     levelId: {
       type: mongoose.Types.ObjectId,

@@ -3,11 +3,12 @@ const { question: validation } = require("../../../config/models");
 
 const clientSchema = [
   "_id",
-  "author",
   "title",
   "photoURL",
   "options",
   "answer",
+  "authorId",
+  "schoolId",
   "levelId",
   "gradeId",
   "seasonId",
@@ -19,9 +20,38 @@ const clientSchema = [
 
 const questionSchema = new mongoose.Schema(
   {
-    author: {
+    title: {
+      type: String,
+      trim: true,
+      required: true,
+      minLength: validation.title.minLength,
+      maxLength: validation.title.maxLength,
+    },
+    photoURL: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    options: [
+      {
+        type: String,
+        minLength: validation.option.minLength,
+        maxLength: validation.option.maxLength,
+      },
+    ],
+    answer: {
+      type: String,
+      minLength: validation.answer.minLength,
+      maxLength: validation.answer.maxLength,
+    },
+    authorId: {
       type: mongoose.Types.ObjectId,
       ref: "User",
+      required: true,
+    },
+    schoolId: {
+      type: mongoose.Types.ObjectId,
+      ref: "School",
       required: true,
     },
     levelId: {
@@ -58,30 +88,6 @@ const questionSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "Quiz",
       required: true,
-    },
-    title: {
-      type: String,
-      trim: true,
-      required: true,
-      minLength: validation.title.minLength,
-      maxLength: validation.title.maxLength,
-    },
-    photoURL: {
-      type: String,
-      default: "",
-      trim: true,
-    },
-    options: [
-      {
-        type: String,
-        minLength: validation.option.minLength,
-        maxLength: validation.option.maxLength,
-      },
-    ],
-    answer: {
-      type: String,
-      minLength: validation.answer.minLength,
-      maxLength: validation.answer.maxLength,
     },
   },
   {

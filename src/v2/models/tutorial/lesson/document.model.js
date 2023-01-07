@@ -3,9 +3,10 @@ const { document: validation } = require("../../../config/models");
 
 const clientSchema = [
   "_id",
-  "author",
   "title",
-  "text",
+  "fileURL",
+  "authorId",
+  "schoolId",
   "levelId",
   "gradeId",
   "seasonId",
@@ -16,9 +17,26 @@ const clientSchema = [
 
 const documentSchema = new mongoose.Schema(
   {
-    author: {
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+      minLength: validation.title.minLength,
+      maxLength: validation.title.maxLength,
+    },
+    fileURL: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    authorId: {
       type: mongoose.Types.ObjectId,
       ref: "User",
+      required: true,
+    },
+    schoolId: {
+      type: mongoose.Types.ObjectId,
+      ref: "School",
       required: true,
     },
     levelId: {
@@ -50,18 +68,6 @@ const documentSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "Lesson",
       required: true,
-    },
-    title: {
-      type: String,
-      required: true,
-      trim: true,
-      minLength: validation.title.minLength,
-      maxLength: validation.title.maxLength,
-    },
-    fileUrl: {
-      type: String,
-      required: true,
-      trim: true,
     },
   },
   {

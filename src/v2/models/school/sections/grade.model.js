@@ -1,7 +1,14 @@
 const mongoose = require("mongoose");
 const { grade: validation } = require("../../../config/models");
 
-const clientSchema = ["_id", "author", "levelId", "photoURL", "number"];
+const clientSchema = [
+  "_id",
+  "photoURL",
+  "number",
+  "authorId",
+  "schoolId",
+  "levelId",
+];
 
 const gradeSchema = new mongoose.Schema(
   {
@@ -9,9 +16,14 @@ const gradeSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    author: {
+    authorId: {
       type: mongoose.Types.ObjectId,
       ref: "User",
+      required: true,
+    },
+    schoolId: {
+      type: mongoose.Types.ObjectId,
+      ref: "School",
       required: true,
     },
     levelId: {

@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
 
 const clientSchema = [
-  "author",
+  "_id",
   "date",
   "answers",
+  "authorId",
+  "schoolId",
   "levelId",
   "gradeId",
   "seasonId",
@@ -15,11 +17,6 @@ const clientSchema = [
 
 const submissionSchema = new mongoose.Schema(
   {
-    author: {
-      type: mongoose.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
     date: {
       type: String,
       default: new Date(),
@@ -29,6 +26,16 @@ const submissionSchema = new mongoose.Schema(
         type: String,
       },
     ],
+    authorId: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    schoolId: {
+      type: mongoose.Types.ObjectId,
+      ref: "School",
+      required: true,
+    },
     levelId: {
       type: mongoose.Types.ObjectId,
       ref: "Level",

@@ -3,14 +3,14 @@ const { subject: validation } = require("../../../config/models");
 
 const clientSchema = [
   "_id",
-  "author",
+  "photoURL",
   "videoURL",
+  "title",
+  "authorId",
+  "schoolId",
   "levelId",
   "gradeId",
   "seasonId",
-  "author",
-  "photoURL",
-  "title",
 ];
 
 const subjectSchema = new mongoose.Schema(
@@ -20,19 +20,31 @@ const subjectSchema = new mongoose.Schema(
       default: "",
       trim: true,
     },
-    author: {
-      type: mongoose.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
     videoURL: {
       type: String,
       required: true,
       trim: true,
     },
+    title: {
+      type: String,
+      trim: true,
+      required: true,
+      minLength: validation.title.minLength,
+      maxLength: validation.title.maxLength,
+    },
     isFree: {
       type: Boolean,
       default: false,
+    },
+    authorId: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    schoolId: {
+      type: mongoose.Types.ObjectId,
+      ref: "School",
+      required: true,
     },
     levelId: {
       type: mongoose.Types.ObjectId,
@@ -48,13 +60,6 @@ const subjectSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "Season",
       required: true,
-    },
-    title: {
-      type: String,
-      trim: true,
-      required: true,
-      minLength: validation.title.minLength,
-      maxLength: validation.title.maxLength,
     },
   },
   {

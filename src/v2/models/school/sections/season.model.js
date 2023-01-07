@@ -3,11 +3,12 @@ const { season: validation } = require("../../../config/models");
 
 const clientSchema = [
   "_id",
-  "levelId",
-  "gradeId",
-  "author",
   "photoURL",
   "number",
+  "authorId",
+  "schoolId",
+  "levelId",
+  "gradeId",
 ];
 
 const seasonSchema = new mongoose.Schema(
@@ -17,9 +18,20 @@ const seasonSchema = new mongoose.Schema(
       default: "",
       trim: true,
     },
-    author: {
+    number: {
+      type: Number,
+      enum: validation.supportedSeasons,
+      trim: true,
+      required: true,
+    },
+    authorId: {
       type: mongoose.Types.ObjectId,
       ref: "User",
+      required: true,
+    },
+    schoolId: {
+      type: mongoose.Types.ObjectId,
+      ref: "School",
       required: true,
     },
     levelId: {
@@ -30,12 +42,6 @@ const seasonSchema = new mongoose.Schema(
     gradeId: {
       type: mongoose.Types.ObjectId,
       ref: "Grade",
-      required: true,
-    },
-    number: {
-      type: Number,
-      enum: validation.supportedSeasons,
-      trim: true,
       required: true,
     },
   },

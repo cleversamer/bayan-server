@@ -3,9 +3,10 @@ const { quiz: validation } = require("../../../config/models");
 
 const clientSchema = [
   "_id",
-  "author",
   "title",
   "questions",
+  "authorId",
+  "schoolId",
   "levelId",
   "gradeId",
   "seasonId",
@@ -16,9 +17,27 @@ const clientSchema = [
 
 const quizSchema = new mongoose.Schema(
   {
-    author: {
+    title: {
+      type: String,
+      trim: true,
+      required: true,
+      minLength: validation.title.minLength,
+      maxLength: validation.title.maxLength,
+    },
+    questions: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Question",
+      },
+    ],
+    authorId: {
       type: mongoose.Types.ObjectId,
       ref: "User",
+      required: true,
+    },
+    schoolId: {
+      type: mongoose.Types.ObjectId,
+      ref: "School",
       required: true,
     },
     levelId: {
@@ -51,19 +70,6 @@ const quizSchema = new mongoose.Schema(
       ref: "Lesson",
       required: true,
     },
-    title: {
-      type: String,
-      trim: true,
-      required: true,
-      minLength: validation.title.minLength,
-      maxLength: validation.title.maxLength,
-    },
-    questions: [
-      {
-        type: mongoose.Types.ObjectId,
-        ref: "Question",
-      },
-    ],
   },
   {
     // To not avoid empty object when creating the document
