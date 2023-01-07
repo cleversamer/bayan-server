@@ -12,7 +12,7 @@ router.get(
   gradesController.getLevelGrades
 );
 
-//////////////////// SCHOOL ROUTES ////////////////////
+//////////////////// SCHOOL MANAGER ROUTES ////////////////////
 router.post(
   "/add",
   gradeValidator.validateCreateGrade,

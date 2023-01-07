@@ -4,7 +4,7 @@ const { packagesController } = require("../../controllers");
 const { packageValidator } = require("../../middleware/validation");
 const auth = require("../../middleware/auth");
 
-//////////////////// STUDENT/TEACHER/SCHOOL ROUTES ////////////////////
+//////////////////// STUDENT/TEACHER/SCHOOL MANAGER ROUTES ////////////////////
 router.get(
   "/get",
   packageValidator.validateGetGradePackages,
@@ -12,7 +12,7 @@ router.get(
   packagesController.getGradePackages
 );
 
-//////////////////// SCHOOL ROUTES ////////////////////
+//////////////////// SCHOOL MANAGER ROUTES ////////////////////
 router.post(
   "/add",
   packageValidator.validateCreatePackage,

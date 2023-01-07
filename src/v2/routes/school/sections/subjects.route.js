@@ -12,7 +12,7 @@ router.get(
   subjectsController.getSeasonSubjects
 );
 
-//////////////////// SCHOOL ROUTES ////////////////////
+//////////////////// SCHOOL MANAGER ROUTES ////////////////////
 router.post(
   "/add",
   subjectValidator.validateCreateSubject,

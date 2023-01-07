@@ -12,7 +12,7 @@ router.get(
   lessonsController.getVideo
 );
 
-//////////////////// TEACHER/SCHOOL ROUTES ////////////////////
+//////////////////// TEACHER/SCHOOL MANAGER ROUTES ////////////////////
 router.post(
   "/add",
   videoValidator.validateAddVideo,

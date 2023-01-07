@@ -12,7 +12,7 @@ router.get(
   lessonsController.getQuiz
 );
 
-//////////////////// TEACHER/SCHOOL ROUTES ////////////////////
+//////////////////// TEACHER/SCHOOL MANAGER ROUTES ////////////////////
 router.post(
   "/add",
   quizValidator.validateAddQuiz,

@@ -12,7 +12,7 @@ router.get(
   unitsController.getSubjectUnits
 );
 
-//////////////////// SCHOOL/TEACHER ROUTES ////////////////////
+//////////////////// SCHOOL MANAGER/TEACHER ROUTES ////////////////////
 router.post(
   "/add",
   unitValidator.validateCreateUnit,

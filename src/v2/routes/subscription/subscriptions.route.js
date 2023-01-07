@@ -18,7 +18,7 @@ router.post(
   subscriptionsController.createSubscription
 );
 
-//////////////////// SCHOOL ROUTES ////////////////////
+//////////////////// SCHOOL MANAGER ROUTES ////////////////////
 router.patch(
   "/:subscriptionId/toggle-active",
   subscriptionValidator.validateToggleSubscriptionActive,

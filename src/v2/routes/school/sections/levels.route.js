@@ -7,7 +7,7 @@ const auth = require("../../../middleware/auth");
 //////////////////// STUDENT/TEACHER ROUTES ////////////////////
 router.get("/get", auth("readOwn", "level"), levelsController.getSchoolLevels);
 
-//////////////////// SCHOOL ROUTES ////////////////////
+//////////////////// SCHOOL MANAGER ROUTES ////////////////////
 router.post(
   "/add",
   levelValidator.validateCreateLevel,

@@ -12,7 +12,7 @@ router.get(
   lessonsController.getDocumnent
 );
 
-//////////////////// TEACHER/SCHOOL ROUTES ////////////////////
+//////////////////// TEACHER/SCHOOL MANAGER ROUTES ////////////////////
 router.post(
   "/add",
   documentValidator.validateAddDocument,

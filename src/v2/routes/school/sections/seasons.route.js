@@ -12,7 +12,7 @@ router.get(
   seasonsController.getGradeSeasons
 );
 
-//////////////////// SCHOOL ROUTES ////////////////////
+//////////////////// SCHOOL MANAGER ROUTES ////////////////////
 router.post(
   "/add",
   seasonValidator.validateCreateSeason,
