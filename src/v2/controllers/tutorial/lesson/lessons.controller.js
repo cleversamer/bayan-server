@@ -23,7 +23,7 @@ const _ = require("lodash");
 module.exports.getLessonById = async (req, res, next) => {
   try {
     const user = req.user;
-    const { id: lessonId } = req.params;
+    const { lessonId } = req.params;
 
     const lesson = await lessonsService.getLessonById(user, lessonId, true);
 
@@ -52,7 +52,7 @@ module.exports.createLesson = async (req, res, next) => {
 
 module.exports.getUnitLessons = async (req, res, next) => {
   try {
-    const { id: unitId } = req.params;
+    const { unitId } = req.query;
 
     let units = await lessonsService.getUnitLessons(unitId);
 

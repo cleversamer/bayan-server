@@ -18,7 +18,8 @@ router.post(
 );
 
 router.get(
-  "/:id/details",
+  "/:lessonId/details",
+  lessonValidator.validateGetLesson,
   auth("readAny", "lesson"),
   lessonsController.getLessonById
 );

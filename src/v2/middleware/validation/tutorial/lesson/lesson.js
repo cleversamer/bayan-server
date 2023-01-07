@@ -12,7 +12,14 @@ const validateCreateLesson = [
   commonMiddleware.next,
 ];
 
+const validateGetLesson = [
+  commonMiddleware.putQueryParamsInBody,
+  commonMiddleware.checkLessonId,
+  commonMiddleware.next,
+];
+
 module.exports = {
   validateGetUnitLessons,
   validateCreateLesson,
+  validateGetLesson,
 };

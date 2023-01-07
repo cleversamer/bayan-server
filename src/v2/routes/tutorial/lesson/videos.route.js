@@ -4,7 +4,6 @@ const { lessonsController } = require("../../../controllers");
 const { videoValidator } = require("../../../middleware/validation");
 const auth = require("../../../middleware/auth");
 
-// Video APIs
 router.post(
   "/add",
   videoValidator.validateAddVideo,
