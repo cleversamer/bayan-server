@@ -194,7 +194,7 @@ module.exports.getVideo = async (req, res, next) => {
 
 module.exports.getQuiz = async (req, res, next) => {
   try {
-    const { id: quizId } = req.params;
+    const { quizId } = req.params;
 
     const quiz = await lessonsService.getQuiz(quizId);
 
