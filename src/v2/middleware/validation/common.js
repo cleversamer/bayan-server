@@ -63,48 +63,6 @@ const putQueryParamsInBody = (req, res, next) => {
   next();
 };
 
-const checkMongoIdQueryParam = (req, res, next) => {
-  const emptyQueryParams = !Object.keys(req.query).length;
-  if (emptyQueryParams) {
-    const statusCode = httpStatus.BAD_REQUEST;
-    const message = errors.system.noMongoId;
-    const err = new ApiError(statusCode, message);
-    return next(err);
-  }
-
-  for (let item in req.query) {
-    if (!mongoose.isValidObjectId(req.query[item])) {
-      const statusCode = httpStatus.BAD_REQUEST;
-      const message = errors.system.invalidMongoId;
-      const err = new ApiError(statusCode, message);
-      return next(err);
-    }
-  }
-
-  next();
-};
-
-const checkMongoIdParam = (req, res, next) => {
-  const emptyParams = !Object.keys(req.params).length;
-  if (emptyParams) {
-    const statusCode = httpStatus.BAD_REQUEST;
-    const message = errors.system.noMongoId;
-    const err = new ApiError(statusCode, message);
-    return next(err);
-  }
-
-  for (let item in req.params) {
-    if (!mongoose.isValidObjectId(req.params[item])) {
-      const statusCode = httpStatus.BAD_REQUEST;
-      const message = errors.system.invalidMongoId;
-      const err = new ApiError(statusCode, message);
-      return next(err);
-    }
-  }
-
-  next();
-};
-
 const conditionalCheck = (key, checker) => (req, res, next) =>
   req.body[key] ? checker(req, res, next) : next();
 
@@ -392,6 +350,10 @@ const checkLessonTitle = check("title")
   .withMessage(errors.lesson.invalidTitle);
 
 //////////////////// VIDEO FUNCTIONS ////////////////////
+const checkVideoId = check("videoId")
+  .isMongoId()
+  .withMessage(errors.video.invalidId);
+
 const checkVideoTitle = check("title")
   .isLength({
     min: videoValidation.title.minLength,
@@ -436,6 +398,10 @@ const checkVideoType = (req, res, next) => {
 };
 
 //////////////////// DOCUMENT FUNCTIONS ////////////////////
+const checkDocumentId = check("documentId")
+  .isMongoId()
+  .withMessage(errors.document.invalidId);
+
 const checkDocumentTitle = check("title")
   .isLength({
     min: documentValidation.title.minLength,
@@ -660,10 +626,8 @@ module.exports = {
   next,
   authTypeHandler,
   putQueryParamsInBody,
-  checkMongoIdQueryParam,
   conditionalCheck,
   checkFile,
-  checkMongoIdParam,
   // AUTH
   checkRole,
   checkAuthType,
@@ -700,10 +664,12 @@ module.exports = {
   checkLessonId,
   checkLessonTitle,
   // VIDEO
+  checkVideoId,
   checkVideoTitle,
   checkVideoDescription,
   checkVideoType,
   // DOCUMENT
+  checkDocumentId,
   checkDocumentTitle,
   // QUIZ
   checkQuizId,

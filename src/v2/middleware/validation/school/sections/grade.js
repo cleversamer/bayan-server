@@ -8,7 +8,8 @@ const validateCreateGrade = [
 ];
 
 const validateGetLevelGrades = [
-  commonMiddleware.checkMongoIdQueryParam,
+  commonMiddleware.putQueryParamsInBody,
+  commonMiddleware.checkLevelId,
   commonMiddleware.next,
 ];
 

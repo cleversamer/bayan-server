@@ -8,7 +8,8 @@ const validateCreateSeason = [
 ];
 
 const validateGetGradeSeasons = [
-  commonMiddleware.checkMongoIdQueryParam,
+  commonMiddleware.putQueryParamsInBody,
+  commonMiddleware.checkGradeId,
   commonMiddleware.next,
 ];
 

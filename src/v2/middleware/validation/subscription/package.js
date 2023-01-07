@@ -9,7 +9,8 @@ const validateCreatePackage = [
 ];
 
 const validateGetGradePackages = [
-  commonMiddleware.checkMongoIdQueryParam,
+  commonMiddleware.putQueryParamsInBody,
+  commonMiddleware.checkGradeId,
   commonMiddleware.next,
 ];
 

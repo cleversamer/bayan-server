@@ -1,6 +1,10 @@
 const { title } = require("../../../models/tutorial/lesson/document");
 
 module.exports = Object.freeze({
+  invalidId: {
+    en: "Invalid document id",
+    ar: "معرّف المستند غير صالح",
+  },
   notFound: {
     en: "Document not found",
     ar: "الملف غير موجود",

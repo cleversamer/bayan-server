@@ -12,8 +12,8 @@ router.post(
 );
 
 router.get(
-  "/:id/details",
-  quizValidator.validateParamsId,
+  "/:quizId/details",
+  quizValidator.validateGetQuiz,
   auth("readOwn", "quiz"),
   lessonsController.getQuiz
 );

@@ -7,7 +7,8 @@ const validateCreateUnit = [
 ];
 
 const validateGetSubjectUnits = [
-  commonMiddleware.checkMongoIdQueryParam,
+  commonMiddleware.putQueryParamsInBody,
+  commonMiddleware.checkSubjectId,
   commonMiddleware.next,
 ];
 

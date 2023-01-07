@@ -13,8 +13,8 @@ router.post(
 );
 
 router.get(
-  "/:id/details",
-  videoValidator.validateParamsId,
+  "/:videoId/details",
+  videoValidator.validateGetVideo,
   lessonsController.getVideo
 );
 

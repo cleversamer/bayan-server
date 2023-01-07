@@ -8,12 +8,13 @@ const validateAddVideo = [
   commonMiddleware.next,
 ];
 
-const validateParamsId = [
-  commonMiddleware.checkMongoIdParam,
+const validateGetVideo = [
+  commonMiddleware.putQueryParamsInBody,
+  commonMiddleware.checkVideoId,
   commonMiddleware.next,
 ];
 
 module.exports = {
   validateAddVideo,
-  validateParamsId,
+  validateGetVideo,
 };

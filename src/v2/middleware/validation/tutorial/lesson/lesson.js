@@ -1,7 +1,8 @@
 const commonMiddleware = require("../../common");
 
 const validateGetUnitLessons = [
-  commonMiddleware.checkMongoIdParam,
+  commonMiddleware.putQueryParamsInBody,
+  commonMiddleware.checkUnitId,
   commonMiddleware.next,
 ];
 

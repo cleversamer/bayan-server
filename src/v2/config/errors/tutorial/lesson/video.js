@@ -1,6 +1,10 @@
 const { title, description } = require("../../../models/tutorial/lesson/video");
 
 module.exports = Object.freeze({
+  invalidId: {
+    en: "Invalid video id",
+    ar: "معرّف الفيديو غير صالح",
+  },
   notFound: {
     en: "Video not found",
     ar: "الفيديو غير موجود",

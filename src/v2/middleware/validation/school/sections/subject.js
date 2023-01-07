@@ -9,7 +9,8 @@ const validateCreateSubject = [
 ];
 
 const validateGetSeasonSubjects = [
-  commonMiddleware.checkMongoIdQueryParam,
+  commonMiddleware.putQueryParamsInBody,
+  commonMiddleware.checkSeasonId,
   commonMiddleware.next,
 ];
 

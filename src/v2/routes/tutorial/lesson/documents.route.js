@@ -12,8 +12,8 @@ router.post(
 );
 
 router.get(
-  "/:id/details",
-  documentValidator.validateParamsId,
+  "/:documentId/details",
+  documentValidator.validateGetDocument,
   lessonsController.getDocumnent
 );
 

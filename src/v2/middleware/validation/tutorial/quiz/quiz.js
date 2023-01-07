@@ -6,12 +6,13 @@ const validateAddQuiz = [
   commonMiddleware.next,
 ];
 
-const validateParamsId = [
-  commonMiddleware.checkMongoIdParam,
+const validateGetQuiz = [
+  commonMiddleware.putQueryParamsInBody,
+  commonMiddleware.checkQuizId,
   commonMiddleware.next,
 ];
 
 module.exports = {
   validateAddQuiz,
-  validateParamsId,
+  validateGetQuiz,
 };

@@ -7,12 +7,13 @@ const validateAddDocument = [
   commonMiddleware.next,
 ];
 
-const validateParamsId = [
-  commonMiddleware.checkMongoIdParam,
+const validateGetDocument = [
+  commonMiddleware.putQueryParamsInBody,
+  commonMiddleware.checkDocumentId,
   commonMiddleware.next,
 ];
 
 module.exports = {
   validateAddDocument,
-  validateParamsId,
+  validateGetDocument,
 };

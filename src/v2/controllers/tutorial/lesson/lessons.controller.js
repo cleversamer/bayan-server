@@ -166,7 +166,7 @@ module.exports.submitQuiz = async (req, res, next) => {
 
 module.exports.getDocumnent = async (req, res, next) => {
   try {
-    const { id: documentId } = req.params;
+    const { documentId } = req.params;
 
     const document = await lessonsService.getDocument(documentId);
 
@@ -180,7 +180,7 @@ module.exports.getDocumnent = async (req, res, next) => {
 
 module.exports.getVideo = async (req, res, next) => {
   try {
-    const { id: videoId } = req.params;
+    const { videoId } = req.params;
 
     const video = await lessonsService.getVideo(videoId);
 
