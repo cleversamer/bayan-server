@@ -16,6 +16,7 @@ const {
   document: documentValidation,
   question: questionValidation,
   quiz: quizValidation,
+  package: packageValidation,
 } = require("../../config/models");
 const { server } = require("../../config/system");
 
@@ -555,6 +556,78 @@ const checkPackageId = check("packageId")
   .isMongoId()
   .withMessage(errors.package.invalidId);
 
+const checkPackageNumOfSubjects = (req, res, next) => {
+  const { numOfSubjects } = req.body;
+
+  if (typeof numOfSubjects !== "number") {
+    const statusCode = httpStatus.BAD_REQUEST;
+    const message = errors.package.invalidNumOfSubjects;
+    const err = new ApiError(statusCode, message);
+    return next(err);
+  }
+
+  const isValidLength =
+    numOfSubjects >= packageValidation.numOfSubjects.min &&
+    numOfSubjects <= packageValidation.numOfSubjects.max;
+
+  if (!isValidLength) {
+    const statusCode = httpStatus.BAD_REQUEST;
+    const message = errors.package.invalidNumOfSubjects;
+    const err = new ApiError(statusCode, message);
+    return next(err);
+  }
+
+  next();
+};
+
+const checkPackagePrice = (req, res, next) => {
+  const { price } = req.body;
+
+  if (!price || (typeof price !== "string" && typeof price !== "number")) {
+    const statusCode = httpStatus.BAD_REQUEST;
+    const message = errors.package.invalidPrice;
+    const err = new ApiError(statusCode, message);
+    return next(err);
+  }
+
+  const isValidPrice =
+    price >= packageValidation.price.min &&
+    price >= packageValidation.price.max;
+
+  if (!isValidPrice) {
+    const statusCode = httpStatus.BAD_REQUEST;
+    const message = errors.package.invalidPrice;
+    const err = new ApiError(statusCode, message);
+    return next(err);
+  }
+
+  next();
+};
+
+const checkPackageMonths = (req, res, next) => {
+  const { months } = req.body;
+
+  if (typeof months !== "number") {
+    const statusCode = httpStatus.BAD_REQUEST;
+    const message = errors.package.invalidMonths;
+    const err = new ApiError(statusCode, message);
+    return next(err);
+  }
+
+  const isValidMonths =
+    months >= packageValidation.months.min &&
+    months <= packageValidation.months.max;
+
+  if (!isValidMonths) {
+    const statusCode = httpStatus.BAD_REQUEST;
+    const message = errors.package.invalidMonths;
+    const err = new ApiError(statusCode, message);
+    return next(err);
+  }
+
+  next();
+};
+
 //////////////////// SUBJECT FUNCTIONS ////////////////////
 const checkSubjects = (req, res, next) => {
   const { subjects } = req.body;
@@ -638,6 +711,9 @@ module.exports = {
   checkSubmissionAnswers,
   // PACKAGE
   checkPackageId,
+  checkPackageNumOfSubjects,
+  checkPackagePrice,
+  checkPackageMonths,
   // SUBJECT
   checkSubjects,
 };

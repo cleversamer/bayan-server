@@ -1,9 +1,9 @@
-const commonCheckers = require("../../common");
+const commonMiddleware = require("../../common");
 
 const validateAddSubmission = [
-  commonCheckers.checkQuizId,
-  commonCheckers.checkSubmissionAnswers,
-  commonCheckers.next,
+  commonMiddleware.checkQuizId,
+  commonMiddleware.checkSubmissionAnswers,
+  commonMiddleware.next,
 ];
 
 module.exports = {

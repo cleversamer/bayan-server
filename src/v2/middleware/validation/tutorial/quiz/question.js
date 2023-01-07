@@ -1,12 +1,12 @@
-const commonCheckers = require("../../common");
+const commonMiddleware = require("../../common");
 
 const validateAddQuestionToQuiz = [
-  commonCheckers.checkQuizId,
-  commonCheckers.checkQuestionTitle,
-  commonCheckers.checkFile("photo", ["png", "jpg", "jpeg"], false),
-  commonCheckers.checkQuestionOptions,
-  commonCheckers.checkQuestionAnswer,
-  commonCheckers.next,
+  commonMiddleware.checkQuizId,
+  commonMiddleware.checkQuestionTitle,
+  commonMiddleware.checkFile("photo", ["png", "jpg", "jpeg"], false),
+  commonMiddleware.checkQuestionOptions,
+  commonMiddleware.checkQuestionAnswer,
+  commonMiddleware.next,
 ];
 
 module.exports = {
