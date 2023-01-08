@@ -8,7 +8,7 @@ const _ = require("lodash");
 module.exports.getSchoolLevels = async (req, res, next) => {
   try {
     const user = req.user;
-    const { schoolId } = req.query;
+    const { schoolId } = req.params;
 
     // Asking service to find school's levels
     const levels = await levelsService.getSchoolLevels(user, schoolId);
@@ -28,11 +28,12 @@ module.exports.getSchoolLevels = async (req, res, next) => {
 module.exports.createLevel = async (req, res, next) => {
   try {
     const user = req.user;
-    const { schoolId, title } = req.body;
+    const { schoolId } = req.params;
+    const { title } = req.body;
     const { photo } = req.files;
 
     // Asking service to create a new level
-    const level = await levelsService.createLevel(user, schoolId, title, photo);
+    const level = await levelsService.createLevel(user, title, photo);
 
     // Genereate the response object
     const response = _.pick(level, clientSchema);

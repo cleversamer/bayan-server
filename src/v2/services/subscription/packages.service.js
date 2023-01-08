@@ -94,10 +94,17 @@ module.exports.createPackage = async (
   }
 };
 
-module.exports.getGradePackages = async (gradeId) => {
+module.exports.getGradePackages = async (schoolId, gradeId) => {
   try {
+    // Create the query criteria object
+    const criteria = {
+      schoolId: new mongoose.Types.ObjectId(schoolId),
+      gradeId: new mongoose.Types.ObjectId(gradeId),
+    };
+
+    // Find school packges for this grade
     return await Package.aggregate([
-      { $match: { gradeId: new mongoose.Types.ObjectId(gradeId) } },
+      { $match: criteria },
       {
         $lookup: {
           from: "grades",

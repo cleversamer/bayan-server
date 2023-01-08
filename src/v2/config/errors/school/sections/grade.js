@@ -33,4 +33,8 @@ module.exports = Object.freeze({
     en: "Grade should have a photo",
     ar: "الصف يجب أن يكون له صورة",
   },
+  notBelongToSchool: {
+    en: "Grade does not belong to your school",
+    ar: "الصف لا ينتمي إلى مدرستك",
+  },
 });

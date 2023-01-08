@@ -1,6 +1,8 @@
 const commonMiddleware = require("../../common");
 
 const validateCreateSeason = [
+  commonMiddleware.putQueryParamsInBody,
+  commonMiddleware.checkSchoolId,
   commonMiddleware.checkGradeId,
   commonMiddleware.checkkSeasonNumber,
   commonMiddleware.checkFile("photo", ["png", "jpg", "jpeg"]),
@@ -9,6 +11,7 @@ const validateCreateSeason = [
 
 const validateGetGradeSeasons = [
   commonMiddleware.putQueryParamsInBody,
+  commonMiddleware.checkSchoolId,
   commonMiddleware.checkGradeId,
   commonMiddleware.next,
 ];

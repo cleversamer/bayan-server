@@ -39,16 +39,13 @@ module.exports.getSchoolLevels = async (user, schoolId) => {
   }
 };
 
-module.exports.createLevel = async (user, schoolId, title, photo) => {
+module.exports.createLevel = async (user, title, photo) => {
   try {
-    // Asking service to find school
-    const school = await schoolsService.findSchoolById(schoolId);
-
     // Create a new level
     const level = new Level({
-      author: user._id,
-      schoolId: school._id,
       title,
+      author: user._id,
+      schoolId: user.schoolId,
     });
 
     // Save the level to the DB

@@ -1,6 +1,7 @@
 module.exports.authValidator = require("./user/auth");
 module.exports.userValidator = require("./user/user");
 
+module.exports.schoolValidator = require("./school/staff/school");
 module.exports.levelValidator = require("./school/sections/level");
 module.exports.gradeValidator = require("./school/sections/grade");
 module.exports.seasonValidator = require("./school/sections/season");

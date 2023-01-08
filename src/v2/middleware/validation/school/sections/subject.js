@@ -1,6 +1,8 @@
 const commonMiddleware = require("../../common");
 
 const validateCreateSubject = [
+  commonMiddleware.putQueryParamsInBody,
+  commonMiddleware.checkSchoolId,
   commonMiddleware.checkSeasonId,
   commonMiddleware.checkSubjectTitle,
   commonMiddleware.checkSubjectVideoType,
@@ -10,11 +12,14 @@ const validateCreateSubject = [
 
 const validateGetSeasonSubjects = [
   commonMiddleware.putQueryParamsInBody,
+  commonMiddleware.checkSchoolId,
   commonMiddleware.checkSeasonId,
   commonMiddleware.next,
 ];
 
 const validateToggleIsSubjectFree = [
+  commonMiddleware.putQueryParamsInBody,
+  commonMiddleware.checkSchoolId,
   commonMiddleware.checkSubjectId,
   commonMiddleware.next,
 ];

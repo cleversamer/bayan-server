@@ -24,15 +24,30 @@ module.exports.findSeasonById = async (seasonId) => {
 
 module.exports.createSeason = async (user, gradeId, number, photo) => {
   try {
+    // Find grade
     const grade = await gradesService.findGradeById(gradeId);
 
+    // Check if grade belongs to user's school
+    if (!user.isBelongToSchool(grade.schoolId)) {
+      const statusCode = httpStatus.FORBIDDEN;
+      const message = errors.grade.notBelongToSchool;
+      throw new ApiError(statusCode, message);
+    }
+
+    // Check if grade exists
     if (!grade) {
       const statusCode = httpStatus.NOT_FOUND;
       const message = errors.grade.notFound;
       throw new ApiError(statusCode, message);
     }
 
-    const gradeSeasons = await Season.find({ gradeId: grade._id });
+    // Find school seasons for this grade
+    const gradeSeasons = await Season.find({
+      schoolId: user.schoolId,
+      gradeId: grade._id,
+    });
+
+    // Check if season is already added to this grade
     const seasonAdded = gradeSeasons.find((season) => season.number === number);
     if (seasonAdded) {
       const statusCode = httpStatus.BAD_REQUEST;
@@ -40,28 +55,47 @@ module.exports.createSeason = async (user, gradeId, number, photo) => {
       throw new ApiError(statusCode, message);
     }
 
+    // Store season's photo locally
     const localFile = await localStorage.storeFile(photo);
+
+    // Store seasons's photo on the cloud
     const cloudFile = await cloudStorage.uploadFile(localFile);
+
+    // Delete local season's photo
     await localStorage.deleteFile(localFile);
 
+    // Create new season
     const season = new Season({
-      author: user._id,
+      photoURL: cloudFile,
       number,
+      author: user._id,
+      schoolId: user.schoolId,
       levelId: grade.levelId,
       gradeId: grade._id,
-      photoURL: cloudFile,
     });
 
-    return await season.save();
+    // Save season to the DB
+    await season.save();
+
+    return season;
   } catch (err) {
     throw err;
   }
 };
 
-module.exports.getGradeSeasons = async (gradeId) => {
+module.exports.getGradeSeasons = async (user, schoolId, gradeId) => {
   try {
-    const seasons = await Season.find({ gradeId });
+    // Check if user belongs to the school
+    if (!user.isBelongToSchool(schoolId)) {
+      const statusCode = httpStatus.FORBIDDEN;
+      const message = errors.user.notBelongToSchool;
+      throw new ApiError(statusCode, message);
+    }
 
+    // Find seasons of school
+    const seasons = await Season.find({ schoolId, gradeId });
+
+    // Check if there are no seasons
     if (!seasons || !seasons.length) {
       const statusCode = httpStatus.NOT_FOUND;
       const message = errors.season.noSeasons;

@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model, Types } = require("mongoose");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { server } = require("../../config/system");
@@ -42,9 +42,9 @@ const userSchema = new Schema(
     },
     // User's school reference
     schoolId: {
-      type: mongoose.Types.ObjectId,
+      type: Types.ObjectId,
       ref: "School",
-      required: true,
+      default: null,
     },
     // The full name of the user
     name: {

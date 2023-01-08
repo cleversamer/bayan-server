@@ -5,7 +5,7 @@ const _ = require("lodash");
 
 module.exports.register = async (req, res, next) => {
   try {
-    const { lang, email, password, name, phone, authType, googleToken } =
+    const { lang, role, email, password, name, phone, authType, googleToken } =
       req.body;
 
     // Create the user
@@ -15,7 +15,8 @@ module.exports.register = async (req, res, next) => {
       name,
       phone,
       authType,
-      googleToken
+      googleToken,
+      role
     );
 
     // Send a mail to user's email registering using an email

@@ -17,8 +17,10 @@ module.exports.createPackage = async (req, res, next) => {
       months
     );
 
+    // Genereate the response object
     const response = _.pick(package, clientSchema);
 
+    // Send the data back to the client
     res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
@@ -27,20 +29,24 @@ module.exports.createPackage = async (req, res, next) => {
 
 module.exports.getGradePackages = async (req, res, next) => {
   try {
-    const { gradeId } = req.query;
+    const { schoolId, gradeId } = req.query;
 
-    const packages = await packagesService.getGradePackages(gradeId);
+    // Asking service to get school packages for this grade
+    const packages = await packagesService.getGradePackages(schoolId, gradeId);
 
+    // Check if there are no packages
     if (!packages || !packages.length) {
       const statusCode = httpStatus.NOT_FOUND;
       const message = errors.package.noPackages;
       throw new ApiError(statusCode, message);
     }
 
+    // Genereate the response object
     const response = {
       packages: packages.map((package) => _.pick(package, clientSchema)),
     };
 
+    // Send the data back to the client
     res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);

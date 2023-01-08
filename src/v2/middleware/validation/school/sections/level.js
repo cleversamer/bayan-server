@@ -1,6 +1,7 @@
 const commonMiddleware = require("../../common");
 
 const validateCreateLevel = [
+  commonMiddleware.putQueryParamsInBody,
   commonMiddleware.checkSchoolId,
   commonMiddleware.checkLevelTitle,
   commonMiddleware.checkFile("photo", ["png", "jpg", "jpeg"]),

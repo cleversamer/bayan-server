@@ -20,12 +20,16 @@ const _ = require("lodash");
 module.exports.createUnit = async (req, res, next) => {
   try {
     const user = req.user;
+    const { schoolId } = req.params;
     const { subjectId, title } = req.body;
 
+    // Asking service to create a new unit
     const unit = await unitsService.createUnit(user, subjectId, title);
 
+    // Genereate the response object
     const response = _.pick(unit, unitSchema);
 
+    // Send the data back to the client
     res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
@@ -34,13 +38,18 @@ module.exports.createUnit = async (req, res, next) => {
 
 module.exports.getSubjectUnits = async (req, res, next) => {
   try {
+    const { schoolId } = req.params;
     const { subjectId } = req.query;
 
-    // Returns an object with the units and subeject video url
-    const subject = await unitsService.getSubjectUnits(subjectId);
+    // Asking service to find units
+    const units = await unitsService.getSubjectUnits(schoolId, subjectId);
 
-    const response = _.pick(subject, unitSchema);
+    // Genereate the response object
+    const response = {
+      units: units.map((unit) => _.pick(unit, unitSchema)),
+    };
 
+    // Send the data back to the client
     res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);
@@ -50,6 +59,7 @@ module.exports.getSubjectUnits = async (req, res, next) => {
 module.exports.addContent = async (req, res, next) => {
   try {
     const user = req.user;
+    const { schoolId } = req.params;
     const { unitId, type, title, documentText, videoUrl, videoDescription } =
       req.body;
 
@@ -78,6 +88,7 @@ module.exports.addContent = async (req, res, next) => {
         ? _.pick(content, quizSchema)
         : _.pick(content, videoSchema);
 
+    // Send the data back to the client
     res.status(httpStatus.CREATED).json(response);
   } catch (err) {
     next(err);
@@ -86,6 +97,7 @@ module.exports.addContent = async (req, res, next) => {
 
 module.exports.getUnitLessons = async (req, res, next) => {
   try {
+    const { schoolId } = req.params;
     const { unitId } = req.query;
 
     const lessons = await unitsService.getUnitLessons(unitId);
@@ -94,6 +106,7 @@ module.exports.getUnitLessons = async (req, res, next) => {
       lessons: lessons.map((lesson) => _.pick(lesson, lessonSchema)),
     };
 
+    // Send the data back to the client
     res.status(httpStatus.OK).json(response);
   } catch (err) {
     next(err);

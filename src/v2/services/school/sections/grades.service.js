@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const { Grade } = require("../../../models/school/sections/grade.model");
 const levelsService = require("./levels.service");
 const localStorage = require("../../storage/localStorage.service");
@@ -15,17 +14,17 @@ module.exports.findGradeById = async (gradeId) => {
   }
 };
 
-module.exports.createGrade = async (user, schoolId, levelId, number, photo) => {
+module.exports.createGrade = async (user, levelId, number, photo) => {
   try {
-    // Check if user belongs to the school
-    if (!user.isBelongToSchool(schoolId)) {
+    // Asking servide to find level
+    const level = await levelsService.findLevelById(levelId);
+
+    // Check if level belongs to user's school
+    if (user.schoolId.toString() !== level.schoolId.toString()) {
       const statusCode = httpStatus.FORBIDDEN;
-      const message = errors.user.notBelongToSchool;
+      const message = errors.level.notBelongToSchool;
       throw new ApiError(statusCode, message);
     }
-
-    // Asking servide to find level
-    const level = await levelsService.findLevelById(schoolId, levelId);
 
     // Check if level does not exist
     if (!level) {
@@ -36,9 +35,10 @@ module.exports.createGrade = async (user, schoolId, levelId, number, photo) => {
 
     // Create a new grade
     const grade = new Grade({
-      author: user._id,
       number,
-      levelId: new mongoose.Types.ObjectId(levelId),
+      author: user._id,
+      schoolId: user.schoolId,
+      levelId: level._id,
     });
 
     // Save grade to the DB

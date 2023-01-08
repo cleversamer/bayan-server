@@ -3,6 +3,9 @@ module.exports = Object.freeze({
     "read:own": ["*"],
     "update:own": ["*"],
   },
+  school: {
+    "read:any": ["*"],
+  },
   emailVerificationCode: {
     "read:own": ["*"],
     "update:own": ["*"],

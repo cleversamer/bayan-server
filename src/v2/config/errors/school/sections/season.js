@@ -29,4 +29,8 @@ module.exports = Object.freeze({
     en: "Season should have a photo",
     ar: "الفصل يجب أن يكون له صورة",
   },
+  notBelongToSchool: {
+    en: "Season does not belong to your school",
+    ar: "الفصل الدراسي لا تنتمي إلى مدرستك",
+  },
 });

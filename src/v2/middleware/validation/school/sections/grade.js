@@ -1,6 +1,7 @@
 const commonMiddleware = require("../../common");
 
 const validateCreateGrade = [
+  commonMiddleware.putQueryParamsInBody,
   commonMiddleware.checkSchoolId,
   commonMiddleware.checkLevelId,
   commonMiddleware.checkGradeNumber,

@@ -10,6 +10,7 @@ const validateCreatePackage = [
 
 const validateGetGradePackages = [
   commonMiddleware.putQueryParamsInBody,
+  commonMiddleware.checkSchoolId,
   commonMiddleware.checkGradeId,
   commonMiddleware.next,
 ];

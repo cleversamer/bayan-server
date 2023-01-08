@@ -43,6 +43,10 @@ module.exports = Object.freeze({
     en: "You don't belong to this school",
     ar: "أنت لا تنتمي لهذه المدرسة",
   },
+  alreadyManager: {
+    en: "You're already a manager of a school",
+    ar: "أنت مدير لمدرسة بالفعل",
+  },
   ////////////////////////////////////////
   // noLanguage: {
   //   en: "Please select your favorite language",

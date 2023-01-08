@@ -2,6 +2,7 @@ const { allRights } = require("./common");
 
 module.exports = Object.freeze({
   user: allRights,
+  school: allRights,
   emailVerificationCode: allRights,
   phoneVerificationCode: allRights,
   password: allRights,

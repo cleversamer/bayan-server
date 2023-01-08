@@ -7,6 +7,7 @@ const registerValidator = [
   commonMiddleware.checkPhone,
   commonMiddleware.checkPassword,
   commonMiddleware.checkAuthType,
+  commonMiddleware.checkRegisterRole,
   commonMiddleware.authTypeHandler,
 ];
 

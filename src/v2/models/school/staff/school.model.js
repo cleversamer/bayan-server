@@ -8,6 +8,7 @@ const schoolSchema = new mongoose.Schema(
     managerId: {
       type: mongoose.Types.ObjectId,
       required: true,
+      unique: true,
       ref: "User",
     },
     name: {

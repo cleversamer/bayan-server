@@ -6,17 +6,12 @@ const _ = require("lodash");
 module.exports.createGrade = async (req, res, next) => {
   try {
     const user = req.user;
-    const { schoolId, levelId, number } = req.body;
+    const { schoolId } = req.params;
+    const { levelId, number } = req.body;
     const { photo } = req.files;
 
     // Asking service to create a new grade
-    const grade = await gradesService.createGrade(
-      user,
-      schoolId,
-      levelId,
-      number,
-      photo
-    );
+    const grade = await gradesService.createGrade(user, levelId, number, photo);
 
     // Genereate the response object
     const response = _.pick(grade, clientSchema);
@@ -31,7 +26,8 @@ module.exports.createGrade = async (req, res, next) => {
 module.exports.getLevelGrades = async (req, res, next) => {
   try {
     const user = req.user;
-    const { schoolId, levelId } = req.query;
+    const { schoolId } = req.params;
+    const { levelId } = req.query;
 
     // Asking service to fetch grades
     const grades = await gradesService.getLevelGrades(user, schoolId, levelId);

@@ -29,4 +29,8 @@ module.exports = Object.freeze({
     en: "Grade is not included in this level",
     ar: "هذا الصف ليس من ضمن هذه المرحلة التعليمية",
   },
+  notBelongToSchool: {
+    en: "Level does not belong to your school",
+    ar: "المرحلة لا تنتمي إلى مدرستك",
+  },
 });

@@ -1,6 +1,8 @@
 const commonMiddleware = require("../../common");
 
 const validateCreateUnit = [
+  commonMiddleware.putQueryParamsInBody,
+  commonMiddleware.checkSchoolId,
   commonMiddleware.checkSubjectId,
   commonMiddleware.checkUnitTitle,
   commonMiddleware.next,
@@ -8,6 +10,7 @@ const validateCreateUnit = [
 
 const validateGetSubjectUnits = [
   commonMiddleware.putQueryParamsInBody,
+  commonMiddleware.checkSchoolId,
   commonMiddleware.checkSubjectId,
   commonMiddleware.next,
 ];

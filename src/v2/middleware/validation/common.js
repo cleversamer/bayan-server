@@ -104,6 +104,11 @@ const checkRole = (exceptAdmin = false) =>
         .isIn(userValidation.roles)
         .withMessage(errors.user.invalidRole);
 
+const checkRegisterRole = check("role")
+  .trim()
+  .isIn(userValidation.registerRoles)
+  .withMessage(errors.user.invalidRole);
+
 const checkAuthType = check("authType")
   .trim()
   .isIn(userValidation.authTypes)
@@ -643,6 +648,7 @@ module.exports = {
   checkFile,
   // AUTH
   checkRole,
+  checkRegisterRole,
   checkAuthType,
   checkCode,
   checkSendTo,

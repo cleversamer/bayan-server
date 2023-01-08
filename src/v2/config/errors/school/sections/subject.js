@@ -25,4 +25,8 @@ module.exports = Object.freeze({
     en: "Subject should have a photo",
     ar: "المادة يجب أن يكون لها صورة",
   },
+  notBelongToSchool: {
+    en: "Subject does not belong to your school",
+    ar: "المادة لا تنتمي إلى مدرستك",
+  },
 });

@@ -11,22 +11,23 @@ module.exports.createUser = async (
   name,
   phone,
   authType,
-  googleToken
+  googleToken,
+  role
 ) => {
   try {
     if (authType === "email") {
       // Create a new user using email and phone
-      return await registerWithEmail(email, password, name, phone);
+      return await registerWithEmail(email, password, name, phone, role);
     } else {
       // Creating a new user using Google account
-      return await registerWithGoogle(googleToken, phone);
+      return await registerWithGoogle(googleToken, phone, role);
     }
   } catch (err) {
     throw err;
   }
 };
 
-const registerWithEmail = async (email, password, name, phone) => {
+const registerWithEmail = async (email, password, name, phone, role) => {
   try {
     // Create an instance of the User model
     const user = new User({
@@ -38,6 +39,7 @@ const registerWithEmail = async (email, password, name, phone) => {
         nsn: phone.nsn,
       },
       authType: "email",
+      role,
       lastLogin: new Date(),
     });
 
@@ -68,7 +70,7 @@ const registerWithEmail = async (email, password, name, phone) => {
   }
 };
 
-const registerWithGoogle = async (googleToken, phone) => {
+const registerWithGoogle = async (googleToken, phone, role) => {
   try {
     // Get the user data via google token
     const googleUser = await googleService.decodeToken(googleToken);
@@ -93,6 +95,7 @@ const registerWithGoogle = async (googleToken, phone) => {
         phone: false,
       },
       authType: "google",
+      role,
       lastLogin: new Date(),
     });
 
