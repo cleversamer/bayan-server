@@ -59,7 +59,10 @@ const putQueryParamsInBody = (req, res, next) => {
   req.body = {
     ...req.body,
     ...req.query,
+    ...req.params,
   };
+
+  console.log("req.body:", req.body);
 
   next();
 };
