@@ -8,7 +8,6 @@ const _ = require("lodash");
 module.exports.createSubject = async (req, res, next) => {
   try {
     const user = req.user;
-    const { schoolId } = req.params;
     const { seasonId, title, videoType, videoURL } = req.body;
     const { video, photo } = req.files;
 
@@ -36,8 +35,7 @@ module.exports.createSubject = async (req, res, next) => {
 module.exports.getSeasonSubjects = async (req, res, next) => {
   try {
     const user = req.user;
-    const { schoolId } = req.params;
-    const { seasonId } = req.query;
+    const { schoolId, seasonId } = req.query;
 
     // Asking service to find subject
     const subjects = await subjectsService.getSeasonSubjects(
@@ -61,7 +59,6 @@ module.exports.getSeasonSubjects = async (req, res, next) => {
 module.exports.toggleIsSubjectFree = async (req, res, next) => {
   try {
     const user = req.user;
-    const { schoolId } = req.params;
     const { subjectId } = req.body;
 
     // Asking service to toggle subject free

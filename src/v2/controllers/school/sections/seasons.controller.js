@@ -8,7 +8,6 @@ const _ = require("lodash");
 module.exports.createSeason = async (req, res, next) => {
   try {
     const user = req.user;
-    const { schoolId } = req.params;
     const { gradeId, number } = req.body;
     const { photo } = req.files;
 
@@ -33,8 +32,7 @@ module.exports.createSeason = async (req, res, next) => {
 module.exports.getGradeSeasons = async (req, res, next) => {
   try {
     const user = req.user;
-    const { schoolId } = req.params;
-    const { gradeId } = req.query;
+    const { schoolId, gradeId } = req.query;
 
     // Asking service to find school seasons for this grade
     const seasons = await seasonsService.getGradeSeasons(

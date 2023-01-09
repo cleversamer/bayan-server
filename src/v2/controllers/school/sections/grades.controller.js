@@ -6,7 +6,6 @@ const _ = require("lodash");
 module.exports.createGrade = async (req, res, next) => {
   try {
     const user = req.user;
-    const { schoolId } = req.params;
     const { levelId, number } = req.body;
     const { photo } = req.files;
 
@@ -26,8 +25,7 @@ module.exports.createGrade = async (req, res, next) => {
 module.exports.getLevelGrades = async (req, res, next) => {
   try {
     const user = req.user;
-    const { schoolId } = req.params;
-    const { levelId } = req.query;
+    const { schoolId, levelId } = req.query;
 
     // Asking service to fetch grades
     const grades = await gradesService.getLevelGrades(user, schoolId, levelId);

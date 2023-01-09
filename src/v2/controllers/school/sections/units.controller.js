@@ -20,7 +20,6 @@ const _ = require("lodash");
 module.exports.createUnit = async (req, res, next) => {
   try {
     const user = req.user;
-    const { schoolId } = req.params;
     const { subjectId, title } = req.body;
 
     // Asking service to create a new unit
@@ -38,8 +37,7 @@ module.exports.createUnit = async (req, res, next) => {
 
 module.exports.getSubjectUnits = async (req, res, next) => {
   try {
-    const { schoolId } = req.params;
-    const { subjectId } = req.query;
+    const { schoolId, subjectId } = req.query;
 
     // Asking service to find units
     const units = await unitsService.getSubjectUnits(schoolId, subjectId);
@@ -59,7 +57,6 @@ module.exports.getSubjectUnits = async (req, res, next) => {
 module.exports.addContent = async (req, res, next) => {
   try {
     const user = req.user;
-    const { schoolId } = req.params;
     const { unitId, type, title, documentText, videoUrl, videoDescription } =
       req.body;
 
@@ -97,7 +94,6 @@ module.exports.addContent = async (req, res, next) => {
 
 module.exports.getUnitLessons = async (req, res, next) => {
   try {
-    const { schoolId } = req.params;
     const { unitId } = req.query;
 
     const lessons = await unitsService.getUnitLessons(unitId);

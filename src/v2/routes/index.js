@@ -28,11 +28,11 @@ const userRoutes = [
 
 const schoolRoutes = [
   { path: "/schools", route: schoolsRoute },
-  { path: "/schools/:schoolId/levels", route: levelsRoute },
-  { path: "/schools/:schoolId/grades", route: gradesRoute },
-  { path: "/schools/:schoolId/seasons", route: seasonsRoute },
-  { path: "/schools/:schoolId/subjects", route: subjectsRoute },
-  { path: "/schools/:schoolId/units", route: unitsRoute },
+  { path: "/schools/levels", route: levelsRoute },
+  { path: "/schools/grades", route: gradesRoute },
+  { path: "/schools/seasons", route: seasonsRoute },
+  { path: "/schools/subjects", route: subjectsRoute },
+  { path: "/schools/units", route: unitsRoute },
 ];
 
 const subscriptionRoutes = [
