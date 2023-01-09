@@ -19,6 +19,10 @@ const schoolSchema = new mongoose.Schema(
       minLength: validation.name.minLength,
       maxLength: validation.name.maxLength,
     },
+    active: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     // To not avoid empty object when creating the document

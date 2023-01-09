@@ -13,4 +13,16 @@ module.exports = Object.freeze({
     en: "School was not found",
     ar: "المدرسة غير موجودة",
   },
+  noSchools: {
+    en: "There are no schools out there",
+    ar: "لا يوجد هناك مدارس مسجّلة بعد",
+  },
+  noInactiveSchools: {
+    en: "There are no inactive schools out there",
+    ar: "لا يوجد هناك مدارس غير نشطة بعد",
+  },
+  alreadyActive: {
+    en: "School is already active",
+    ar: "المدرسة نشطة بالفعل",
+  },
 });

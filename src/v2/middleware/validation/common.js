@@ -92,6 +92,11 @@ const checkFile =
     next();
   };
 
+const checkSkip = check("skip")
+  .trim()
+  .isNumeric()
+  .withMessage(errors.system.invalidSkip);
+
 //////////////////// AUTH FUNCTIONS ////////////////////
 const checkRole = (exceptAdmin = false) =>
   exceptAdmin
@@ -645,6 +650,7 @@ module.exports = {
   authTypeHandler,
   putQueryParamsInBody,
   conditionalCheck,
+  checkSkip,
   checkFile,
   // AUTH
   checkRole,
