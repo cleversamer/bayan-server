@@ -11,6 +11,7 @@ const validateCreateLevel = [
 const validateGetSchoolLevels = [
   commonMiddleware.putQueryParamsInBody,
   commonMiddleware.checkSchoolId,
+  commonMiddleware.checkSkip,
   commonMiddleware.next,
 ];
 

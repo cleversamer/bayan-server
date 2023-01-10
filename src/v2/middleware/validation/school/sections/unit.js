@@ -12,6 +12,7 @@ const validateGetSubjectUnits = [
   commonMiddleware.putQueryParamsInBody,
   commonMiddleware.checkSchoolId,
   commonMiddleware.checkSubjectId,
+  commonMiddleware.checkSkip,
   commonMiddleware.next,
 ];
 

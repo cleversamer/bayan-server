@@ -3,6 +3,7 @@ const commonMiddleware = require("../../common");
 const validateGetUnitLessons = [
   commonMiddleware.putQueryParamsInBody,
   commonMiddleware.checkUnitId,
+  commonMiddleware.checkSkip,
   commonMiddleware.next,
 ];
 

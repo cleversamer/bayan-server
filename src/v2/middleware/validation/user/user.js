@@ -22,6 +22,7 @@ const validateSubscripeToPackage = [
 
 const validateGetUserSubscriptions = [
   commonMiddleware.checkMongoIdParam,
+  commonMiddleware.checkSkip,
   commonMiddleware.next,
 ];
 

@@ -14,6 +14,7 @@ const validateGetSeasonSubjects = [
   commonMiddleware.putQueryParamsInBody,
   commonMiddleware.checkSchoolId,
   commonMiddleware.checkSeasonId,
+  commonMiddleware.checkSkip,
   commonMiddleware.next,
 ];
 

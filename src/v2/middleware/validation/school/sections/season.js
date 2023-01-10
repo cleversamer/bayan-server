@@ -13,6 +13,7 @@ const validateGetGradeSeasons = [
   commonMiddleware.putQueryParamsInBody,
   commonMiddleware.checkSchoolId,
   commonMiddleware.checkGradeId,
+  commonMiddleware.checkSkip,
   commonMiddleware.next,
 ];
 

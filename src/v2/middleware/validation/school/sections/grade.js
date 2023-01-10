@@ -13,6 +13,7 @@ const validateGetLevelGrades = [
   commonMiddleware.putQueryParamsInBody,
   commonMiddleware.checkSchoolId,
   commonMiddleware.checkLevelId,
+  commonMiddleware.checkSkip,
   commonMiddleware.next,
 ];
 
