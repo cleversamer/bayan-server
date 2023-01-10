@@ -37,10 +37,11 @@ module.exports.createUnit = async (req, res, next) => {
 
 module.exports.getSubjectUnits = async (req, res, next) => {
   try {
+    const user = req.user;
     const { schoolId, subjectId } = req.query;
 
     // Asking service to find units
-    const units = await unitsService.getSubjectUnits(schoolId, subjectId);
+    const units = await unitsService.getSubjectUnits(user, schoolId, subjectId);
 
     // Genereate the response object
     const response = {

@@ -63,7 +63,7 @@ module.exports.createUnit = async (user, subjectId, title) => {
   }
 };
 
-module.exports.getSubjectUnits = async (schoolId, subjectId) => {
+module.exports.getSubjectUnits = async (user, schoolId, subjectId) => {
   try {
     // Check if user belongs to the school
     if (!user.isBelongToSchool(schoolId)) {
