@@ -48,7 +48,6 @@ module.exports.exportUsersToExcelFile = async (users = []) => {
     // Return file's path
     return filePath;
   } catch (err) {
-    console.log("err", err.message);
     const statusCode = httpStatus.INTERNAL_SERVER_ERROR;
     const message = errors.system.errorExportingExcel;
     throw new ApiError(statusCode, message);
