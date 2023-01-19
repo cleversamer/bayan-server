@@ -12,6 +12,7 @@ router.get(
   lessonsController.getUnitLessons
 );
 
+// TODO: fix bugs
 router.get(
   "/:lessonId/details",
   lessonValidator.validateGetLesson,

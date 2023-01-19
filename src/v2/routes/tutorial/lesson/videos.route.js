@@ -5,6 +5,7 @@ const { videoValidator } = require("../../../middleware/validation");
 const auth = require("../../../middleware/auth");
 
 //////////////////// STUDENT/TEACHER ROUTES ////////////////////
+// TODO: fix bugs
 router.get(
   "/:videoId/details",
   videoValidator.validateGetVideo,
