@@ -5,10 +5,10 @@ const uploadFile = async (file = { name: "", path: "" }) => {
   try {
     const storage = new Storage({
       keyFilename: path.join(__dirname, "../../bayan-platform-storage.json"),
-      projectId: "bayan-platform",
+      projectId: "monkey-road",
     });
 
-    const bucketName = "bayan-bucket-1";
+    const bucketName = "monkey-road-bucket-1";
     const filePath = path.join(__dirname, `../../../../uploads${file.path}`);
     const destFileName = file.name;
     const generationMatchPrecondition = 0;
