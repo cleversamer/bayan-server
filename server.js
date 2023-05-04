@@ -1,5 +1,5 @@
 require("dotenv").config();
-const setup = require("./src/v2/setup");
+const setup = require("./src/v1/setup");
 const express = require("express");
 const app = express();
 

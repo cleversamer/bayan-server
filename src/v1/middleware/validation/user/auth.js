@@ -4,18 +4,18 @@ const { auth: errors } = require("../../../config/errors");
 const commonCheckers = require("../common");
 
 const loginValidator = [
-  check("emailOrPhone")
-    .trim()
-    .isString()
-    .withMessage(errors.invalidEmailOrPhone)
-    .bail(),
+  // check("emailOrPhone")
+  //   .trim()
+  //   .isString()
+  //   .withMessage(errors.invalidEmailOrPhone)
+  //   .bail(),
 
-  check("password")
-    .trim()
-    .isLength({ min: 8, max: 32 })
-    .withMessage(errors.invalidPassword),
+  // check("password")
+  //   .trim()
+  //   .isLength({ min: 8, max: 32 })
+  //   .withMessage(errors.invalidPassword),
 
-  check("authType").trim().isIn(AUTH_TYPES).withMessage(errors.invalidAuthType),
+  // check("authType").trim().isIn(AUTH_TYPES).withMessage(errors.invalidAuthType),
 
   commonCheckers.authTypeHandler,
 ];
