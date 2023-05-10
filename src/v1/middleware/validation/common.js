@@ -23,30 +23,31 @@ const checkPhone = (req, res, next) => {
     return console.log("Invalid phone");
   }
 
-  const kuwaitPhone = phone.startsWith("+965");
-  const palestinePhone =
-    phone.startsWith("+97259") || phone.startsWith("+97059");
+  const isValidCountryCode =
+    phone.startsWith("+972") ||
+    phone.startsWith("+970") ||
+    phone.startsWith("+965");
 
-  if (!kuwaitPhone && !palestinePhone) {
+  if (!isValidCountryCode) {
     const statusCode = httpStatus.BAD_REQUEST;
     const message = errors.auth.invalidCountryCode;
     const err = new ApiError(statusCode, message);
     return next(err);
   }
 
-  if (kuwaitPhone && phone.length !== 12) {
-    const statusCode = httpStatus.BAD_REQUEST;
-    const message = errors.auth.invalidPhone;
-    const err = new ApiError(statusCode, message);
-    return next(err);
-  }
+  // if (isKuwaitPhone && phone.length !== 12) {
+  //   const statusCode = httpStatus.BAD_REQUEST;
+  //   const message = errors.auth.invalidPhone;
+  //   const err = new ApiError(statusCode, message);
+  //   return next(err);
+  // }
 
-  if (palestinePhone && phone.length !== 13) {
-    const statusCode = httpStatus.BAD_REQUEST;
-    const message = errors.auth.invalidPhone;
-    const err = new ApiError(statusCode, message);
-    return next(err);
-  }
+  // if (isValidCountryCode && phone.length !== 13) {
+  //   const statusCode = httpStatus.BAD_REQUEST;
+  //   const message = errors.auth.invalidPhone;
+  //   const err = new ApiError(statusCode, message);
+  //   return next(err);
+  // }
 
   const _phoneNumber = phone.substring(1);
   for (let i = 0; i < _phoneNumber.length; i++) {
